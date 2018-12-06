@@ -26,7 +26,7 @@ class dynamicPages {
     productPage(req, res) {
         try {
             let productid = parseInt(req.query.pid);
-            if (isNaN(productid)) throw new Error("No Product page for product id:" + req.query.pid);
+            if (isNaN(productid)) throw new Error("Invalid Product Id:" + req.query.pid);
             dal.getProductById(parseInt(req.query.pid))
                 .then((product) => {
                     if (product === undefined)
