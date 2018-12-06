@@ -11,6 +11,7 @@ class dynamicPages {
         this.homePage = this.homePage.bind(this);
         this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
+        this.constructDataObject = this.constructDataObject.bind(this);
     }
 
     initialize() {
@@ -20,7 +21,8 @@ class dynamicPages {
     }
 
     homePage(req, res) {
-        res.render('../pages/index');
+        req.user = { name: "Laukik" };
+        res.render('../pages/index', this.constructDataObject(req.user));
     }
 
     productPage(req, res) {
@@ -32,7 +34,7 @@ class dynamicPages {
                     if (product === undefined)
                         throw new Error("No Product found in database for product id:" + req.query.pid);
                     else
-                        res.render('../pages/product', product);
+                        res.render('../pages/product', this.constructDataObject(req.user,product));
                 })
                 .catch((err) => {
                     this.renderErrorPage(res, err);
@@ -46,6 +48,13 @@ class dynamicPages {
     renderErrorPage(res, err) {
         console.error(err);
         res.render('../pages/error', err);
+    }
+
+    constructDataObject(user, product) {
+        return {
+            user: user,
+            product: product
+        }
     }
 }
 

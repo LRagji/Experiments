@@ -5,7 +5,7 @@
     <% include ./head %>
 
     <title>Health Mall
-        <%= name %>
+        <%= product.name %>
     </title>
 </head>
 
@@ -19,15 +19,15 @@
         <div class="row">
             <div class="col my-1">
                 <h4>
-                    <%= name %>
+                    <%= product.name %>
                 </h4>
             </div>
         </div>
         <div class="row mx-0">
-            <div class="col-md-auto pl-0"><img class="img-thumbnail" src="<%= image[0] %>" alt="Product Image"></div>
+            <div class="col-md-auto pl-0"><img class="img-thumbnail" src="<%= product.image[0] %>" alt="Product Image"></div>
             <div class="col">
                 <ul>
-                    <li>Item # : <b>1020</b></li>
+                    <li>Item # : <b><%= product.id %></b></li>
                     <li> Manufacturer SKU : <b>733739016621</b></li>
                     <li>Product Code : <b>NF1662</b></li>
                     <li> Package Details : <b>180 Softgels</b></li>
