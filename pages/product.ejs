@@ -24,16 +24,17 @@
             </div>
         </div>
         <div class="row mx-0">
-            <div class="col-md-auto pl-0"><img class="img-thumbnail" src="<%= product.image[0] %>" alt="Product Image"></div>
+        
+            <div class="col-md-auto pl-0"><img class="img-thumbnail" src="./static/resources/images/Product1.jpg" alt="Product Image"></div>
             <div class="col">
                 <ul>
                     <li>Item # : <b><%= product.id %></b></li>
                     <li> Manufacturer SKU : <b>733739016621</b></li>
-                    <li>Product Code : <b>NF1662</b></li>
-                    <li> Package Details : <b>180 Softgels</b></li>
-                    <li>Serving Size : <b>1 Softgel</b></li>
-                    <li>Serving per Container : <b>This bottle will last for 180 Days</b></li>
-                    <li><a href="#">Visit Manufacturer's Website</a></li>
+                    <li>Product Code : <b><%= product.meta.code %></b></li>
+                    <li> Package Details : <b><%= product.meta.package_detail %></b></li>
+                    <li>Serving Size : <b><%= product.meta.serving_size %></b></li>
+                    <li>Serving per Container : <b><%= product.meta.serving_per_container %></b></li>
+                    <li>Visit<a target="blank" href="<%= product.website %>"> <%= product.mname %></a></li>
                 </ul>
                 <div class="d-flex">
                     <button class="btn btn-primary" type="submit">Add to Cart</button>
@@ -56,21 +57,7 @@
 
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                         <div class="card-body">
-                            <ul>
-                                <li>Protection from heart attack and stroke.</li>
-                                <li>Lowers triglycerides, LDL and increases HDL.</li>
-                                <li>Helps maintain healthy joints.</li>
-                                <li>Key component of the brain and eye.</li>
-                                <li>Important in the growth and development of the foetal brain during pregnancy.</li>
-                                <li>Improves skin and eye health.</li>
-                                <li>Helps in psoriasis and eczema.</li>
-                                <li>Provide lubrication to the skin, arteries, veins and intestinal tract.</li>
-                                <li>Helps in reducing depression.</li>
-                                <li>Helps in Attention Deficit/Hyperactivity Disorder (ADHD)</li>
-                                <li>Helps maintain normal blood sugar levels.</li>
-                                <li>Lowers blood pressure.</li>
-                                <li>Helps in Reducing breast, colon and prostate cancer.</li>
-                            </ul>
+                        <%- product.description %>
                         </div>
                     </div>
                 </div>
@@ -79,21 +66,13 @@
                         <h5 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
                                 aria-expanded="false" aria-controls="collapseTwo">
-                                Collapsible Group Item #2
+                                Ingredients
                             </button>
                         </h5>
                     </div>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                         <div class="card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                            squid.
-                            3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                            laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
-                            single-origin
-                            coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
-                            anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                            occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't
-                            heard of them accusamus labore sustainable VHS.
+                        <%- product.ingredients %>
                         </div>
                     </div>
                 </div>
@@ -102,7 +81,7 @@
                         <h5 class="mb-0">
                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
                                 aria-expanded="false" aria-controls="collapseThree">
-                                Collapsible Group Item #3
+                                FAQ's
                             </button>
                         </h5>
                     </div>
