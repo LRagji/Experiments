@@ -7,22 +7,19 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <form class="form-inline my-2 w-100 input-group">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-dark" type="submit"><i class="fas fa-search"></i></button>
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-outline-dark" type="submit"><i class="fas fa-search"></i></button>
             </div>
         </form>
 
 
         <ul class="navbar-nav mr-2">
             <li class="nav-item active">
-                <button class="btn btn-link my-2 mr-0 my-sm-0" type="submit"><i class="fas fa-user-circle"></i>
-                    <% if (user) { %>
-                        <%= user.name %>
-                      <% } else{ %>
-                    Login
-                      <% } %>
-                      </button>
+                <button onclick="<% if (user) { %><%= 'window.location.href = "/secure/profile"';%><% } else{ %><%= 'window.location.href = "/secure/login";' %><% } %>
+                    " class="btn btn-link my-2 mr-0 my-sm-0" type="submit"><i class="fas fa-user-circle"></i>
+                    <% if (user) { %><%- user %><% } else{ %>Login<% } %>
+                </button>
             </li>
             <li class="nav-item active">
                 <button class="btn btn-link my-2 mr-0 my-sm-0" type="submit"><i class="fas fa-shopping-cart"></i>

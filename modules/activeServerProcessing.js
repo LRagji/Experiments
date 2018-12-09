@@ -17,12 +17,12 @@ class dynamicPages {
     initialize() {
         server.get('/', this.homePage);
         server.get('/product', this.productPage);
+        server.get('/error', (req, res) => res.render('../pages/error', {}));
         return server;
     }
 
     homePage(req, res) {
-        req.user = { name: "Laukik" };
-        res.render('../pages/index', this.constructDataObject(req.user));
+        res.render('../pages/index', this.constructDataObject(req.session.passport!==undefined?req.session.passport.user:undefined));
     }
 
     productPage(req, res) {
@@ -34,7 +34,7 @@ class dynamicPages {
                     if (product === undefined)
                         throw new Error("No Product found in database for product id:" + req.query.pid);
                     else
-                        res.render('../pages/product', this.constructDataObject(req.user,product));
+                        res.render('../pages/product', this.constructDataObject(req.user, product));
                 })
                 .catch((err) => {
                     this.renderErrorPage(res, err);
