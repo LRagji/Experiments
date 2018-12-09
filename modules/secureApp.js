@@ -1,39 +1,36 @@
-let express = require('express');
-let _secureApp = new express();
 let authenticationModule = require('./auth.js');
-let path = require('path');
-let _auth = new authenticationModule(_secureApp);
 
 class secureapp {
-    constructor() {
-        _secureApp.set('view engine', 'ejs');
+    constructor(_secureApp, basePath) {
+        let _auth = new authenticationModule(_secureApp);
 
-        _secureApp.get('/logout',
-            function (req, res) {
-                req.logout();
-                res.redirect('/');
-            });
-
+        // _secureApp.get('/logout',
+        //     function (req, res) {
+        //         req.logout();
+        //         res.redirect('/');
+        //     });
+        this.basePath = basePath;
+        this.securePagePath = "../pages/secure/";
         this.login = this.login.bind(this);
         this.constructDataObject = this.constructDataObject.bind(this);
         this.renderProfile = this.renderProfile.bind(this);
-
-        _secureApp.get('/login', this.login);
-        _secureApp.post('/login', _auth.authenticateLogIn("/secure/profile", "/secure/login"));
-        _secureApp.get('/profile', _auth.authenticatedInterceptor('/secure/login'), this.renderProfile);
+        this.loadRoutes = this.loadRoutes.bind(this);
+        this.loadRoutes(_secureApp, basePath, _auth);
     }
 
-    initialize() {
-        return _secureApp;
+    loadRoutes(_secureApp, basePath, _auth) {
+        _secureApp.get(basePath + '/login', this.login);
+        _secureApp.post(basePath + '/login', _auth.authenticateLogIn(basePath + "/profile", this.basePath + "/login"));
+        _secureApp.get(basePath + '/profile', _auth.authenticatedInterceptor(basePath + '/login'), this.renderProfile);
     }
 
     login(req, res) {
         if (req.user) res.redirect("/secure/profile");
-        else res.render('../secure/login', this.constructDataObject(req.user, req.flash("error")));
+        else res.render(this.securePagePath + 'login', this.constructDataObject(req.user, req.flash("error")));
     }
 
     renderProfile(req, res) {
-        res.render('../secure/profile', { user: req.user });
+        res.render(this.securePagePath + 'profile', { user: req.user });
     }
 
     constructDataObject(user, error) {

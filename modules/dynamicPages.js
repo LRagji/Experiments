@@ -1,20 +1,22 @@
-let serverProcessing = require('express')
-let server = new serverProcessing();
+let _secureApp = require('./secureApp');
 let pgdal = require('../db/dataAccessLayer');
 let dal = new pgdal();
+let securePages = null;
 
 class dynamicPages {
 
-    constructor() {
+    constructor(server) {
         server.set('view engine', 'ejs');
-        this.initialize = this.initialize.bind(this);
+        securePages = new _secureApp(server,'/secure');
+        
         this.homePage = this.homePage.bind(this);
         this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
         this.constructDataObject = this.constructDataObject.bind(this);
+        this.loadRoutes(server);
     }
 
-    initialize() {
+    loadRoutes(server) {
         server.get('/', this.homePage);
         server.get('/product', this.productPage);
         server.get('/error', (req, res) => res.render('../pages/error', {}));
@@ -22,7 +24,7 @@ class dynamicPages {
     }
 
     homePage(req, res) {
-        res.render('../pages/index', this.constructDataObject(req.session.passport!==undefined?req.session.passport.user:undefined));
+        res.render('../pages/index', this.constructDataObject(req.user));
     }
 
     productPage(req, res) {
