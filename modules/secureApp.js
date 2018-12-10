@@ -4,6 +4,7 @@ class secureapp {
     constructor(_secureApp, basePath) {
         let _auth = new authenticationModule(_secureApp);
 
+        
         // _secureApp.get('/logout',
         //     function (req, res) {
         //         req.logout();
