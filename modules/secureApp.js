@@ -20,7 +20,7 @@ class secureapp {
 
     loadRoutes(_secureApp, basePath, _auth) {
         _secureApp.get(basePath + '/login', this.login);
-        _secureApp.post(basePath + '/login', _auth.authenticateLogIn(basePath + "/profile", this.basePath + "/login"));
+        _secureApp.post(basePath + '/login', _auth.authenticateLogIn("/", this.basePath + "/login"));
         _secureApp.get(basePath + '/profile', _auth.authenticatedInterceptor(basePath + '/login'), this.renderProfile);
     }
 
