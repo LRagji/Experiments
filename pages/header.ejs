@@ -18,7 +18,7 @@
             <li class="nav-item active">
                 <button onclick="<% if (user) { %><%= 'window.location.href = "/secure/profile"';%><% } else{ %><%= 'window.location.href = "/secure/login";' %><% } %>
                     " class="btn btn-link my-2 mr-0 my-sm-0" type="submit"><i class="fas fa-user-circle"></i>
-                    <% if (user) { %><%- user.name %><% } else{ %>Login<% } %>
+                    <% if (user) { %><%- user.first %><% } else{ %>Login<% } %>
                 </button>
             </li>
             <li class="nav-item active">

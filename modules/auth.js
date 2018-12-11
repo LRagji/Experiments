@@ -2,6 +2,9 @@ let passport = require('passport');
 let strategy = require('passport-local').Strategy;
 let ensureLogin = require('connect-ensure-login');
 let flash = require('connect-flash');
+let hash = require('object-hash');
+let pgDal = require('../db/dataAccessLayer');
+let dal = new pgDal();
 
 class authentication {
     constructor(expressApp) {
@@ -35,22 +38,26 @@ class authentication {
     }
 
     authenticateLogin(username, password, done) {
-        //TODO:Implement Login functionality
-
-        // User.findOne({ username: username }, function(err, user) {
-        //     if (err) { return done(err); }
-        //     if (!user) {
-        //       return done(null, false, { message: 'Incorrect username.' });
-        //     }
-        //     if (!user.validPassword(password)) {
-        //       return done(null, false, { message: 'Incorrect password.' });
-        //     }
-        //     return done(null, user);
-        //   });
-
-        console.log("User:" + username + " Pass:" + password + " logged in");
-        //return done(null, false, { message: 'Incorrect username.' });
-        return done(null, { "name": username,"hello":"something" });
+        dal.getUserByEmail(username).then((user) => {
+            if (user !== undefined) {
+                if (user.password === hash(password, { algorithm: 'md5' })) {
+                    console.info(username + ' logged in.');
+                    return done(null, user);
+                }
+                else {
+                    console.warn('Invalid password for ' + username);
+                    return done(null, false, { message: 'Invalid password for ' + username });
+                }
+            }
+            else {
+                console.warn('No user exits with ' + username);
+                return done(null, false, { message: 'No User exits with ' + username });
+            }
+        }).catch((err) => {
+            console.error("Error while login for " + username);
+            console.error(err);
+            return done(null, false, { message: 'System error while logging in for ' + username });
+        });
     }
 }
 module.exports = authentication;

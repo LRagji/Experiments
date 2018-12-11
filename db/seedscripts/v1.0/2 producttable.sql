@@ -1,23 +1,4 @@
-create table manufacturer (
-"id" serial primary key,
-"name" varchar(250) not null,
-"image" text[],
-"website" varchar(250)
-);
 
-create table products (
-"id" serial Primary key,
-"mid" integer REFERENCES manufacturer(id) not null,
-"name" varchar(250) not null,
-"price" float not null,
-"discount" float  not null,
-"image" text[] not null,
-"description" varchar(2000),
-"ingredients" varchar(2000),
-"keywords" text[], 
-"meta" jsonb,
-"sys_meta" jsonb
-);
 
 insert into manufacturer (name,image,website) 
 values(

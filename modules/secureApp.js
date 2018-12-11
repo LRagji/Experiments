@@ -3,19 +3,13 @@ let authenticationModule = require('./auth.js');
 class secureapp {
     constructor(_secureApp, basePath) {
         let _auth = new authenticationModule(_secureApp);
-
-        
-        // _secureApp.get('/logout',
-        //     function (req, res) {
-        //         req.logout();
-        //         res.redirect('/');
-        //     });
         this.basePath = basePath;
         this.securePagePath = "../pages/secure/";
         this.login = this.login.bind(this);
         this.constructDataObject = this.constructDataObject.bind(this);
         this.renderProfile = this.renderProfile.bind(this);
         this.loadRoutes = this.loadRoutes.bind(this);
+        this.renderLogout = this.renderLogout.bind(this);
         this.loadRoutes(_secureApp, basePath, _auth);
     }
 
@@ -23,6 +17,7 @@ class secureapp {
         _secureApp.get(basePath + '/login', this.login);
         _secureApp.post(basePath + '/login', _auth.authenticateLogIn("/", this.basePath + "/login"));
         _secureApp.get(basePath + '/profile', _auth.authenticatedInterceptor(basePath + '/login'), this.renderProfile);
+        _secureApp.get(basePath + '/logout', _auth.authenticatedInterceptor(basePath + '/login'), this.renderLogout);
     }
 
     login(req, res) {
@@ -32,6 +27,11 @@ class secureapp {
 
     renderProfile(req, res) {
         res.render(this.securePagePath + 'profile', { user: req.user });
+    }
+
+    renderLogout(req, res) {
+        req.logout();
+        res.redirect(this.basePath + '/login');
     }
 
     constructDataObject(user, error) {
