@@ -55,21 +55,6 @@ class DAL {
             .then((res) => {
                 return res.rows[0]
             });
-        //         try{
-
-        //         }
-        //         catch(err){
-        //             console.error(err);
-        // return undefined;
-        //         }
-        //         return {
-        //             "first":"Laukik",
-        //             "last":"Ragji",
-        //             "mobile":"9819569622",
-        //             "email":"Laukik.Ragji@gmail.com",
-        //             "password":"81d7df2cd5d931a654f48a43a8442d5d"
-
-        //         }
     }
 }
 
