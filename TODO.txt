@@ -1,4 +1,1 @@
-1)Need to handle how we can compose data object for the page including the user object, refactor that into utils 
-2)Show the erro details on the html and dev info as well
-3)Move the product id parsing into dal layer from dynamic pages
 4)Move everything to constants file EG:File path etc
