@@ -52,7 +52,7 @@ class DAL {
             pgPool.query(`SELECT manufacturer.name as mname,manufacturer.website as website,manufacturer.image as mimage,products.*
             FROM products JOIN manufacturer ON (products.mid = manufacturer.id) 
             where products.id=$1`, [validatedProductid])
-                .then((result) => { res(result.rows[0]) });
+                .then((result) => { res(result.rows[0]) }).catch((err)=>rej(err));
         });
     }
 

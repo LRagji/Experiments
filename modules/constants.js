@@ -1,3 +1,4 @@
 module.exports={
-    "error":"exception"
+    "error":"exception",
+    "product":"product",
 }

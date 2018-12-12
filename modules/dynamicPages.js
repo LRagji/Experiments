@@ -15,7 +15,6 @@ class dynamicPages {
         this.homePage = this.homePage.bind(this);
         this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
-        this.constructDataObject = this.constructDataObject.bind(this);
         this.loadRoutes(server);
     }
 
@@ -27,16 +26,20 @@ class dynamicPages {
     }
 
     homePage(req, res) {
-        res.render('../pages/index', this.constructDataObject(req.user));
+        res.render('../pages/index', utils.constructPageData(req.user, undefined));
     }
 
     productPage(req, res) {
         dal.getProductById(req.query.pid)
             .then((product) => {
-                if (product === undefined)
+                if (product === undefined) {
                     throw new Error("No Product found in database for product id:" + req.query.pid);
-                else
-                    res.render('../pages/product', this.constructDataObject(req.user, product));
+                }
+                else {
+                    var pageData = {};
+                    pageData[constants.product] = product;
+                    res.render('../pages/product', utils.constructPageData(req.user, pageData));
+                }
             })
             .catch((err) => {
                 utils.navigateToError(req, res, err, textService["Unknown Product"]);
@@ -57,15 +60,9 @@ class dynamicPages {
             });
 
         }
-
-        res.render('../pages/error', this.constructDataObject(req.user, undefined));
-    }
-
-    constructDataObject(user, product) {
-        return {
-            user: user,
-            product: product
-        }
+        var pageData = {};
+        pageData[constants.error] = exception;
+        res.render('../pages/error', utils.constructPageData(req.user, pageData));
     }
 }
 
