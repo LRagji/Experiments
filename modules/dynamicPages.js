@@ -31,25 +31,16 @@ class dynamicPages {
     }
 
     productPage(req, res) {
-        try {
-            // TODO:Move this code to dal
-            let productid = parseInt(req.query.pid);
-            if (isNaN(productid)) throw new Error("Invalid Product Id:" + req.query.pid);
-            
-            dal.getProductById(productid)
-                .then((product) => {
-                    if (product === undefined)
-                        throw new Error("No Product found in database for product id:" + req.query.pid);
-                    else
-                        res.render('../pages/product', this.constructDataObject(req.user, product));
-                })
-                .catch((err) => {
-                    utils.navigateToError(req, res, err,textService["Unknown Product"]);
-                });
-        }
-        catch (err) {
-            utils.navigateToError(req, res, err);
-        }
+        dal.getProductById(req.query.pid)
+            .then((product) => {
+                if (product === undefined)
+                    throw new Error("No Product found in database for product id:" + req.query.pid);
+                else
+                    res.render('../pages/product', this.constructDataObject(req.user, product));
+            })
+            .catch((err) => {
+                utils.navigateToError(req, res, err, textService["Unknown Product"]);
+            });
     }
 
     renderErrorPage(req, res) {
@@ -58,15 +49,15 @@ class dynamicPages {
             //This is the case when user directly request for a error page
             exception.push(new Error("Unknown Error"));
         }
-        else{
+        else {
             exception.forEach(err => {
                 console.error('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-                console.error(err);    
+                console.error(err);
                 console.error('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
             });
-            
+
         }
-        
+
         res.render('../pages/error', this.constructDataObject(req.user, undefined));
     }
 

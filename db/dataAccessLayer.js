@@ -44,10 +44,16 @@ class DAL {
     }
 
     getProductById(productId) {
-        return pgPool.query(`SELECT manufacturer.name as mname,manufacturer.website as website,manufacturer.image as mimage,products.*
-        FROM products JOIN manufacturer ON (products.mid = manufacturer.id) 
-        where products.id=$1`, [productId])
-            .then((res) => { return res.rows[0] });
+
+        return new Promise((res, rej) => {
+            let validatedProductid = parseInt(productId);
+            if (isNaN(validatedProductid)) rej(Error("Invalid Product Id:" + productId));
+
+            pgPool.query(`SELECT manufacturer.name as mname,manufacturer.website as website,manufacturer.image as mimage,products.*
+            FROM products JOIN manufacturer ON (products.mid = manufacturer.id) 
+            where products.id=$1`, [validatedProductid])
+                .then((result) => { res(result.rows[0]) });
+        });
     }
 
     getUserByEmail(email) {
