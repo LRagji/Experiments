@@ -9,6 +9,8 @@ let appSession = new sessionBuilder();
 let _port = 3000;
 let dynamicPages = require('./modules/dynamicPages');
 let webServer = null;
+let api = require('./modules/apis');
+let apiServer = null;
 
 
 //Body-Parser
@@ -17,6 +19,8 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(appSession.build(dal.pool(), _cookiesecret, _timeout));
 //Dynamic & Secured Pages
 webServer = new dynamicPages(app);
+//API Server
+apiServer = new api(app);
 
 //Static Content
 app.use('/static', express.static('static'));

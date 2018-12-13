@@ -3,7 +3,7 @@
 
 <head>
     <% include ./head %>
-   
+
     <title>Health Mall</title>
 </head>
 
@@ -66,78 +66,49 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-
-        <div class="card-columns mt-4 ">
-            <div class="card">
-                <img class="card-img-top" src="./static/resources/images/Product1.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title that wraps to a new line</h5>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
+        <div class="card" style="display:none" id="productTemplate">
+            <center>
+                <img class="card-img-top" style="max-width:220px; max-height:250px" src="../static/resources/images/Product1.jpg"
+                    alt="Card image cap">
+            </center>
+            <div class="card-body">
+                <h3>PRODUCT NAME</h3>
+                <div class="d-flex justify-content-center align-items-center">
+                    500/-INR
+                    <button class="btn btn-link my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
+                        Buy Now</button>
                 </div>
-            </div>
-            <div class="card p-3">
-                <blockquote class="blockquote mb-0 card-body">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                    <footer class="blockquote-footer">
-                        <small class="text-muted">
-                            Someone famous in <cite title="Source Title">Source Title</cite>
-                        </small>
-                    </footer>
-                </blockquote>
-            </div>
-            <div class="card">
-                <img class="card-img-top" src="./static/resources/images/Product2.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional
-                        content.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-            </div>
-            <div class="card bg-primary text-white text-center p-3">
-                <blockquote class="blockquote mb-0">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
-                    <footer class="blockquote-footer">
-                        <small>
-                            Someone famous in <cite title="Source Title">Source Title</cite>
-                        </small>
-                    </footer>
-                </blockquote>
-            </div>
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This card has a regular title and short paragraphy of text below it.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-            </div>
-            <div class="card">
-                <img class="card-img" src="./static/resources/images/Product3.png" alt="Card image">
-            </div>
-            <div class="card p-3 text-right">
-                <blockquote class="blockquote mb-0">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                    <footer class="blockquote-footer">
-                        <small class="text-muted">
-                            Someone famous in <cite title="Source Title">Source Title</cite>
-                        </small>
-                    </footer>
-                </blockquote>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is another card with title and supporting text below. This card has some
-                        additional content to make it slightly taller overall.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
+                </input>
             </div>
         </div>
-    </div>
+        <img id="loadingSpinner" style="max-width:220px; max-height:250px" src="../static/resources/images/loading.gif"
+            alt="Loading Results">
+        <div id="resultContainer" class="card-columns">
 
+        </div>
+
+    </div>
+   
     <!-- Footer -->
     <% include ./footer %>
+
+    <script>
+            loadData();
+            function loadData() {
+                $.getJSON("/v1/home/products", function (data) {
+                    var items = [];
+                    var template = $('#productTemplate');
+                    var container = $('#resultContainer');
+                    var spinner = $('#loadingSpinner');
+                    $.each(data, function (key, val) {
+                        var clonedTemplate = template.clone();
+                        clonedTemplate.show();
+                        container.append(clonedTemplate);
+                    });
+                    spinner.hide();
+                });
+            }
+        </script>
 </body>
 
 </html>
