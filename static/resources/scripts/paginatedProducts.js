@@ -46,7 +46,7 @@ function loadData(query) {
 
 function fillProductInfo(product) {
 
-    return `<div class="card">
+    return `<div class="card m-1">
     <center>
         <img class="card-img-top" style="max-width:220px; max-height:250px" src="../static/resources/images/Product1.jpg"
             alt="Product Image">

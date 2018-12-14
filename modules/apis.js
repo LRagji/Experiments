@@ -16,7 +16,7 @@ class apiServer {
         for (let i = 0; i < size; i++) {
             arr.push({
                 "id": (page * size) + i,
-                "productname": "Laukik " + i,
+                "productname": "Product " + (page * size) + i,
                 "price": (page * size) + i
             })
         }
