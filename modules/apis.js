@@ -36,9 +36,13 @@ class apiServer {
         if (req.session.products === undefined) {
             req.session.products = [];
         }
-
-        req.session.products.push({ "productId": req.body.productId });
-        res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
+        if (req.session.products.length < 25) {
+            req.session.products.push({ "productId": req.body.productId });
+            res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
+        }
+        else{
+            res.status(413).send({ "TotalProducts": utils.getCartItemsCount(req) });
+        }
     }
 }
 

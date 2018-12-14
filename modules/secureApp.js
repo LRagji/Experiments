@@ -41,6 +41,7 @@ class secureapp {
 
     renderLogout(req, res) {
         req.logout();
+        req.session.destroy();
         res.redirect(this.basePath + '/login');
     }
 
