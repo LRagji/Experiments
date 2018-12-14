@@ -1,1 +1,3 @@
-4)Move everything to constants file EG:File path etc
+
+5)Remove font-awesome and just put required icon files as svg on static folder
+6)Use node gzip middleware for compressing the responses.

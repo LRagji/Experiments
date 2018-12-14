@@ -38,7 +38,7 @@
     </nav>
 
     <!-- Site Content -->
-    <div class="container">
+    <div class="container" id="mainContainer">
         <!-- Carousel -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -66,49 +66,20 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-        <div class="card" style="display:none" id="productTemplate">
-            <center>
-                <img class="card-img-top" style="max-width:220px; max-height:250px" src="../static/resources/images/Product1.jpg"
-                    alt="Card image cap">
-            </center>
-            <div class="card-body">
-                <h3>PRODUCT NAME</h3>
-                <div class="d-flex justify-content-center align-items-center">
-                    500/-INR
-                    <button class="btn btn-link my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
-                        Buy Now</button>
+        <div id="resultContainer" class="card-columns"></div>
+        <div id="loadingSpinner" class="my-2">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100"
+                    aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    <span id="loadingMessage">Loading Products</span>
                 </div>
-                </input>
             </div>
         </div>
-        <img id="loadingSpinner" style="max-width:220px; max-height:250px" src="../static/resources/images/loading.gif"
-            alt="Loading Results">
-        <div id="resultContainer" class="card-columns">
-
-        </div>
-
     </div>
-   
+
     <!-- Footer -->
     <% include ./footer %>
-
-    <script>
-            loadData();
-            function loadData() {
-                $.getJSON("/v1/home/products", function (data) {
-                    var items = [];
-                    var template = $('#productTemplate');
-                    var container = $('#resultContainer');
-                    var spinner = $('#loadingSpinner');
-                    $.each(data, function (key, val) {
-                        var clonedTemplate = template.clone();
-                        clonedTemplate.show();
-                        container.append(clonedTemplate);
-                    });
-                    spinner.hide();
-                });
-            }
-        </script>
+    <script src="../static/resources/scripts/paginatedProducts.js"></script>
 </body>
 
 </html>

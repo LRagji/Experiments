@@ -11,14 +11,20 @@ class apiServer {
 
     getHomePageProducts(req, res) {
         let arr = [];
-        for (let i = 0; i < 10; i++) {
+        let page = parseInt(req.query.page);
+        let size = parseInt(req.query.size);
+        for (let i = 0; i < size; i++) {
             arr.push({
-                "productname": "Laukik",
-                "price": i
+                "id": (page * size) + i,
+                "productname": "Laukik " + i,
+                "price": (page * size) + i
             })
         }
-        res.json(arr);
+        if (req.query.page < 3)
+            res.status(206).send(arr);
+        else
+            res.status(200).send(arr);
     }
 }
 
-module.exports=apiServer;
+module.exports = apiServer;
