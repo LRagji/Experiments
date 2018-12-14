@@ -61,7 +61,7 @@ function addProductToSession(productId) {
 function showFailure(message) {
     alertPanel.text(message)
         .removeAttr('class')
-        .addClass('alert alert-danger')
+        .addClass('alert alert-danger text-center')
         .show()
         .fadeOut(4000);
 }
@@ -69,7 +69,7 @@ function showFailure(message) {
 function showSucess(message) {
     alertPanel.text(message)
         .removeAttr('class')
-        .addClass('alert alert-success')
+        .addClass('alert alert-success text-center')
         .show()
         .fadeOut(4000);
 }
