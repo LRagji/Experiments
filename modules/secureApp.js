@@ -26,14 +26,17 @@ class secureapp {
             res.redirect("/secure/profile");
         }
         else {
-            var pageData = {};
+            let pageData = {};
             pageData[constants.error] = req.flash("error");
+            pageData[constants.cartItems] = utils.getCartItemsCount(req);
             res.render(this.securePagePath + 'login', utils.constructPageData(req.user, pageData));
         }
     }
 
     renderProfile(req, res) {
-        res.render(this.securePagePath + 'profile', { user: req.user });
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render(this.securePagePath + 'profile', utils.constructPageData(req.user, pageData));
     }
 
     renderLogout(req, res) {

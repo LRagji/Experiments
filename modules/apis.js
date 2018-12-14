@@ -1,3 +1,5 @@
+let utils = require('./utilities');
+
 class apiServer {
     constructor(server) {
         this.getHomePageProducts = this.getHomePageProducts.bind(this);
@@ -36,7 +38,7 @@ class apiServer {
         }
 
         req.session.products.push({ "productId": req.body.productId });
-        res.status(201).send({ "TotalProducts": req.session.products.length });
+        res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
     }
 }
 

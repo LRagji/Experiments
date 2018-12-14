@@ -26,7 +26,9 @@ class dynamicPages {
     }
 
     homePage(req, res) {
-        res.render('../pages/index', utils.constructPageData(req.user, undefined));
+        let pageData = {};
+        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+        res.render('../pages/index', utils.constructPageData(req.user, pageData));
     }
 
     productPage(req, res) {
@@ -36,8 +38,9 @@ class dynamicPages {
                     throw new Error("No Product found in database for product id:" + req.query.pid);
                 }
                 else {
-                    var pageData = {};
+                    let pageData = {};
                     pageData[constants.product] = product;
+                    pageData[constants.cartItems] =  utils.getCartItemsCount(req);
                     res.render('../pages/product', utils.constructPageData(req.user, pageData));
                 }
             })
@@ -60,8 +63,9 @@ class dynamicPages {
             });
 
         }
-        var pageData = {};
+        let pageData = {};
         pageData[constants.error] = exception;
+        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
         res.render('../pages/error', utils.constructPageData(req.user, pageData));
     }
 }

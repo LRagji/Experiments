@@ -16,5 +16,12 @@ module.exports = {
             user: user,
             pageData: data
         }
+    },
+
+    getCartItemsCount(req) {
+        if (req.session.products === undefined) {
+            req.session.products = [];
+        }
+        return req.session.products.length;
     }
 }
