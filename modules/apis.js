@@ -1,15 +1,18 @@
 class apiServer {
     constructor(server) {
         this.getHomePageProducts = this.getHomePageProducts.bind(this);
+        this.addProductToSession = this.addProductToSession.bind(this);
         this.loadRoutes(server);
     }
 
     loadRoutes(server) {
         server.get('/v1/home/products', this.getHomePageProducts);
+        server.post('/v1/cart/products', this.addProductToSession);
         return server;
     }
 
     getHomePageProducts(req, res) {
+        // TODO:Call the appropiate API
         let arr = [];
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
@@ -24,6 +27,16 @@ class apiServer {
             res.status(206).send(arr);
         else
             res.status(200).send(arr);
+    }
+
+    addProductToSession(req, res) {
+
+        if (req.session.products === undefined) {
+            req.session.products = [];
+        }
+
+        req.session.products.push({ "productId": req.body.productId });
+        res.status(201).send({ "TotalProducts": req.session.products.length });
     }
 }
 

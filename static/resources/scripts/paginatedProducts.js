@@ -1,6 +1,8 @@
 var container = $('#resultContainer');
 var spinner = $('#loadingSpinner');
 var loadingMessage = $('#loadingMessage');
+var shoppingBadge = $('#shoppingCart');
+var alertPanel = $('#alertPane');
 var pageNo = 1;
 var size = 10;
 
@@ -44,6 +46,34 @@ function loadData(query) {
     });
 }
 
+function addProductToSession(productId) {
+    $.post("/v1/cart/products", { productId: productId }).always((responseData) => {
+        if (responseData !== undefined && responseData.TotalProducts !== undefined && parseInt(responseData.TotalProducts)) {
+            showSucess("Product added to your shopping cart.")
+            shoppingBadge.text(parseInt(responseData.TotalProducts));
+        }
+        else {
+            showFailure("Failed to add product to cart.");
+        }
+    });
+}
+
+function showFailure(message) {
+    alertPanel.text(message)
+        .removeAttr('class')
+        .addClass('alert alert-danger')
+        .show()
+        .fadeOut(4000);
+}
+
+function showSucess(message) {
+    alertPanel.text(message)
+        .removeAttr('class')
+        .addClass('alert alert-success')
+        .show()
+        .fadeOut(4000);
+}
+
 function fillProductInfo(product) {
 
     return `<div class="card m-1">
@@ -55,10 +85,9 @@ function fillProductInfo(product) {
         <h3>${product.productname}</h3>
         <div class="d-flex justify-content-center align-items-center">
             ${product.price}/-INR
-            <button class="btn btn-link my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
+            <button onClick=addProductToSession(${product.id}) class="btn btn-link my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
                 Buy Now</button>
         </div>
-        </input>
     </div>
 </div>`;
 }
