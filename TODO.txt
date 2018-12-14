@@ -4,9 +4,4 @@
 6)Use node gzip middleware for compressing the responses.
 7)Use minification to reduce the size of the total file 
 
---Functions
-8)Test default laoding of the page should load the total count for prducts
-9)After login the shopping cart should retain.
-10)We need to add quantity.
-11)What to do when same product is added 
-12)Logout should clear the cart.
+--Functional

@@ -46,8 +46,8 @@ function loadData(query) {
     });
 }
 
-function addProductToSession(productId) {
-    $.post("/v1/cart/products", { productId: productId }).always((responseData) => {
+function addProductToSession(productId,quantity) {
+    $.post("/v1/cart/products", { productId: productId,quantity:quantity }).always((responseData) => {
         if (responseData !== undefined && responseData.TotalProducts !== undefined && parseInt(responseData.TotalProducts)) {
             showSucess("Product added to your shopping cart.")
             shoppingBadge.text(parseInt(responseData.TotalProducts));
@@ -85,7 +85,7 @@ function fillProductInfo(product) {
         <h3>${product.productname}</h3>
         <div class="d-flex justify-content-center align-items-center">
             ${product.price}/-INR
-            <button onClick=addProductToSession(${product.id}) class="btn btn-link my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
+            <button onClick=addProductToSession(${product.id},1) class="btn btn-link my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
                 Buy Now</button>
         </div>
     </div>

@@ -21,7 +21,7 @@ class apiServer {
         for (let i = 0; i < size; i++) {
             arr.push({
                 "id": (page * size) + i,
-                "productname": "Product " + (page * size) + i,
+                "productname": "Product Name " + ((page * size) + i),
                 "price": (page * size) + i
             })
         }
@@ -37,10 +37,18 @@ class apiServer {
             req.session.products = [];
         }
         if (req.session.products.length < 25) {
-            req.session.products.push({ "productId": req.body.productId });
+            let productQuantity = parseInt(req.body.quantity);
+            let existingProduct = req.session.products.find((element) => { return element.productId === req.body.productId });
+            if (existingProduct === undefined) {
+                req.session.products.push({ "productId": req.body.productId, "quantity": productQuantity });
+            }
+            else {
+                existingProduct.quantity += productQuantity;
+            }
+
             res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }
-        else{
+        else {
             res.status(413).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }
     }
