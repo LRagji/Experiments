@@ -18,6 +18,8 @@ class dynamicPages {
         this.renderHowToPlaceOrder = this.renderHowToPlaceOrder.bind(this);
         this.renderWhyShopHere = this.renderWhyShopHere.bind(this);
         this.renderRequestAProduct = this.renderRequestAProduct.bind(this);
+        this.renderShippingTerms = this.renderShippingTerms.bind(this);
+        this.renderPrivacyPolicy = this.renderPrivacyPolicy.bind(this);
         this.loadRoutes(server);
     }
 
@@ -30,6 +32,8 @@ class dynamicPages {
         server.get('/howtoorder', this.renderHowToPlaceOrder);
         server.get('/whyshophere', this.renderWhyShopHere);
         server.get('/requestaproduct', this.renderRequestAProduct);
+        server.get('/shippingterms', this.renderShippingTerms);
+        server.get('/privacypolicy', this.renderPrivacyPolicy);
         return server;
     }
 
@@ -74,6 +78,19 @@ class dynamicPages {
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/static/requestaproduct', utils.constructPageData(req.user, pageData));
     }
+
+    renderShippingTerms(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/static/shippingterms', utils.constructPageData(req.user, pageData));
+    }
+
+    renderPrivacyPolicy(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/static/privacypolicy', utils.constructPageData(req.user, pageData));
+    }
+
     renderErrorPage(req, res) {
         let exception = req.flash(constants.error);
         if (exception.length <= 0) {
