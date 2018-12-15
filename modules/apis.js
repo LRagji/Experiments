@@ -25,7 +25,7 @@ class apiServer {
                 "price": (page * size) + i
             })
         }
-        if (req.query.page < 3)
+        if (req.query.page < 1)
             res.status(206).send(arr);
         else
             res.status(200).send(arr);
