@@ -15,6 +15,7 @@ class dynamicPages {
         this.homePage = this.homePage.bind(this);
         this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
+        this.renderHowToPlaceOrder= this.renderHowToPlaceOrder.bind(this);
         this.loadRoutes(server);
     }
 
@@ -22,6 +23,9 @@ class dynamicPages {
         server.get('/', this.homePage);
         server.get('/product', this.productPage);
         server.get('/error', this.renderErrorPage);
+
+        //Static
+        server.get('/howtoorder',this.renderHowToPlaceOrder);
         return server;
     }
 
@@ -47,6 +51,13 @@ class dynamicPages {
             .catch((err) => {
                 utils.navigateToError(req, res, err, textService["Unknown Product"]);
             });
+    }
+
+    renderHowToPlaceOrder(req,res)
+    {
+        let pageData = {};
+        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+        res.render('../pages/static/howtoplaceorder', utils.constructPageData(req.user, pageData));
     }
 
     renderErrorPage(req, res) {
