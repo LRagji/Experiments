@@ -76,9 +76,9 @@ function showSucess(message) {
 
 function fillProductInfo(product) {
 
-    return `<div class="card m-1">
+    return `<div class="card m-2 myshadow" style="max-width:250px" >
     <center>
-        <img class="card-img-top" style="max-width:220px; max-height:250px" src="../static/resources/images/Product1.jpg"
+        <img class="productThumbnail" src="../static/resources/images/Product1.jpg"
             alt="Product Image">
     </center>
     <div class="card-body">
