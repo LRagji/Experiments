@@ -16,6 +16,7 @@ class dynamicPages {
         this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
         this.renderHowToPlaceOrder= this.renderHowToPlaceOrder.bind(this);
+        this.renderWhyShopHere=this.renderWhyShopHere.bind(this);
         this.loadRoutes(server);
     }
 
@@ -26,6 +27,7 @@ class dynamicPages {
 
         //Static
         server.get('/howtoorder',this.renderHowToPlaceOrder);
+        server.get('/whyshophere',this.renderWhyShopHere);
         return server;
     }
 
@@ -58,6 +60,13 @@ class dynamicPages {
         let pageData = {};
         pageData[constants.cartItems] =  utils.getCartItemsCount(req);
         res.render('../pages/static/howtoplaceorder', utils.constructPageData(req.user, pageData));
+    }
+
+    renderWhyShopHere(req,res)
+    {
+        let pageData = {};
+        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+        res.render('../pages/static/whyshophere', utils.constructPageData(req.user, pageData));
     }
 
     renderErrorPage(req, res) {
