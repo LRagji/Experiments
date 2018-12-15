@@ -8,8 +8,8 @@
     "start": "node_modules/nodemon/bin/nodemon.js index.js;"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LRagji/Experiments.git"
+    "type": "",
+    "url": ""
   },
   "keywords": [],
   "author": "",
