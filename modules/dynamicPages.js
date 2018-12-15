@@ -20,6 +20,7 @@ class dynamicPages {
         this.renderRequestAProduct = this.renderRequestAProduct.bind(this);
         this.renderShippingTerms = this.renderShippingTerms.bind(this);
         this.renderPrivacyPolicy = this.renderPrivacyPolicy.bind(this);
+        this.renderTermsAndConditions = this.renderTermsAndConditions.bind(this);
         this.loadRoutes(server);
     }
 
@@ -34,6 +35,7 @@ class dynamicPages {
         server.get('/requestaproduct', this.renderRequestAProduct);
         server.get('/shippingterms', this.renderShippingTerms);
         server.get('/privacypolicy', this.renderPrivacyPolicy);
+        server.get('/terms', this.renderTermsAndConditions);
         return server;
     }
 
@@ -89,6 +91,12 @@ class dynamicPages {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/static/privacypolicy', utils.constructPageData(req.user, pageData));
+    }
+
+    renderTermsAndConditions(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/static/termsandconditions', utils.constructPageData(req.user, pageData));
     }
 
     renderErrorPage(req, res) {
