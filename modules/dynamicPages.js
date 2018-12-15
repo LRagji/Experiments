@@ -15,8 +15,9 @@ class dynamicPages {
         this.homePage = this.homePage.bind(this);
         this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
-        this.renderHowToPlaceOrder= this.renderHowToPlaceOrder.bind(this);
-        this.renderWhyShopHere=this.renderWhyShopHere.bind(this);
+        this.renderHowToPlaceOrder = this.renderHowToPlaceOrder.bind(this);
+        this.renderWhyShopHere = this.renderWhyShopHere.bind(this);
+        this.renderRequestAProduct = this.renderRequestAProduct.bind(this);
         this.loadRoutes(server);
     }
 
@@ -26,14 +27,15 @@ class dynamicPages {
         server.get('/error', this.renderErrorPage);
 
         //Static
-        server.get('/howtoorder',this.renderHowToPlaceOrder);
-        server.get('/whyshophere',this.renderWhyShopHere);
+        server.get('/howtoorder', this.renderHowToPlaceOrder);
+        server.get('/whyshophere', this.renderWhyShopHere);
+        server.get('/requestaproduct', this.renderRequestAProduct);
         return server;
     }
 
     homePage(req, res) {
         let pageData = {};
-        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/index', utils.constructPageData(req.user, pageData));
     }
 
@@ -46,7 +48,7 @@ class dynamicPages {
                 else {
                     let pageData = {};
                     pageData[constants.product] = product;
-                    pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+                    pageData[constants.cartItems] = utils.getCartItemsCount(req);
                     res.render('../pages/product', utils.constructPageData(req.user, pageData));
                 }
             })
@@ -55,20 +57,23 @@ class dynamicPages {
             });
     }
 
-    renderHowToPlaceOrder(req,res)
-    {
+    renderHowToPlaceOrder(req, res) {
         let pageData = {};
-        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/static/howtoplaceorder', utils.constructPageData(req.user, pageData));
     }
 
-    renderWhyShopHere(req,res)
-    {
+    renderWhyShopHere(req, res) {
         let pageData = {};
-        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/static/whyshophere', utils.constructPageData(req.user, pageData));
     }
 
+    renderRequestAProduct(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/static/requestaproduct', utils.constructPageData(req.user, pageData));
+    }
     renderErrorPage(req, res) {
         let exception = req.flash(constants.error);
         if (exception.length <= 0) {
@@ -85,7 +90,7 @@ class dynamicPages {
         }
         let pageData = {};
         pageData[constants.error] = exception;
-        pageData[constants.cartItems] =  utils.getCartItemsCount(req);
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/error', utils.constructPageData(req.user, pageData));
     }
 }
