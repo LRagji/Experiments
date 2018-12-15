@@ -21,6 +21,9 @@ class dynamicPages {
         this.renderShippingTerms = this.renderShippingTerms.bind(this);
         this.renderPrivacyPolicy = this.renderPrivacyPolicy.bind(this);
         this.renderTermsAndConditions = this.renderTermsAndConditions.bind(this);
+        this.renderAboutUs = this.renderAboutUs.bind(this);
+        this.renderContactUs = this.renderContactUs.bind(this);
+        
         this.loadRoutes(server);
     }
 
@@ -36,6 +39,8 @@ class dynamicPages {
         server.get('/shippingterms', this.renderShippingTerms);
         server.get('/privacypolicy', this.renderPrivacyPolicy);
         server.get('/terms', this.renderTermsAndConditions);
+        server.get('/about', this.renderAboutUs);
+        server.get('/contact', this.renderContactUs);
         return server;
     }
 
@@ -99,6 +104,17 @@ class dynamicPages {
         res.render('../pages/static/termsandconditions', utils.constructPageData(req.user, pageData));
     }
 
+    renderAboutUs(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/static/about', utils.constructPageData(req.user, pageData));
+    }
+
+    renderContactUs(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/static/contact', utils.constructPageData(req.user, pageData));
+    }
     renderErrorPage(req, res) {
         let exception = req.flash(constants.error);
         if (exception.length <= 0) {
