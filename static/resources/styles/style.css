@@ -20,3 +20,8 @@
     border-radius:0px;
     display:none
 }
+.myproductcard
+{
+    max-width:250px; 
+    background-image: url('../images/1.jpg');
+}

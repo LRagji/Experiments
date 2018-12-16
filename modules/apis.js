@@ -21,8 +21,12 @@ class apiServer {
         for (let i = 0; i < size; i++) {
             arr.push({
                 "id": (page * size) + i,
-                "productname": "Product Name " + ((page * size) + i),
-                "price": (page * size) + i
+                "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi " + ((page * size) + i),
+                "offerprice": (page * size) + i,
+                "price": (((page * size) + i) * 10),
+                "image": "Product2.jpg",
+                "shippingdetail": "Ships in 10 days."
+
             })
         }
         if (req.query.page < 1)
