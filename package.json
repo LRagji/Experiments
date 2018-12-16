@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node_modules/nodemon/bin/nodemon.js index.js;"
+    "start": "node_modules/nodemon/bin/nodemon.js index.js;",
+    "winstart": "cls && node \node_modules\nodemon\bin\nodemon.js index.js;",
+    "winbundle":"cls && if exist dist rd /s /q dist && mkdir dist && bundle.bat"
   },
   "repository": {
     "type": "",
