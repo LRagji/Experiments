@@ -2,21 +2,60 @@
     Response:
     [
         {
-            id: 10
-            image: "Product2.jpg"
-            name: "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi 10"
-            offerprice: 10
-            price: 100
-            shippingdetail: "Ships in 10 days."
+            "id": 10
+            "image": "Product2.jpg"
+            "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi 10"
+            "offerprice": 10
+            "price": 100.2
+            "shippingdetail": "Ships in 10 days."
         }
     ]
+2)GET v1/products/{productID} should return everything about the product and any joins if any
+    Response:
+    {
+        "allkeys":"allvalues"
+    }
 
+3)GET v1/users/{userEmail} should return everything about the user including hashed password MD5 algorithm
+    Response:
+    {
+        "id": 2,
+        "prefix":"Mr"
+        "first": "Laukik",
+        "last": "R",
+        "mobile": "123456789",
+        "email": "Laukik.Ragji@gmail.com",
+        "password": "81d7df2cd5d931a654f48a43a8442d5d",
+        "meta": { "type": "admin" }
+    }
 
+4)POST v1/users/ will be used to create a user.
+    Request:
+    {
+        "prefix":"Mr"
+        "first": "Laukik",
+        "last": "R",
+        "mobile": "123456789",
+        "email": "Laukik.Ragji@gmail.com",
+        "password": "81d7df2cd5d931a654f48a43a8442d5d",
+        ""
+    }
+    Response:
+    {
+        "id": 2,
+        "prefix":"Mr"
+        "first": "Laukik",
+        "last": "R",
+        "mobile": "123456789",
+        "email": "Laukik.Ragji@gmail.com",
+        "password": "81d7df2cd5d931a654f48a43a8442d5d",
+        "meta": { "type": "admin" }
+    }    
 
-Optional)Need GET v1/categories to return list of categories with following response
+5)Need GET v1/categories to return list of categories with following response
     Response:
     [
         {
-            name:"categoryname"
+            "name":"categoryname"
         }
     ]
