@@ -28,6 +28,10 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="card-body">
 
+                            <!-- <% users.forEach(function(user){ %>
+                                <%- include('user/show', {user: user}) %>
+                              <% }); %> -->
+
                         <div class="row m-1">
                             <div class="col-md-1">
                                 <img class="productThumbnail" src="../static/resources/images/Product1.jpg" style="max-width:50px;max-height:70px"
@@ -53,7 +57,7 @@
                             </div>
                         </div>
                         <hr>
-                        
+
                         <!-- Final Footer -->
                         <div class="d-flex flex-row-reverse">
                             <form id="cartForm" method="POST" url="/cart" class="form-inline">

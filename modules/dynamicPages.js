@@ -123,6 +123,7 @@ class dynamicPages {
     renderCart(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        pageData[constants.shoppingCartProducts] = ;
         res.render('../pages/cart', utils.constructPageData(req.user, pageData));
     }
 
