@@ -23,6 +23,7 @@ class dynamicPages {
         this.renderTermsAndConditions = this.renderTermsAndConditions.bind(this);
         this.renderAboutUs = this.renderAboutUs.bind(this);
         this.renderContactUs = this.renderContactUs.bind(this);
+        this.renderCart=this.renderCart.bind(this);
         
         this.loadRoutes(server);
     }
@@ -31,6 +32,7 @@ class dynamicPages {
         server.get('/', this.homePage);
         server.get('/product', this.productPage);
         server.get('/error', this.renderErrorPage);
+        server.get('/cart',this.renderCart);
 
         //Static
         server.get('/howtoorder', this.renderHowToPlaceOrder);
@@ -115,6 +117,13 @@ class dynamicPages {
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/static/contact', utils.constructPageData(req.user, pageData));
     }
+
+    renderCart(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/cart', utils.constructPageData(req.user, pageData));
+    }
+
     renderErrorPage(req, res) {
         let exception = req.flash(constants.error);
         if (exception.length <= 0) {
