@@ -24,6 +24,7 @@ class dynamicPages {
         this.renderAboutUs = this.renderAboutUs.bind(this);
         this.renderContactUs = this.renderContactUs.bind(this);
         this.renderCart=this.renderCart.bind(this);
+        this.processCart=this.processCart.bind(this);
         
         this.loadRoutes(server);
     }
@@ -33,6 +34,7 @@ class dynamicPages {
         server.get('/product', this.productPage);
         server.get('/error', this.renderErrorPage);
         server.get('/cart',this.renderCart);
+        server.post('/cart',this.processCart);
 
         //Static
         server.get('/howtoorder', this.renderHowToPlaceOrder);
@@ -119,6 +121,16 @@ class dynamicPages {
     }
 
     renderCart(req, res) {
+        let pageData = {};
+        pageData[constants.cartItems] = utils.getCartItemsCount(req);
+        res.render('../pages/cart', utils.constructPageData(req.user, pageData));
+    }
+
+    processCart(req,res)
+    {
+        // TODO: First check if the same user is doing post
+        // TODO:Check the state of the checkout state from session
+        console.log(req.body);
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/cart', utils.constructPageData(req.user, pageData));

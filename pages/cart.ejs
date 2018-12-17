@@ -4,7 +4,7 @@
 <head>
     <% include ./head %>
 
-    <title>Health Mall-Error</title>
+    <title>Health Mall-Shopping Cart</title>
 </head>
 
 <body class="bg-light">
@@ -12,52 +12,108 @@
     <% include ./header %>
 
     <!-- Content -->
-    <div class="container">
+    <div class="container p-3">
+
         <div class="accordion" id="accordionExample">
+
             <div class="card">
-              <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Collapsible Group Item #1
-                  </button>
-                </h5>
-              </div>
-          
-              <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                <div class="card-header bg-success" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link text-white " type="button" data-toggle="collapse" data-target="#collapseOne"
+                            aria-expanded="true" aria-controls="collapseOne">
+                            <h4>1.Shopping Cart</h4>
+                        </button>
+                    </h5>
                 </div>
-              </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+
+                        <div class="row m-1">
+                            <div class="col-md-1">
+                                <img class="productThumbnail" src="../static/resources/images/Product1.jpg" style="max-width:50px;max-height:70px"
+                                    alt="Product Image">
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Source Naturals, Natural Progesterone Cream, 4 oz Code : SNS01926</strong>
+                            </div>
+                            <div class="col">
+                                <ul class="list-unstyled">
+                                    <li>Price:<b>&#8377;2000.00</b></li>
+                                    <li>Quantity:<b id="s">1</b></li>
+                                    <li>Discount:<b>&#8377;0</b></li>
+                                    <li><b>Total:&#8377;2000.00</b></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="btn-group my-3">
+                                    <button type="button" class="btn btn-success"><i class="fas fa-plus-square"></i></button>
+                                    <button type="button" class="btn btn-success"><i class="fas fa-trash-alt"></i></button>
+                                    <button type="button" class="btn btn-success"><i class="fas fa-minus-square"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        
+                        <!-- Final Footer -->
+                        <div class="d-flex flex-row-reverse">
+                            <form id="cartForm" method="POST" url="/cart" class="form-inline">
+                                <input type="hidden" name="state" value="1" />
+                                <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;2000</h3>
+                                <button type="submit" class="btn btn-primary">Place Order</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
             <div class="card">
-              <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Collapsible Group Item #2
-                  </button>
-                </h5>
-              </div>
-              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                <div class="card-body">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                <div class="card-header bg-success" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed text-white disabled" type="button" data-toggle="collapse"
+                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <h4>2.Shipping Details</h4>
+                        </button>
+                    </h5>
                 </div>
-              </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't
+                        heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
             </div>
+
+
             <div class="card">
-              <div class="card-header" id="headingThree">
-                <h5 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Collapsible Group Item #3
-                  </button>
-                </h5>
-              </div>
-              <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                <div class="card-body">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                <div class="card-header bg-success" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed disabled text-white" type="button" data-toggle="collapse"
+                            data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <h4>3.Payment Details</h4>
+                        </button>
+                    </h5>
                 </div>
-              </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't
+                        heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
             </div>
-          </div>
+
+        </div>
+
     </div>
 
     <!-- Footer -->
