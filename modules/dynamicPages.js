@@ -127,6 +127,7 @@ class dynamicPages {
         try {
             let pageData = {};
             pageData[constants.cartItems] = utils.getCartItemsCount(req);
+            pageData[constants.state] = req.session.locked === undefined ? undefined : req.session.locked.state;
             pageData[constants.shoppingCartProducts] = [];
 
             if (req.session.products !== undefined) {
@@ -144,12 +145,36 @@ class dynamicPages {
     }
 
     processCart(req, res) {
-        // TODO: First check if the same user is doing post
-        // TODO:Check the state of the checkout state from session
-        console.log(req.body);
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/cart', utils.constructPageData(req.user, pageData));
+        try {
+            // TODO: First check if the same user is doing post
+            // TODO:Check the state of the checkout state from session
+            if (req.user === undefined) {
+                res.redirect("/secure/login");
+                return;
+            }
+
+            if (utils.getCartItemsCount(req) > 0 && req.user !== undefined) {
+                if (req.session.locked === undefined) {
+                    req.session.locked = {
+                        "userId": req.user.id,
+                        "state": 1
+                    }
+                    res.redirect("/cart");;
+                    return;
+                }
+                else {
+                    if (req.session.locked.state <= 2) req.session.locked.state += 1;
+                    res.redirect("/cart");;
+                    return;
+                }
+            }
+            else {
+                throw new Error("Cannot find Users/Cart items, please refresh and try again.");
+            }
+        }
+        catch (ex) {
+            utils.navigateToError(req, res, err, undefined);
+        }
     }
 
     manipulateProductsInCart(req, res) {

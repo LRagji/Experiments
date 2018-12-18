@@ -14,16 +14,16 @@ let apiServer = null;
 var minifyHTML = require('express-minify-html');
 
 // Minify on the fly
-app.use(minifyHTML({
-    override: true,
-    exception_url: false,
-    htmlMinifier: {
-        removeComments: true,
-        collapseWhitespace: true,
-        minifyJS: true,
-        minifyCSS: true
-    }
-}));
+// app.use(minifyHTML({
+//     override: true,
+//     exception_url: false,
+//     htmlMinifier: {
+//         removeComments: true,
+//         collapseWhitespace: true,
+//         minifyJS: true,
+//         minifyCSS: true
+//     }
+// }));
 
 //Body-Parser
 app.use(require('body-parser').urlencoded({ extended: true }));

@@ -19,13 +19,13 @@
             <div class="card">
                 <div class="card-header bg-success" id="headingOne">
                     <h5 class="mb-0">
-                        <button class="btn btn-link text-white " type="button" data-toggle="collapse" data-target="#collapseOne"
-                            aria-expanded="true" aria-controls="collapseOne">
+                        <button id="btnCollapseOne" class="btn btn-link text-white" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             <h4>1.Shopping Cart</h4>
                         </button>
                     </h5>
                 </div>
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="card-body">
 
                         <% pageData.scp.forEach(function(product){ %>
@@ -79,7 +79,8 @@
                                 <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;
                                     <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
                                 </h3>
-                                <button type="submit" class="btn btn-primary">Place Order</button>
+                                <button type="submit" class="btn btn-primary" <%=pageData.cartItems <=0?'disabled':'' %>>Place
+                                    Order</button>
                             </form>
                         </div>
                     </div>
@@ -90,7 +91,7 @@
             <div class="card">
                 <div class="card-header bg-success" id="headingTwo">
                     <h5 class="mb-0">
-                        <button class="btn btn-link collapsed text-white disabled" type="button" data-toggle="collapse"
+                        <button id="btnCollapseTwo" class="btn btn-link collapsed text-white" type="button" data-toggle="collapse"
                             data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                             <h4>2.Shipping Details</h4>
                         </button>
@@ -113,8 +114,8 @@
             <div class="card">
                 <div class="card-header bg-success" id="headingThree">
                     <h5 class="mb-0">
-                        <button class="btn btn-link collapsed disabled text-white" type="button" data-toggle="collapse"
-                            data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <button id="btnCollapseThree" class="btn btn-link collapsed text-white" type="button"
+                            data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                             <h4>3.Payment Details</h4>
                         </button>
                     </h5>
@@ -133,11 +134,36 @@
             </div>
 
         </div>
-
+        <input id="state" type="hidden" name="operator" value="<%- pageData.state %>" />
     </div>
 
     <!-- Footer -->
     <% include ./footer %>
+    <script>
+        let state = $("#state").val();
+
+        if (state === "1") {
+            $('#btnCollapseOne').prop('disabled', false);
+            $('#btnCollapseTwo').prop('disabled', false);
+            $('#btnCollapseThree').prop('disabled', true);
+            $('#btnCollapseTwo').click();
+        }
+
+        else if (state === "2") {
+            $('#btnCollapseOne').prop('disabled', false);
+            $('#btnCollapseTwo').prop('disabled', false);
+            $('#btnCollapseThree').prop('disabled', false);
+            $('#btnCollapseThree').click();
+        }
+
+        else {
+            $('#btnCollapseOne').prop('disabled', false);
+            $('#btnCollapseTwo').prop('disabled', true);
+            $('#btnCollapseThree').prop('disabled', true);
+            $('#btnCollapseOne').click();
+        }
+    </script>
+
 </body>
 
 </html>
