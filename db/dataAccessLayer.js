@@ -62,7 +62,7 @@ class DAL {
         for (let i = 0; i < ids.length; i++) {
             products.push({
                 "id": ids[i],
-                "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi " + i,
+                "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi " + ids[i],
                 "offerprice": i * 1000,
                 "price": i * 100,
                 "image": "Product2.jpg",

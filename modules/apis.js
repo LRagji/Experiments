@@ -36,23 +36,12 @@ class apiServer {
     }
 
     addProductToSession(req, res) {
-
-        if (req.session.products === undefined) {
-            req.session.products = [];
-        }
-        if (req.session.products.length < 25) {
-            let productQuantity = parseInt(req.body.quantity);
-            let existingProduct = req.session.products.find((element) => { return element.productId === req.body.productId });
-            if (existingProduct === undefined) {
-                req.session.products.push({ "productId": req.body.productId, "quantity": productQuantity });
-            }
-            else {
-                existingProduct.quantity += productQuantity;
-            }
+        try {
+            utils.addProductOrQuantityToCartItem(req, req.body.productId, 1);
 
             res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }
-        else {
+        catch (err) {
             res.status(413).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }
     }

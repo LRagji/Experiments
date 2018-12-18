@@ -25,6 +25,7 @@ class dynamicPages {
         this.renderContactUs = this.renderContactUs.bind(this);
         this.renderCart = this.renderCart.bind(this);
         this.processCart = this.processCart.bind(this);
+        this.manipulateProductsInCart = this.manipulateProductsInCart.bind(this);
 
         this.loadRoutes(server);
     }
@@ -35,6 +36,7 @@ class dynamicPages {
         server.get('/error', this.renderErrorPage);
         server.get('/cart', this.renderCart);
         server.post('/cart', this.processCart);
+        server.post('/cart/items', this.manipulateProductsInCart);
 
         //Static
         server.get('/howtoorder', this.renderHowToPlaceOrder);
@@ -121,6 +123,7 @@ class dynamicPages {
     }
 
     renderCart(req, res) {
+        //TODO:This should be promise based
         try {
             let pageData = {};
             pageData[constants.cartItems] = utils.getCartItemsCount(req);
@@ -147,6 +150,32 @@ class dynamicPages {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/cart', utils.constructPageData(req.user, pageData));
+    }
+
+    manipulateProductsInCart(req, res) {
+        try {
+
+            switch (req.body.operator) {
+                case "add":
+                    utils.addProductOrQuantityToCartItem(req, req.body.productId, 1);
+                    res.redirect("/cart");
+                    break;
+                case "sub":
+                    utils.subtractProductOrQuantityToCartItem(req, req.body.productId, 1);
+                    res.redirect("/cart");
+                    break;
+                case "rem":
+                    utils.subtractProductOrQuantityToCartItem(req, req.body.productId, constants.maxQuantity + 1);
+                    res.redirect("/cart");
+                    break;
+                default:
+                    throw new Error("Unknown Operator");
+                    break
+            }
+        }
+        catch (err) {
+            utils.navigateToError(req, res, err, undefined);
+        }
     }
 
     renderErrorPage(req, res) {

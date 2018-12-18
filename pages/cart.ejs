@@ -49,9 +49,21 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="btn-group my-3">
-                                    <button type="button" class="btn btn-success"><i class="fas fa-plus-square"></i></button>
-                                    <button type="button" class="btn btn-success"><i class="fas fa-trash-alt"></i></button>
-                                    <button type="button" class="btn btn-success"><i class="fas fa-minus-square"></i></button>
+                                    <form method="POST" action="/cart/items" id="add" >
+                                        <input type="hidden" name="operator" value="add" />
+                                        <input type="hidden" name="productId" value="${product.id}" />
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-plus-square"></i></button>
+                                    </form>
+                                    <form method="POST" action="/cart/items" id="rem" >
+                                        <input type="hidden" name="operator" value="rem" />
+                                        <input type="hidden" name="productId" value="${product.id}" />
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                    <form method="POST" action="/cart/items" id="sub">
+                                        <input type="hidden" name="operator" value="sub" />
+                                        <input type="hidden" name="productId" value="${product.id}" />
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-minus-square"></i></button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +74,7 @@
 
                         <!-- Final Footer -->
                         <div class="d-flex flex-row-reverse">
-                            <form id="cartForm" method="POST" url="/cart" class="form-inline">
+                            <form id="cartForm" method="POST" action="/cart" class="form-inline">
                                 <input type="hidden" name="state" value="1" />
                                 <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;
                                     <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
