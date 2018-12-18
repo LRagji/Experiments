@@ -124,6 +124,12 @@ class dynamicPages {
 
     renderCart(req, res) {
         //TODO:This should be promise based
+
+        req.session.locked = {
+            "userId": "SomeID",
+            "state": 1
+        }
+
         try {
             let pageData = {};
             pageData[constants.cartItems] = utils.getCartItemsCount(req);

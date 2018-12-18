@@ -99,13 +99,132 @@
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                     <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
-                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
-                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't
-                        heard of them accusamus labore sustainable VHS.
+                        <form>
+                            <!-- First Name -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="registerFirstName">Billing Address</label>
+                                        <div class="input-group mb-2">
+                                            <select id="inputState" class="input-group-prepend custom-select col-3">
+                                                <option class="input-group-text" selected>Mr.</option>
+                                                <option>Miss.</option>
+                                                <option>Dr.</option>
+                                                <option>Prof.</option>
+                                            </select>
+                                            <input type="text" class="form-control" id="registerFirstName" placeholder="First Name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <div class="d-flex">
+                                            <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck">
+                                            <label class="form-check-label" for="disabledFieldsetCheck">
+                                                Shipping Address, same as Billing
+                                            </label>
+                                        </div>
+                                        <div class="input-group mb-2">
+                                            <select id="inputState" class="input-group-prepend custom-select col-3">
+                                                <option class="input-group-text" selected>Mr.</option>
+                                                <option>Miss.</option>
+                                                <option>Dr.</option>
+                                                <option>Prof.</option>
+                                            </select>
+                                            <input type="text" class="form-control" id="registerFirstName" placeholder="First Name">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Last name">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Last name">
+                                </div>
+                            </div>
+                            <!-- Add 1 -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Address 1">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Address 1">
+                                </div>
+                            </div>
+                            <!-- Add 2 -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Address 2">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Address 2">
+                                </div>
+                            </div>
+                            <!-- Add 3 -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Address 3">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Address 3">
+                                </div>
+                            </div>
+                            <!-- City -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="City">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="City">
+                                </div>
+                            </div>
+                            <!-- Pincode -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Pincode">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Pincode">
+                                </div>
+                            </div>
+                            <!-- State -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <select id="inputState" class="input-group-prepend custom-select">
+                                        <option class="input-group-text" selected>Jaipur</option>
+                                        <option>Delhi.</option>
+                                        <option>Banglore.</option>
+                                        <option>Pune</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <select id="inputState" class="input-group-prepend custom-select">
+                                        <option class="input-group-text" selected>Jaipur</option>
+                                        <option>Delhi.</option>
+                                        <option>Banglore</option>
+                                        <option>Pune.</option>
+                                        <option>Maharashtra</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Mobile -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Mobile">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Mobile">
+                                </div>
+                            </div>
+                            <!-- Final Footer -->
+                            <div class="d-flex flex-row-reverse mt-2">
+                                <input type="hidden" name="state" value="1" />
+                                <button type="submit" class="btn btn-primary">Proceed to payment</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
