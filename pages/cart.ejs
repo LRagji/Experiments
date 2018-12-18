@@ -28,24 +28,23 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="card-body">
 
-                            <!-- <% users.forEach(function(user){ %>
-                                <%- include('user/show', {user: user}) %>
-                              <% }); %> -->
+                        <% pageData.scp.forEach(function(product){ %>
+                        <%- 
 
-                        <div class="row m-1">
+                        `<div class="row m-1">
                             <div class="col-md-1">
-                                <img class="productThumbnail" src="../static/resources/images/Product1.jpg" style="max-width:50px;max-height:70px"
+                                <img class="productThumbnail" src="../static/resources/images/${product.image}" style="max-width:50px;max-height:70px"
                                     alt="Product Image">
                             </div>
                             <div class="col-md-6">
-                                <strong>Source Naturals, Natural Progesterone Cream, 4 oz Code : SNS01926</strong>
+                                <strong>${product.name}</strong>
                             </div>
                             <div class="col">
                                 <ul class="list-unstyled">
-                                    <li>Price:<b>&#8377;2000.00</b></li>
-                                    <li>Quantity:<b id="s">1</b></li>
+                                    <li>Price:<b>&#8377;${product.price}</b></li>
+                                    <li>Quantity:<b id="s">${product.quantity}</b></li>
                                     <li>Discount:<b>&#8377;0</b></li>
-                                    <li><b>Total:&#8377;2000.00</b></li>
+                                    <li><b>Total:&#8377;${product.price * product.quantity}</b></li>
                                 </ul>
                             </div>
                             <div class="col-md-2">
@@ -56,13 +55,18 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
+                        <hr>`
+
+                        %>
+                        <% }); %>
 
                         <!-- Final Footer -->
                         <div class="d-flex flex-row-reverse">
                             <form id="cartForm" method="POST" url="/cart" class="form-inline">
                                 <input type="hidden" name="state" value="1" />
-                                <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;2000</h3>
+                                <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;
+                                    <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                </h3>
                                 <button type="submit" class="btn btn-primary">Place Order</button>
                             </form>
                         </div>

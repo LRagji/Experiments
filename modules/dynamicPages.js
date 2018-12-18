@@ -23,9 +23,9 @@ class dynamicPages {
         this.renderTermsAndConditions = this.renderTermsAndConditions.bind(this);
         this.renderAboutUs = this.renderAboutUs.bind(this);
         this.renderContactUs = this.renderContactUs.bind(this);
-        this.renderCart=this.renderCart.bind(this);
-        this.processCart=this.processCart.bind(this);
-        
+        this.renderCart = this.renderCart.bind(this);
+        this.processCart = this.processCart.bind(this);
+
         this.loadRoutes(server);
     }
 
@@ -33,8 +33,8 @@ class dynamicPages {
         server.get('/', this.homePage);
         server.get('/product', this.productPage);
         server.get('/error', this.renderErrorPage);
-        server.get('/cart',this.renderCart);
-        server.post('/cart',this.processCart);
+        server.get('/cart', this.renderCart);
+        server.post('/cart', this.processCart);
 
         //Static
         server.get('/howtoorder', this.renderHowToPlaceOrder);
@@ -121,14 +121,26 @@ class dynamicPages {
     }
 
     renderCart(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        pageData[constants.shoppingCartProducts] = ;
-        res.render('../pages/cart', utils.constructPageData(req.user, pageData));
+        try {
+            let pageData = {};
+            pageData[constants.cartItems] = utils.getCartItemsCount(req);
+            pageData[constants.shoppingCartProducts] = [];
+
+            if (req.session.products !== undefined) {
+                let productIds = req.session.products.map(ele => ele.productId);
+                let productInfo = dal.getProducts(productIds);
+                productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
+                pageData[constants.shoppingCartProducts] = productInfo;
+            }
+
+            res.render('../pages/cart', utils.constructPageData(req.user, pageData));
+        }
+        catch (err) {
+            utils.navigateToError(req, res, err, undefined);
+        }
     }
 
-    processCart(req,res)
-    {
+    processCart(req, res) {
         // TODO: First check if the same user is doing post
         // TODO:Check the state of the checkout state from session
         console.log(req.body);

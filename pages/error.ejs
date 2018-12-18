@@ -22,7 +22,7 @@
             <small>
                 <ul>
                     <% pageData.exception.forEach(function(err){ %>
-                    <%- '<li>'+err.message+'<br/>'+ err.stack+'</li>' %>
+                    <%- '<li><b>'+err.message+'</b><br/>'+ err.stack+'</li>' %>
                     <% }); %>
                 </ul>
             </small>

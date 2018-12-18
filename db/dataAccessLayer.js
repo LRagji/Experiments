@@ -44,7 +44,7 @@ class DAL {
     }
 
     getProductById(productId) {
-
+        // TODO:Call the appropiate API
         return new Promise((res, rej) => {
             let validatedProductid = parseInt(productId);
             if (isNaN(validatedProductid)) rej(Error("Invalid Product Id:" + productId));
@@ -52,8 +52,26 @@ class DAL {
             pgPool.query(`SELECT manufacturer.name as mname,manufacturer.website as website,manufacturer.image as mimage,products.*
             FROM products JOIN manufacturer ON (products.mid = manufacturer.id) 
             where products.id=$1`, [validatedProductid])
-                .then((result) => { res(result.rows[0]) }).catch((err)=>rej(err));
+                .then((result) => { res(result.rows[0]) }).catch((err) => rej(err));
         });
+    }
+
+    getProducts(ids) {
+        // TODO:Call the appropiate API
+        let products = [];
+        for (let i = 0; i < ids.length; i++) {
+            products.push({
+                "id": ids[i],
+                "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi " + i,
+                "offerprice": i * 1000,
+                "price": i * 100,
+                "image": "Product2.jpg",
+                "shippingdetail": "Ships in 10 days."
+
+            })
+        }
+
+        return products;
     }
 
     getUserByEmail(email) {
