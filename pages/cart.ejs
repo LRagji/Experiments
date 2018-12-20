@@ -108,14 +108,15 @@
                                     <div class="form-group mb-0">
                                         <h4>Billing Address</h4>
                                         <div class="input-group">
-                                            <select id="inputState" name="bSalutation" class="input-group-prepend custom-select col-3">
+                                            <select id="inputState" name="bSalutation" class="input-group-prepend custom-select col-3"
+                                                required>
                                                 <option class="input-group-text" selected>Mr.</option>
                                                 <option>Miss.</option>
                                                 <option>Dr.</option>
                                                 <option>Prof.</option>
                                             </select>
                                             <input type="text" name="bFirstName" class="form-control" id="registerFirstName"
-                                                placeholder="First Name">
+                                                placeholder="First Name" required>
                                         </div>
                                     </div>
                                 </div>
@@ -124,43 +125,49 @@
                             <!-- Last Name -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bLastName" class="form-control" placeholder="Last name">
+                                    <input type="text" name="bLastName" class="form-control" placeholder="Last name"
+                                        required>
                                 </div>
                             </div>
                             <!-- Add 1 -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bAdd1" class="form-control" placeholder="Address 1">
+                                    <input type="text" name="bAdd1" class="form-control" placeholder="Address 1"
+                                        required>
                                 </div>
                             </div>
                             <!-- Add 2 -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bAdd2" class="form-control" placeholder="Address 2">
+                                    <input type="text" name="bAdd2" class="form-control" placeholder="Address 2"
+                                        required>
                                 </div>
                             </div>
                             <!-- Add 3 -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bAdd3" class="form-control" placeholder="Address 3">
+                                    <input type="text" name="bAdd3" class="form-control" placeholder="Address 3"
+                                        required>
                                 </div>
                             </div>
                             <!-- City -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bCity" class="form-control" placeholder="City">
+                                    <input type="text" name="bCity" class="form-control" placeholder="City" required>
                                 </div>
                             </div>
                             <!-- Pincode -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bPincode" class="form-control" placeholder="Pincode">
+                                    <input type="tel" name="bPincode" class="form-control" placeholder="Pincode"
+                                        pattern="[0-9]{6}" title="Input a valid Indian pincode." required>
                                 </div>
                             </div>
                             <!-- State -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <select id="inputState" name="bState" class="input-group-prepend custom-select">
+                                    <select id="inputState" name="bState" class="input-group-prepend custom-select"
+                                        required>
                                         <option>Andaman &amp; Nicobar</option>
                                         <option>Andhra Pradesh</option>
                                         <option>Arunachal Pradesh</option>
@@ -203,7 +210,8 @@
                             <!-- Mobile -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bMobile" class="form-control" placeholder="Mobile">
+                                    <input type="tel" name="bMobile" class="form-control" placeholder="Mobile" pattern="[0-9]{10}"
+                                        title="Input a valid mobile number." required>
                                 </div>
                             </div>
 
@@ -216,8 +224,8 @@
                                         <div class="d-flex">
                                             <h4>Shipping Address</h4>
                                             <div class="form-check ml-3 my-auto">
-                                                <input class="form-check-input" onchange="this.checked?$('.collapseOnDuplicate').hide():$('.collapseOnDuplicate').show()" name="chkSameAsBilling" type="checkbox"
-                                                    id="defaultCheck1">
+                                                <input class="form-check-input" onchange="this.checked?$('.collapseOnDuplicate').hide():$('.collapseOnDuplicate').show();$('.collapseOnDuplicate :input').prop('required',!this.checked);"
+                                                    name="chkSameAsBilling" type="checkbox" id="defaultCheck1">
                                                 <label class="form-check-label" for="defaultCheck1">
                                                     Same as Billing
                                                 </label>
@@ -225,7 +233,8 @@
                                         </div>
 
                                         <div class="input-group collapseOnDuplicate">
-                                            <select id="inputState" name="sSalutation" class="input-group-prepend custom-select col-3">
+                                            <select id="inputState" name="sSalutation" class="input-group-prepend custom-select col-3"
+                                                required>
                                                 <option class="input-group-text" selected>Mr.</option>
                                                 <option>Miss.</option>
                                                 <option>Dr.</option>
@@ -241,43 +250,50 @@
                             <!-- Ship Last Name -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sLastName" class="form-control" placeholder="Last name">
+                                    <input type="text" name="sLastName" class="form-control" placeholder="Last name"
+                                        required>
                                 </div>
                             </div>
                             <!--Ship Add 1 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sAdd1" class="form-control" placeholder="Address 1">
+                                    <input type="text" name="sAdd1" class="form-control" placeholder="Address 1"
+                                        required>
                                 </div>
                             </div>
                             <!--Ship Add 2 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sAdd2" class="form-control" placeholder="Address 2">
+                                    <input type="text" name="sAdd2" class="form-control" placeholder="Address 2"
+                                        required>
                                 </div>
                             </div>
                             <!--Ship Add 3 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sAdd3" class="form-control" placeholder="Address 3">
+                                    <input type="text" name="sAdd3" class="form-control" placeholder="Address 3"
+                                        required>
                                 </div>
                             </div>
                             <!--Ship City -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sCity" class="form-control" placeholder="City">
+                                    <input type="text" name="sCity" class="form-control" placeholder="City" required>
                                 </div>
                             </div>
                             <!--Ship Pincode -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sPincode" class="form-control" placeholder="Pincode">
+                                    <input type="tel" name="sPincode" class="form-control" placeholder="Pincode"
+                                    pattern="[0-9]{6}" title="Input a valid Indian pincode."
+                                        required>
                                 </div>
                             </div>
                             <!--Ship State -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <select id="inputState" name="sState" class="input-group-prepend custom-select">
+                                    <select id="inputState" name="sState" class="input-group-prepend custom-select"
+                                        required>
                                         <option>Andaman &amp; Nicobar</option>
                                         <option>Andhra Pradesh</option>
                                         <option>Arunachal Pradesh</option>
@@ -320,7 +336,9 @@
                             <!--Ship Mobile -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sMobile" class="form-control" placeholder="Mobile">
+                                    <input type="tel" name="sMobile" class="form-control" placeholder="Mobile"
+                                    pattern="[0-9]{10}" title="Input a valid mobile number."
+                                        required>
                                 </div>
                             </div>
 
@@ -363,18 +381,22 @@
                                             <h2>Total:&#8377;500</h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
-                                                    <input name="chequeChequeNo" type="text" class="form-control" placeholder="Cheque No">
+                                                    <input name="chequeChequeNo" type="text" class="form-control"
+                                                        placeholder="Cheque No">
                                                 </div>
                                                 <div class="col-md">
-                                                    <input name="chequeDate" type="text" class="form-control" placeholder="Cheque Date">
+                                                    <input name="chequeDate" type="text" class="form-control"
+                                                        placeholder="Cheque Date">
                                                 </div>
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-md">
-                                                    <input name="chequeBankName" type="text" class="form-control" placeholder="Bank Name">
+                                                    <input name="chequeBankName" type="text" class="form-control"
+                                                        placeholder="Bank Name">
                                                 </div>
                                                 <div class="col-md">
-                                                    <input name="chequeBankBranch" type="text" class="form-control" placeholder="Bank Branch">
+                                                    <input name="chequeBankBranch" type="text" class="form-control"
+                                                        placeholder="Bank Branch">
                                                 </div>
                                             </div>
                                             <div class="d-flex my-2">
@@ -386,7 +408,8 @@
                                             </div>
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" name="chequeDeclaration" type="checkbox" value="" id="chequeConfirm">
+                                                    <input class="form-check-input" name="chequeDeclaration" type="checkbox"
+                                                        value="" id="chequeConfirm">
                                                     <label class="form-check-label" for="chequeConfirm">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -423,15 +446,18 @@
                                             <h2>Total:&#8377;500</h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
-                                                    <input name="bankTransferRefNo" type="text" class="form-control" placeholder="Txn Reference No">
+                                                    <input name="bankTransferRefNo" type="text" class="form-control"
+                                                        placeholder="Txn Reference No">
                                                 </div>
                                                 <div class="col-md">
-                                                    <input name="bankTransferDate" type="text" class="form-control" placeholder="Date">
+                                                    <input name="bankTransferDate" type="text" class="form-control"
+                                                        placeholder="Date">
                                                 </div>
                                             </div>
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
-                                                    <input name="bankTransferDeclaration" class="form-check-input" type="checkbox" value="" id="bankTransferDeclaration">
+                                                    <input name="bankTransferDeclaration" class="form-check-input" type="checkbox"
+                                                        value="" id="bankTransferDeclaration">
                                                     <label class="form-check-label" for="bankTransferDeclaration">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -475,7 +501,8 @@
                                             </div>
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
-                                                    <input name="gatewayDeclaration" class="form-check-input" type="checkbox" value="" id="gatewayDeclaration">
+                                                    <input name="gatewayDeclaration" class="form-check-input" type="checkbox"
+                                                        value="" id="gatewayDeclaration">
                                                     <label class="form-check-label" for="gatewayDeclaration">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
