@@ -376,7 +376,7 @@
                                 <div id="payCheque" class="collapse" aria-labelledby="headingOne" data-parent="#payment">
                                     <div id="chequeCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
-                                            <h2>Total:&#8377;500</h2>
+                                            <h2>Total:&#8377;<%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %></h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="chequeChequeNo" type="text" class="form-control"
@@ -442,7 +442,7 @@
                                 <div id="payBank" class="collapse" aria-labelledby="headingTwo" data-parent="#payment">
                                     <div id="bankTransferCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
-                                            <h2>Total:&#8377;500</h2>
+                                            <h2>Total:&#8377;<%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %></h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="bankTransferRefNo" type="text" class="form-control"
@@ -491,7 +491,7 @@
                                 <div id="payGateway" class="collapse" aria-labelledby="headingThree" data-parent="#payment">
                                     <div id="gatewayCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
-                                            <h2>Total:&#8377;500</h2>
+                                            <h2>Total:&#8377;<%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %></h2>
                                             <div class="row my-2">
                                                 <div class="col">
                                                     <p>On confirmation you will be redirected to payment gateway, your
