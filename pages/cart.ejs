@@ -76,6 +76,8 @@
                         <div class="d-flex flex-row-reverse">
                             <form id="cartForm" method="POST" action="/cart" class="form-inline">
                                 <input type="hidden" name="state" value="1" />
+                                <small class="mx-2 my-auto text-danger">Order once placed cannot be
+                                    cancelled or altered</small>
                                 <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;
                                     <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
                                 </h3>
@@ -99,129 +101,233 @@
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                     <div class="card-body">
-                        <form>
+                        <form method="POST" action="/cart">
                             <!-- First Name -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <div class="form-group">
-                                        <label for="registerFirstName">Billing Address</label>
-                                        <div class="input-group mb-2">
-                                            <select id="inputState" class="input-group-prepend custom-select col-3">
+                                    <div class="form-group mb-0">
+                                        <h4>Billing Address</h4>
+                                        <div class="input-group">
+                                            <select id="inputState" name="bSalutation" class="input-group-prepend custom-select col-3">
                                                 <option class="input-group-text" selected>Mr.</option>
                                                 <option>Miss.</option>
                                                 <option>Dr.</option>
                                                 <option>Prof.</option>
                                             </select>
-                                            <input type="text" class="form-control" id="registerFirstName" placeholder="First Name">
+                                            <input type="text" name="bFirstName" class="form-control" id="registerFirstName"
+                                                placeholder="First Name">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <div class="d-flex">
-                                            <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck">
-                                            <label class="form-check-label" for="disabledFieldsetCheck">
-                                                Shipping Address, same as Billing
-                                            </label>
-                                        </div>
-                                        <div class="input-group mb-2">
-                                            <select id="inputState" class="input-group-prepend custom-select col-3">
-                                                <option class="input-group-text" selected>Mr.</option>
-                                                <option>Miss.</option>
-                                                <option>Dr.</option>
-                                                <option>Prof.</option>
-                                            </select>
-                                            <input type="text" class="form-control" id="registerFirstName" placeholder="First Name">
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                             <!-- Last Name -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Last name">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Last name">
+                                    <input type="text" name="bLastName" class="form-control" placeholder="Last name">
                                 </div>
                             </div>
                             <!-- Add 1 -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Address 1">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Address 1">
+                                    <input type="text" name="bAdd1" class="form-control" placeholder="Address 1">
                                 </div>
                             </div>
                             <!-- Add 2 -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Address 2">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Address 2">
+                                    <input type="text" name="bAdd2" class="form-control" placeholder="Address 2">
                                 </div>
                             </div>
                             <!-- Add 3 -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Address 3">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Address 3">
+                                    <input type="text" name="bAdd3" class="form-control" placeholder="Address 3">
                                 </div>
                             </div>
                             <!-- City -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="City">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="City">
+                                    <input type="text" name="bCity" class="form-control" placeholder="City">
                                 </div>
                             </div>
                             <!-- Pincode -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Pincode">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Pincode">
+                                    <input type="text" name="bPincode" class="form-control" placeholder="Pincode">
                                 </div>
                             </div>
                             <!-- State -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <select id="inputState" class="input-group-prepend custom-select">
-                                        <option class="input-group-text" selected>Jaipur</option>
-                                        <option>Delhi.</option>
-                                        <option>Banglore.</option>
-                                        <option>Pune</option>
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <select id="inputState" class="input-group-prepend custom-select">
-                                        <option class="input-group-text" selected>Jaipur</option>
-                                        <option>Delhi.</option>
-                                        <option>Banglore</option>
-                                        <option>Pune.</option>
-                                        <option>Maharashtra</option>
+                                    <select id="inputState" name="bState" class="input-group-prepend custom-select">
+                                        <option>Andaman &amp; Nicobar</option>
+                                        <option>Andhra Pradesh</option>
+                                        <option>Arunachal Pradesh</option>
+                                        <option>Assam</option>
+                                        <option>Bihar</option>
+                                        <option>Chandigarh</option>
+                                        <option>Chhattisgarh</option>
+                                        <option>Dadra &amp; Nagar Haveli</option>
+                                        <option>Daman &amp; Diu</option>
+                                        <option>Goa</option>
+                                        <option>Gujarat</option>
+                                        <option>Haryana</option>
+                                        <option>Himachal Pradesh</option>
+                                        <option>Jammu &amp; Kashmir</option>
+                                        <option>Jharkhand</option>
+                                        <option>Karnataka</option>
+                                        <option>Kerala</option>
+                                        <option>Lakshadweep</option>
+                                        <option>Madhya Pradesh</option>
+                                        <option selected>Maharashtra</option>
+                                        <option>Manipur</option>
+                                        <option>Meghalaya</option>
+                                        <option>Mizoram</option>
+                                        <option>Nagaland</option>
+                                        <option>New Delhi</option>
+                                        <option>Orissa</option>
+                                        <option>Puducherry</option>
+                                        <option>Punjab</option>
+                                        <option>Rajasthan</option>
+                                        <option>Sikkim</option>
+                                        <option>Tamil Nadu</option>
+                                        <option>Telangana</option>
+                                        <option>Tripura</option>
+                                        <option>Uttar Pradesh</option>
+                                        <option>Uttarakhand</option>
+                                        <option>West Bengal</option>
                                     </select>
                                 </div>
                             </div>
                             <!-- Mobile -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" class="form-control" placeholder="Mobile">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Mobile">
+                                    <input type="text" name="bMobile" class="form-control" placeholder="Mobile">
                                 </div>
                             </div>
+
+                            <hr class="my-4">
+
+                            <!-- Shipping Address -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <div class="form-group mb-0">
+                                        <div class="d-flex">
+                                            <h4>Shipping Address</h4>
+
+                                            <div class="form-check ml-3 my-auto">
+                                                <input class="form-check-input" name="chkSameAsBilling" type="checkbox"
+                                                    id="defaultCheck1">
+                                                <label class="form-check-label" for="defaultCheck1">
+                                                    Same as Billing
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <select id="inputState" name="sSalutation" class="input-group-prepend custom-select col-3">
+                                                <option class="input-group-text" selected>Mr.</option>
+                                                <option>Miss.</option>
+                                                <option>Dr.</option>
+                                                <option>Prof.</option>
+                                            </select>
+                                            <input type="text" name="sFirstName" class="form-control" id="registerFirstName"
+                                                placeholder="First Name">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ship Last Name -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" name="sLastName" class="form-control" placeholder="Last name">
+                                </div>
+                            </div>
+                            <!--Ship Add 1 -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" name="sAdd1" class="form-control" placeholder="Address 1">
+                                </div>
+                            </div>
+                            <!--Ship Add 2 -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" name="sAdd2" class="form-control" placeholder="Address 2">
+                                </div>
+                            </div>
+                            <!--Ship Add 3 -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" name="sAdd3" class="form-control" placeholder="Address 3">
+                                </div>
+                            </div>
+                            <!--Ship City -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" name="sCity" class="form-control" placeholder="City">
+                                </div>
+                            </div>
+                            <!--Ship Pincode -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" name="sPincode" class="form-control" placeholder="Pincode">
+                                </div>
+                            </div>
+                            <!--Ship State -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <select id="inputState" name="sState" class="input-group-prepend custom-select">
+                                        <option>Andaman &amp; Nicobar</option>
+                                        <option>Andhra Pradesh</option>
+                                        <option>Arunachal Pradesh</option>
+                                        <option>Assam</option>
+                                        <option>Bihar</option>
+                                        <option>Chandigarh</option>
+                                        <option>Chhattisgarh</option>
+                                        <option>Dadra &amp; Nagar Haveli</option>
+                                        <option>Daman &amp; Diu</option>
+                                        <option>Goa</option>
+                                        <option>Gujarat</option>
+                                        <option>Haryana</option>
+                                        <option>Himachal Pradesh</option>
+                                        <option>Jammu &amp; Kashmir</option>
+                                        <option>Jharkhand</option>
+                                        <option>Karnataka</option>
+                                        <option>Kerala</option>
+                                        <option>Lakshadweep</option>
+                                        <option>Madhya Pradesh</option>
+                                        <option selected>Maharashtra</option>
+                                        <option>Manipur</option>
+                                        <option>Meghalaya</option>
+                                        <option>Mizoram</option>
+                                        <option>Nagaland</option>
+                                        <option>New Delhi</option>
+                                        <option>Orissa</option>
+                                        <option>Puducherry</option>
+                                        <option>Punjab</option>
+                                        <option>Rajasthan</option>
+                                        <option>Sikkim</option>
+                                        <option>Tamil Nadu</option>
+                                        <option>Telangana</option>
+                                        <option>Tripura</option>
+                                        <option>Uttar Pradesh</option>
+                                        <option>Uttarakhand</option>
+                                        <option>West Bengal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--Ship Mobile -->
+                            <div class="row m-1">
+                                <div class="col">
+                                    <input type="text" name="sMobile" class="form-control" placeholder="Mobile">
+                                </div>
+                            </div>
+
                             <!-- Final Footer -->
                             <div class="d-flex flex-row-reverse mt-2">
-                                <input type="hidden" name="state" value="1" />
+                                <input type="hidden" name="state" value="2" />
                                 <button type="submit" class="btn btn-primary">Proceed to payment</button>
                             </div>
                         </form>
@@ -241,13 +347,157 @@
                 </div>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                     <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
-                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
-                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
-                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't
-                        heard of them accusamus labore sustainable VHS.
+                        <div class="accordion" id="payment">
+                            <!-- Cheque/DD -->
+                            <div class="card">
+                                <div class="card-header bg-transparent" id="headingOne">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#payCheque"
+                                            aria-expanded="true" aria-controls="collapseOne">
+                                            Pay via Cheque/DD
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="payCheque" class="collapse" aria-labelledby="headingOne" data-parent="#payment">
+                                    <div class="card-body">
+                                        <form method="POST" action="/cart">
+                                            <h2>Total:&#8377;500</h2>
+                                            <div class="row my-2">
+                                                <div class="col-md">
+                                                    <input name="chequeChequeNo" type="text" class="form-control" placeholder="Cheque No">
+                                                </div>
+                                                <div class="col-md">
+                                                    <input name="chequeDate" type="text" class="form-control" placeholder="Cheque Date">
+                                                </div>
+                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md">
+                                                    <input name="chequeBankName" type="text" class="form-control" placeholder="Bank Name">
+                                                </div>
+                                                <div class="col-md">
+                                                    <input name="chequeBankBranch" type="text" class="form-control" placeholder="Bank Branch">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2">
+                                                <p>Deposited in Bank:</p>
+                                                <select name="chequeDepositedBank" class="custom-select" id="forBankList">
+                                                    <option selected>HDFC</option>
+                                                    <option>Canara</option>
+                                                </select>
+                                            </div>
+                                            <div class="d-flex my-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" name="chequeDeclaration" type="checkbox" value="" id="chequeConfirm">
+                                                    <label class="form-check-label" for="chequeConfirm">
+                                                        I hereby confirm that said above goods are being purchased for
+                                                        my internal or personal purpose and not for re-sale.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2 flex-row-reverse ">
+                                                <input type="hidden" id="chequeCancel" name="cancel" value="false">
+                                                <input type="hidden" name="paymentMode" value="cheque">
+                                                <input type="hidden" name="state" value="3" />
+                                                <input type="hidden" name="amount" value="5000" />
+                                                <button onclick='$("#chequeCancel").val(true);$("#chequeOrder").click()'
+                                                    type="button" class="btn btn-dark">Cancel</button>
+                                                <button id="chequeOrder" type="submit" class="mr-1 btn btn-primary">Confirm
+                                                    Order</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Bank Trasnfer -->
+                            <div class="card">
+                                <div class="card-header bg-transparent" id="headingTwo">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#payBank" aria-expanded="false" aria-controls="collapseTwo">
+                                            Pay via Bank Transfer
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="payBank" class="collapse" aria-labelledby="headingTwo" data-parent="#payment">
+                                    <div class="card-body">
+                                        <form method="POST" action="/cart">
+                                            <h2>Total:&#8377;500</h2>
+                                            <div class="row my-2">
+                                                <div class="col-md">
+                                                    <input name="bankTransferRefNo" type="text" class="form-control" placeholder="Txn Reference No">
+                                                </div>
+                                                <div class="col-md">
+                                                    <input name="bankTransferDate" type="text" class="form-control" placeholder="Date">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2">
+                                                <div class="form-check">
+                                                    <input name="bankTransferDeclaration" class="form-check-input" type="checkbox" value="" id="bankTransferDeclaration">
+                                                    <label class="form-check-label" for="bankTransferDeclaration">
+                                                        I hereby confirm that said above goods are being purchased for
+                                                        my internal or personal purpose and not for re-sale.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2 flex-row-reverse ">
+                                                <input type="hidden" id="bankTransferCancel" name="cancel" value="false">
+                                                <input type="hidden" name="paymentMode" value="bankTransfer">
+                                                <input type="hidden" name="state" value="3" />
+                                                <input type="hidden" name="amount" value="5000" />
+                                                <button onclick='$("#bankTransferCancel").val(true);$("#bankTransferOrder").click()'
+                                                    type="button" class="btn btn-dark">Cancel</button>
+                                                <button id="bankTransferOrder" type="submit" class="mr-1 btn btn-primary">Confirm
+                                                    Order</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- GateWay -->
+                            <div class="card">
+                                <div class="card-header bg-transparent" id="headingThree">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#payGateway" aria-expanded="false" aria-controls="collapseThree">
+                                            Pay via Net Banking/Card
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="payGateway" class="collapse" aria-labelledby="headingThree" data-parent="#payment">
+                                    <div class="card-body">
+                                        <form method="POST" action="/cart">
+                                            <h2>Total:&#8377;500</h2>
+                                            <div class="row my-2">
+                                                <div class="col">
+                                                    <p>On confirmation you will be redirected to payment gateway, your
+                                                        order will be placed only when we receive successful
+                                                        confirmation.</p>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2">
+                                                <div class="form-check">
+                                                    <input name="gatewayDeclaration" class="form-check-input" type="checkbox" value="" id="gatewayDeclaration">
+                                                    <label class="form-check-label" for="gatewayDeclaration">
+                                                        I hereby confirm that said above goods are being purchased for
+                                                        my internal or personal purpose and not for re-sale.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex my-2 flex-row-reverse ">
+                                                <input type="hidden" id="gatewayCancel" name="cancel" value="false">
+                                                <input type="hidden" name="paymentMode" value="gateway">
+                                                <input type="hidden" name="state" value="3" />
+                                                <input type="hidden" name="amount" value="5000" />
+                                                <button onclick='$("#gatewayCancel").val(true);$("#gatewayOrder").click()'
+                                                    type="button" class="btn btn-dark">Cancel</button>
+                                                <button id="gatewayOrder" type="submit" class="mr-1 btn btn-primary">Confirm
+                                                    Order</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -266,6 +516,7 @@
             $('#btnCollapseTwo').prop('disabled', false);
             $('#btnCollapseThree').prop('disabled', true);
             $('#btnCollapseTwo').click();
+            $('#collapseOne :input').attr('disabled', true);
         }
 
         else if (state === "2") {
@@ -273,6 +524,8 @@
             $('#btnCollapseTwo').prop('disabled', false);
             $('#btnCollapseThree').prop('disabled', false);
             $('#btnCollapseThree').click();
+            $('#collapseOne :input').attr('disabled', true);
+            $('#collapseTwo :input').attr('disabled', true);
         }
 
         else {

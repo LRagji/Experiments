@@ -5,6 +5,7 @@ class DAL {
         this.getProductById = this.getProductById.bind(this);
         this.pool = this.pool.bind(this);
         this.getUserByEmail = this.getUserByEmail.bind(this);
+        this.createOrder = this.createOrder.bind(this);
 
         //         let insertQuery = "insert into products (mid,name,price, discount,image,description,ingredients,keywords,meta,sys_meta)  values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);"
         //         for (let i = 0; i < 50000; i++) {
@@ -79,6 +80,11 @@ class DAL {
             .then((res) => {
                 return res.rows[0]
             });
+    }
+
+    createOrder(order) {
+        //TODO:Compare order amount with calculated product amount from all products.
+        console.log(order);
     }
 }
 

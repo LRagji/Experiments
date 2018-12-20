@@ -42,6 +42,7 @@ class apiServer {
             res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }
         catch (err) {
+            console.error(err);
             res.status(413).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }
     }
