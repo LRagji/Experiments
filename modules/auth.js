@@ -29,8 +29,8 @@ class authentication {
         expressApp.use(flash());
     }
 
-    authenticateLogIn(successRedirect, failureRedirect) {
-        return passport.authenticate('local', { failureRedirect: failureRedirect, successRedirect: successRedirect, failureFlash: true });
+    authenticateLogIn(failureRedirect) {
+        return passport.authenticate('local', { failureRedirect: failureRedirect, failureFlash: true });
     }
 
     authenticatedInterceptor(loginRelativePath) {

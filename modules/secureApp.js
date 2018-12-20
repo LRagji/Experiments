@@ -16,7 +16,12 @@ class secureapp {
 
     loadRoutes(_secureApp, basePath, _auth) {
         _secureApp.get(basePath + '/login', this.renderLoginPage);
-        _secureApp.post(basePath + '/login', _auth.authenticateLogIn("/", this.basePath + "/login"));
+        _secureApp.post(basePath + '/login', _auth.authenticateLogIn(this.basePath + "/login"), (req, res) => {
+            if (req.session.returnTo === undefined)
+                res.redirect("/");
+            else
+                res.redirect(req.session.returnTo);
+        });
         _secureApp.get(basePath + '/profile', _auth.authenticatedInterceptor(basePath + '/login'), this.renderProfile);
         _secureApp.get(basePath + '/logout', _auth.authenticatedInterceptor(basePath + '/login'), this.renderLogout);
     }

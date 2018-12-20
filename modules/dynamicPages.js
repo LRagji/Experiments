@@ -157,6 +157,7 @@ class dynamicPages {
             if (req.body.state !== undefined) {
                 //User needs to login to process any state
                 if (req.user === undefined) {
+                    req.session.returnTo = req.originalUrl;
                     res.redirect("/secure/login");
                     return;
                 }
