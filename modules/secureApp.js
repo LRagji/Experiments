@@ -20,7 +20,10 @@ class secureapp {
             if (req.session.returnTo === undefined)
                 res.redirect("/");
             else
+            {
                 res.redirect(req.session.returnTo);
+                delete req.session.returnTo;
+            }
         });
         _secureApp.get(basePath + '/profile', _auth.authenticatedInterceptor(basePath + '/login'), this.renderProfile);
         _secureApp.get(basePath + '/logout', _auth.authenticatedInterceptor(basePath + '/login'), this.renderLogout);

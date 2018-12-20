@@ -15,6 +15,7 @@
     <div class="container p-3">
 
         <div class="accordion" id="accordionExample">
+
             <!-- Shopping Cart -->
             <div class="card">
                 <div class="card-header bg-success" id="headingOne">
@@ -89,7 +90,7 @@
                 </div>
             </div>
 
-            <!-- Address -->
+            <!-- Shipping Details -->
             <div class="card">
                 <div class="card-header bg-success" id="headingTwo">
                     <h5 class="mb-0">
@@ -410,8 +411,8 @@
                                                         placeholder="Cheque No" required>
                                                 </div>
                                                 <div class="col-md">
-                                                    <input name="chequeDate" type="text" class="form-control"
-                                                        placeholder="Cheque Date" required>
+                                                        <%-  `<input name="chequeDate" type="datetime-local" class="form-control"
+                                                      placeholder="Cheque Date" max="${new Date().toISOString()}" required>` %>
                                                 </div>
                                             </div>
                                             <div class="row my-2">
@@ -478,7 +479,7 @@
                                                         placeholder="Txn Reference No">
                                                 </div>
                                                 <div class="col-md">
-                                                    <input name="bankTransferDate" type="text" class="form-control"
+                                                    <input name="bankTransferDate" type="text" class="form-control" type="datetime-local"
                                                         placeholder="Date">
                                                 </div>
                                             </div>
