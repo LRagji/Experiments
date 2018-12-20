@@ -215,9 +215,8 @@
                                     <div class="form-group mb-0">
                                         <div class="d-flex">
                                             <h4>Shipping Address</h4>
-
                                             <div class="form-check ml-3 my-auto">
-                                                <input class="form-check-input" name="chkSameAsBilling" type="checkbox"
+                                                <input class="form-check-input" onchange="this.checked?$('.collapseOnDuplicate').hide():$('.collapseOnDuplicate').show()" name="chkSameAsBilling" type="checkbox"
                                                     id="defaultCheck1">
                                                 <label class="form-check-label" for="defaultCheck1">
                                                     Same as Billing
@@ -225,7 +224,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="input-group">
+                                        <div class="input-group collapseOnDuplicate">
                                             <select id="inputState" name="sSalutation" class="input-group-prepend custom-select col-3">
                                                 <option class="input-group-text" selected>Mr.</option>
                                                 <option>Miss.</option>
@@ -240,43 +239,43 @@
                             </div>
 
                             <!-- Ship Last Name -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sLastName" class="form-control" placeholder="Last name">
                                 </div>
                             </div>
                             <!--Ship Add 1 -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd1" class="form-control" placeholder="Address 1">
                                 </div>
                             </div>
                             <!--Ship Add 2 -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd2" class="form-control" placeholder="Address 2">
                                 </div>
                             </div>
                             <!--Ship Add 3 -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd3" class="form-control" placeholder="Address 3">
                                 </div>
                             </div>
                             <!--Ship City -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sCity" class="form-control" placeholder="City">
                                 </div>
                             </div>
                             <!--Ship Pincode -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sPincode" class="form-control" placeholder="Pincode">
                                 </div>
                             </div>
                             <!--Ship State -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <select id="inputState" name="sState" class="input-group-prepend custom-select">
                                         <option>Andaman &amp; Nicobar</option>
@@ -319,7 +318,7 @@
                                 </div>
                             </div>
                             <!--Ship Mobile -->
-                            <div class="row m-1">
+                            <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sMobile" class="form-control" placeholder="Mobile">
                                 </div>

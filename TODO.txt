@@ -7,6 +7,5 @@
 --Functional
 13)Session timer is behaving erractically not refreshing on API or rerender calls
 14)Validations for client side and server for Shopping cart
-15)On check of same address in section 2 cart below fields should be disabled.
 16)Login should redirect from and to shopping cart.
 17)Refactor dynamic pages such that each page has its own .js file.
