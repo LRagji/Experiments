@@ -285,8 +285,7 @@
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="tel" name="sPincode" class="form-control" placeholder="Pincode"
-                                    pattern="[0-9]{6}" title="Input a valid Indian pincode."
-                                        required>
+                                        pattern="[0-9]{6}" title="Input a valid Indian pincode." required>
                                 </div>
                             </div>
                             <!--Ship State -->
@@ -336,9 +335,8 @@
                             <!--Ship Mobile -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="tel" name="sMobile" class="form-control" placeholder="Mobile"
-                                    pattern="[0-9]{10}" title="Input a valid mobile number."
-                                        required>
+                                    <input type="tel" name="sMobile" class="form-control" placeholder="Mobile" pattern="[0-9]{10}"
+                                        title="Input a valid mobile number." required>
                                 </div>
                             </div>
 
@@ -376,27 +374,28 @@
                                     </h5>
                                 </div>
                                 <div id="payCheque" class="collapse" aria-labelledby="headingOne" data-parent="#payment">
-                                    <div class="card-body">
+                                    <div id="chequeCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;500</h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="chequeChequeNo" type="text" class="form-control"
-                                                        placeholder="Cheque No">
+                                                        pattern="[0-9]{4,10}" title="Please enter a valid cheque number."
+                                                        placeholder="Cheque No" required>
                                                 </div>
                                                 <div class="col-md">
                                                     <input name="chequeDate" type="text" class="form-control"
-                                                        placeholder="Cheque Date">
+                                                        placeholder="Cheque Date" required>
                                                 </div>
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="chequeBankName" type="text" class="form-control"
-                                                        placeholder="Bank Name">
+                                                        placeholder="Bank Name" required>
                                                 </div>
                                                 <div class="col-md">
                                                     <input name="chequeBankBranch" type="text" class="form-control"
-                                                        placeholder="Bank Branch">
+                                                        placeholder="Bank Branch" required>
                                                 </div>
                                             </div>
                                             <div class="d-flex my-2">
@@ -409,7 +408,7 @@
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
                                                     <input class="form-check-input" name="chequeDeclaration" type="checkbox"
-                                                        value="" id="chequeConfirm">
+                                                        value="" id="chequeConfirm" required>
                                                     <label class="form-check-label" for="chequeConfirm">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -421,7 +420,7 @@
                                                 <input type="hidden" name="paymentMode" value="cheque">
                                                 <input type="hidden" name="state" value="3" />
                                                 <input type="hidden" name="amount" value="5000" />
-                                                <button onclick='$("#chequeCancel").val(true);$("#chequeOrder").click()'
+                                                <button onclick='$("#chequeCancel").val(true);$("#chequeCancelValidation :input").prop("required",false);$("#chequeOrder").click()'
                                                     type="button" class="btn btn-dark">Cancel</button>
                                                 <button id="chequeOrder" type="submit" class="mr-1 btn btn-primary">Confirm
                                                     Order</button>
@@ -441,12 +440,13 @@
                                     </h5>
                                 </div>
                                 <div id="payBank" class="collapse" aria-labelledby="headingTwo" data-parent="#payment">
-                                    <div class="card-body">
+                                    <div id="bankTransferCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;500</h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="bankTransferRefNo" type="text" class="form-control"
+                                                        pattern="[0-9A-Za-z]{4,20}" title="Input a valid Bank transfer reference."
                                                         placeholder="Txn Reference No">
                                                 </div>
                                                 <div class="col-md">
@@ -457,7 +457,7 @@
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
                                                     <input name="bankTransferDeclaration" class="form-check-input" type="checkbox"
-                                                        value="" id="bankTransferDeclaration">
+                                                        value="" id="bankTransferDeclaration" required>
                                                     <label class="form-check-label" for="bankTransferDeclaration">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -469,7 +469,7 @@
                                                 <input type="hidden" name="paymentMode" value="bankTransfer">
                                                 <input type="hidden" name="state" value="3" />
                                                 <input type="hidden" name="amount" value="5000" />
-                                                <button onclick='$("#bankTransferCancel").val(true);$("#bankTransferOrder").click()'
+                                                <button onclick='$("#bankTransferCancel").val(true);$("#bankTransferCancelValidation :input").prop("required",false);$("#bankTransferOrder").click()'
                                                     type="button" class="btn btn-dark">Cancel</button>
                                                 <button id="bankTransferOrder" type="submit" class="mr-1 btn btn-primary">Confirm
                                                     Order</button>
@@ -489,7 +489,7 @@
                                     </h5>
                                 </div>
                                 <div id="payGateway" class="collapse" aria-labelledby="headingThree" data-parent="#payment">
-                                    <div class="card-body">
+                                    <div id="gatewayCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;500</h2>
                                             <div class="row my-2">
@@ -502,7 +502,7 @@
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
                                                     <input name="gatewayDeclaration" class="form-check-input" type="checkbox"
-                                                        value="" id="gatewayDeclaration">
+                                                        value="" id="gatewayDeclaration" required>
                                                     <label class="form-check-label" for="gatewayDeclaration">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -514,7 +514,7 @@
                                                 <input type="hidden" name="paymentMode" value="gateway">
                                                 <input type="hidden" name="state" value="3" />
                                                 <input type="hidden" name="amount" value="5000" />
-                                                <button onclick='$("#gatewayCancel").val(true);$("#gatewayOrder").click()'
+                                                <button onclick='$("#gatewayCancel").val(true);$("#gatewayCancelValidation :input").prop("required",false);$("#gatewayOrder").click()'
                                                     type="button" class="btn btn-dark">Cancel</button>
                                                 <button id="gatewayOrder" type="submit" class="mr-1 btn btn-primary">Confirm
                                                     Order</button>
