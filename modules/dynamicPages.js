@@ -176,8 +176,7 @@ class dynamicPages {
                         if (req.session.locked.userId !== req.user.id) throw new Error("This user cannot checkout cart for other user.");
                         if (req.session.locked.state !== 1) throw new Error("Please complete your order on previous step.");
 
-                        if (req.body.chkSameAsBilling === undefined) throw new Error("Invalid or Incomplete request, Missing:chkSameAsBilling parameter.");
-                        let copyBillingInfo = req.body.chkSameAsBilling === "on" ? true : false;
+                        let copyBillingInfo = req.body.chkSameAsBilling === undefined ? false : true;
                         let shippingDetails = { billing: {}, shipping: {} };
 
                         this.fillShippingDetails(req.body, copyBillingInfo, "Salutation", shippingDetails);
