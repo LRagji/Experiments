@@ -27,7 +27,7 @@ class dynamicPages {
         this.processCart = this.processCart.bind(this);
         this.manipulateProductsInCart = this.manipulateProductsInCart.bind(this);
         this.fillShippingDetails = this.fillShippingDetails.bind(this);
-        this.clearShoppingCartSession=this.clearShoppingCartSession.bind(this);
+        this.clearShoppingCartSession = this.clearShoppingCartSession.bind(this);
 
         this.loadRoutes(server);
     }
@@ -125,19 +125,22 @@ class dynamicPages {
     }
 
     renderCart(req, res) {
-        //TODO:This should be promise based
-        //TODO:Do state based rendering.
         try {
             let pageData = {};
             pageData[constants.cartItems] = utils.getCartItemsCount(req);
             pageData[constants.state] = req.session.locked === undefined ? undefined : req.session.locked.state;
             pageData[constants.shoppingCartProducts] = [];
+            pageData[constants.shoppingInfo] = undefined;
 
             if (req.session.products !== undefined) {
                 let productIds = req.session.products.map(ele => ele.productId);
                 let productInfo = dal.getProducts(productIds);
                 productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
                 pageData[constants.shoppingCartProducts] = productInfo;
+            }
+
+            if (req.session.locked !== undefined && req.session.locked.state === 2) {
+                pageData[constants.shoppingInfo] = req.session.locked;
             }
 
             res.render('../pages/cart', utils.constructPageData(req.user, pageData));
@@ -205,7 +208,7 @@ class dynamicPages {
                         if (req.body.amount === undefined) throw new Error("Invalid or incomplete request, parameter amount missing.");
 
                         if (req.body.cancel === "true") {
-                           this.clearShoppingCartSession(req);
+                            this.clearShoppingCartSession(req);
                         }
                         else {
                             //TODO:Server side data input validations
@@ -285,8 +288,7 @@ class dynamicPages {
         }
     }
 
-    clearShoppingCartSession(req)
-    {
+    clearShoppingCartSession(req) {
         delete req.session.locked;
     }
 

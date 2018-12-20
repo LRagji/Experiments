@@ -15,7 +15,7 @@
     <div class="container p-3">
 
         <div class="accordion" id="accordionExample">
-
+            <!-- Shopping Cart -->
             <div class="card">
                 <div class="card-header bg-success" id="headingOne">
                     <h5 class="mb-0">
@@ -89,7 +89,7 @@
                 </div>
             </div>
 
-
+            <!-- Address -->
             <div class="card">
                 <div class="card-header bg-success" id="headingTwo">
                     <h5 class="mb-0">
@@ -101,14 +101,24 @@
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                     <div class="card-body">
-                        <form method="POST" action="/cart">
+                        <%
+                        function setBillingInputValue(session, propertyName) {
+                            return session !== undefined ? session.shippingDetails.billing[propertyName] : '';
+                        }
+                        function setShippingInputValue(session, propertyName) {
+                            return session !== undefined ? session.shippingDetails.shipping[propertyName] : '';
+                        } 
+                        %>
+                        <%-
+                        `<form method="POST" action="/cart">
                             <!-- First Name -->
                             <div class="row m-1">
                                 <div class="col">
                                     <div class="form-group mb-0">
                                         <h4>Billing Address</h4>
                                         <div class="input-group">
-                                            <select id="inputState" name="bSalutation" class="input-group-prepend custom-select col-3"
+                                            <input id="bSelectSalShadow" type="hidden" value="${setBillingInputValue(pageData.si,'bSalutation')}" >
+                                            <select id="bSelectSal" name="bSalutation" class="input-group-prepend custom-select col-3"
                                                 required>
                                                 <option class="input-group-text" selected>Mr.</option>
                                                 <option>Miss.</option>
@@ -116,7 +126,7 @@
                                                 <option>Prof.</option>
                                             </select>
                                             <input type="text" name="bFirstName" class="form-control" id="registerFirstName"
-                                                placeholder="First Name" required>
+                                                placeholder="First Name" value="${setBillingInputValue(pageData.si,'bFirstName')}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -126,6 +136,7 @@
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="text" name="bLastName" class="form-control" placeholder="Last name"
+                                    value="${setBillingInputValue(pageData.si,'bLastName')}"
                                         required>
                                 </div>
                             </div>
@@ -133,6 +144,7 @@
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="text" name="bAdd1" class="form-control" placeholder="Address 1"
+                                    value="${setBillingInputValue(pageData.si,'bAdd1')}"
                                         required>
                                 </div>
                             </div>
@@ -140,6 +152,7 @@
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="text" name="bAdd2" class="form-control" placeholder="Address 2"
+                                    value="${setBillingInputValue(pageData.si,'bAdd2')}"
                                         required>
                                 </div>
                             </div>
@@ -147,26 +160,31 @@
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="text" name="bAdd3" class="form-control" placeholder="Address 3"
+                                    value="${setBillingInputValue(pageData.si,'bAdd3')}"
                                         required>
                                 </div>
                             </div>
                             <!-- City -->
                             <div class="row m-1">
                                 <div class="col">
-                                    <input type="text" name="bCity" class="form-control" placeholder="City" required>
+                                    <input type="text" name="bCity" class="form-control" placeholder="City"
+                                    value="${setBillingInputValue(pageData.si,'bCity')}" required>
+
                                 </div>
                             </div>
                             <!-- Pincode -->
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="tel" name="bPincode" class="form-control" placeholder="Pincode"
+                                    value="${setBillingInputValue(pageData.si,'bPincode')}"
                                         pattern="[0-9]{6}" title="Input a valid Indian pincode." required>
                                 </div>
                             </div>
                             <!-- State -->
                             <div class="row m-1">
+                                <input id="bSelectStateShadow" type="hidden" value="${setBillingInputValue(pageData.si,'bState')}" > 
                                 <div class="col">
-                                    <select id="inputState" name="bState" class="input-group-prepend custom-select"
+                                    <select  id="bSelectState" name="bState" class="input-group-prepend custom-select"
                                         required>
                                         <option>Andaman &amp; Nicobar</option>
                                         <option>Andhra Pradesh</option>
@@ -211,7 +229,8 @@
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="tel" name="bMobile" class="form-control" placeholder="Mobile" pattern="[0-9]{10}"
-                                        title="Input a valid mobile number." required>
+                                    value="${setBillingInputValue(pageData.si,'bMobile')}"    
+                                    title="Input a valid mobile number." required>
                                 </div>
                             </div>
 
@@ -233,7 +252,8 @@
                                         </div>
 
                                         <div class="input-group collapseOnDuplicate">
-                                            <select id="inputState" name="sSalutation" class="input-group-prepend custom-select col-3"
+                                            <input id="sSelectSalShadow" type="hidden" value="${setShippingInputValue(pageData.si,'sSalutation')}" > 
+                                            <select id="sSelectSal" name="sSalutation" class="input-group-prepend custom-select col-3"
                                                 required>
                                                 <option class="input-group-text" selected>Mr.</option>
                                                 <option>Miss.</option>
@@ -241,7 +261,7 @@
                                                 <option>Prof.</option>
                                             </select>
                                             <input type="text" name="sFirstName" class="form-control" id="registerFirstName"
-                                                placeholder="First Name">
+                                            value="${setShippingInputValue(pageData.si,'sFirstName')}" placeholder="First Name">
                                         </div>
                                     </div>
                                 </div>
@@ -251,47 +271,50 @@
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sLastName" class="form-control" placeholder="Last name"
-                                        required>
+                                    value="${setShippingInputValue(pageData.si,'sLastName')}"  required>
                                 </div>
                             </div>
                             <!--Ship Add 1 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd1" class="form-control" placeholder="Address 1"
-                                        required>
+                                    value="${setShippingInputValue(pageData.si,'sAdd1')}" required>
                                 </div>
                             </div>
                             <!--Ship Add 2 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd2" class="form-control" placeholder="Address 2"
-                                        required>
+                                    value="${setShippingInputValue(pageData.si,'sAdd2')}" sAdd1 required>
                                 </div>
                             </div>
                             <!--Ship Add 3 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd3" class="form-control" placeholder="Address 3"
-                                        required>
+                                    value="${setShippingInputValue(pageData.si,'sAdd3')}" required>
                                 </div>
                             </div>
                             <!--Ship City -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <input type="text" name="sCity" class="form-control" placeholder="City" required>
+                                    <input type="text" name="sCity" class="form-control" placeholder="City"
+                                    value="${setShippingInputValue(pageData.si,'sCity')}" required>
                                 </div>
                             </div>
                             <!--Ship Pincode -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="tel" name="sPincode" class="form-control" placeholder="Pincode"
-                                        pattern="[0-9]{6}" title="Input a valid Indian pincode." required>
+                                        pattern="[0-9]{6}" title="Input a valid Indian pincode."
+                                        value="${setShippingInputValue(pageData.si,'sPincode')}" required>
                                 </div>
                             </div>
                             <!--Ship State -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
-                                    <select id="inputState" name="sState" class="input-group-prepend custom-select"
+                                    <input id="sSelectStateShadow" type="hidden" value="${setShippingInputValue(pageData.si,'sState')}" > 
+                                    <select id="sSelectState" name="sState" class="input-group-prepend custom-select"
                                         required>
                                         <option>Andaman &amp; Nicobar</option>
                                         <option>Andhra Pradesh</option>
@@ -336,7 +359,7 @@
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="tel" name="sMobile" class="form-control" placeholder="Mobile" pattern="[0-9]{10}"
-                                        title="Input a valid mobile number." required>
+                                    value="${setShippingInputValue(pageData.si,'sMobile')}" title="Input a valid mobile number." required>
                                 </div>
                             </div>
 
@@ -345,12 +368,13 @@
                                 <input type="hidden" name="state" value="2" />
                                 <button type="submit" class="btn btn-primary">Proceed to payment</button>
                             </div>
-                        </form>
+                        </form>`
+                        %>
                     </div>
                 </div>
             </div>
 
-
+            <!-- Payments -->
             <div class="card">
                 <div class="card-header bg-success" id="headingThree">
                     <h5 class="mb-0">
@@ -376,7 +400,9 @@
                                 <div id="payCheque" class="collapse" aria-labelledby="headingOne" data-parent="#payment">
                                     <div id="chequeCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
-                                            <h2>Total:&#8377;<%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %></h2>
+                                            <h2>Total:&#8377;
+                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                            </h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="chequeChequeNo" type="text" class="form-control"
@@ -442,7 +468,9 @@
                                 <div id="payBank" class="collapse" aria-labelledby="headingTwo" data-parent="#payment">
                                     <div id="bankTransferCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
-                                            <h2>Total:&#8377;<%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %></h2>
+                                            <h2>Total:&#8377;
+                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                            </h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="bankTransferRefNo" type="text" class="form-control"
@@ -491,7 +519,9 @@
                                 <div id="payGateway" class="collapse" aria-labelledby="headingThree" data-parent="#payment">
                                     <div id="gatewayCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
-                                            <h2>Total:&#8377;<%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %></h2>
+                                            <h2>Total:&#8377;
+                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                            </h2>
                                             <div class="row my-2">
                                                 <div class="col">
                                                     <p>On confirmation you will be redirected to payment gateway, your
@@ -560,6 +590,13 @@
             $('#btnCollapseThree').prop('disabled', true);
             $('#btnCollapseOne').click();
         }
+
+        console.log($('bSelectStateShadow').val());
+        if ($('#bSelectStateShadow').val() !== undefined & $('#bSelectStateShadow').val() !== "") $('#bSelectState').val($('#bSelectStateShadow').val());
+        if ($('#bSelectSalShadow').val() !== undefined & $('#bSelectSalShadow').val() !== "") $('#bSelectSal').val($('#bSelectSalShadow').val());
+
+        if ($('#sSelectStateShadow').val() !== undefined & $('#sSelectStateShadow').val() !== "") $('#sSelectState').val($('#sSelectStateShadow').val());
+        if ($('#sSelectSalShadow').val() !== undefined & $('#sSelectSalShadow').val() !== "") $('#sSelectSal').val($('#sSelectSalShadow').val());
     </script>
 
 </body>
