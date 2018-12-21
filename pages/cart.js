@@ -110,6 +110,7 @@ class cart {
                         }
                         else {
                             //TODO:Server side data input validations
+                            let orderId = undefined;
                             switch (req.body.paymentMode) {
 
                                 case "cheque":
@@ -130,9 +131,9 @@ class cart {
                                         "amount": req.body.amount
                                     }
 
-                                    dal.createOrder(req.session.locked);
+                                    orderId = dal.createOrder(req.session.locked);
                                     this.clearShoppingCartSession(req);
-                                    redirectPage = '/secure/success'; //TODO:Confirm if these are right page links
+                                    redirectPage = '/secure/success?oid=' + orderId; //TODO:Confirm if these are right page links
                                     break;
 
                                 case "bankTransfer":
@@ -147,9 +148,9 @@ class cart {
                                         "amount": req.body.amount
                                     }
 
-                                    dal.createOrder(req.session.locked);
+                                    orderId = dal.createOrder(req.session.locked);
                                     this.clearShoppingCartSession(req);
-                                    redirectPage = '/secure/success'; //TODO:Confirm if these are right page links
+                                    redirectPage = '/secure/success?oid=' + orderId; //TODO:Confirm if these are right page links
                                     break;
 
                                 case "gateway":
@@ -160,9 +161,9 @@ class cart {
                                         "amount": req.body.amount
                                     }
 
-                                    dal.createOrder(req.session.locked);
+                                    orderId = dal.createOrder(req.session.locked);
                                     this.clearShoppingCartSession(req);
-                                    redirectPage = '/secure/gateway'; //TODO:Confirm if these are right page links
+                                    redirectPage = '/secure/gateway?oid=' + orderId; //TODO:Confirm if these are right page links
                                     break;
 
                                 default:

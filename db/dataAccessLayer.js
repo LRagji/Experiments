@@ -1,5 +1,6 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: 'postgres', host: 'localhost', database: 'Experimental', password: 'P@55word', port: 5432, });
+let orders = [];
 class DAL {
     constructor() {
         this.getProductById = this.getProductById.bind(this);
@@ -85,6 +86,13 @@ class DAL {
     createOrder(order) {
         //TODO:Compare order amount with calculated product amount from all products.
         console.log(order);
+        order.id = orders.length + 1;
+        orders.push(order);
+        return order.id;
+    }
+
+    getOrderById(orderId) {
+        return orders.find((e) => e.id === orderId);
     }
 }
 

@@ -5,6 +5,7 @@ module.exports = {
     "state":"state",
     "shoppingCartProducts": "scp",
     "shoppingInfo":"si",
+    "orderdetails":"od",
     maxProducts: 25,
     maxQuantity: 10
 }

@@ -1,6 +1,8 @@
 let authenticationModule = require('./auth.js');
 let utils = require('./utilities');
 let constants = require('./constants');
+let modPageSuccess = require('../pages/secure/success');
+let pageSucess = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath) {
@@ -11,6 +13,9 @@ class secureapp {
         this.renderProfile = this.renderProfile.bind(this);
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderLogout = this.renderLogout.bind(this);
+
+        pageSucess = new modPageSuccess(_secureApp,basePath,_auth);
+
         this.loadRoutes(_secureApp, basePath, _auth);
     }
 
@@ -19,8 +24,7 @@ class secureapp {
         _secureApp.post(basePath + '/login', _auth.authenticateLogIn(this.basePath + "/login"), (req, res) => {
             if (req.session.returnTo === undefined)
                 res.redirect("/");
-            else
-            {
+            else {
                 res.redirect(req.session.returnTo);
                 delete req.session.returnTo;
             }
