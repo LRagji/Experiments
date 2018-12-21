@@ -52,7 +52,6 @@ class cart {
 
     processCart(req, res) {
         try {
-            console.log(req.body);
             let redirectPage = "/cart";
             if (req.body.state !== undefined) {
                 //User needs to login to process any state
