@@ -411,7 +411,7 @@
                                                         placeholder="Cheque No" required>
                                                 </div>
                                                 <div class="col-md">
-                                                        <%-  `<input name="chequeDate" type="datetime-local" class="form-control"
+                                                        <%-  `<input name="chequeDate" type="date" class="form-control"
                                                       placeholder="Cheque Date" max="${new Date().toISOString()}" required>` %>
                                                 </div>
                                             </div>
@@ -479,7 +479,7 @@
                                                         placeholder="Txn Reference No">
                                                 </div>
                                                 <div class="col-md">
-                                                    <input name="bankTransferDate" type="text" class="form-control" type="datetime-local"
+                                                    <input name="bankTransferDate" class="form-control" type="date"
                                                         placeholder="Date">
                                                 </div>
                                             </div>
