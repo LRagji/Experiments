@@ -8,6 +8,7 @@ let sessionBuilder = require('./modules/sessionBuilder')
 let appSession = new sessionBuilder();
 let _port = 3000;
 let dynamicPages = require('./modules/dynamicPages');
+let flash = require('connect-flash');
 let webServer = null;
 let api = require('./modules/apis');
 let apiServer = null;
@@ -24,6 +25,9 @@ var minifyHTML = require('express-minify-html');
 //         minifyCSS: true
 //     }
 // }));
+
+//Use Flash
+app.use(flash());
 
 //Body-Parser
 app.use(require('body-parser').urlencoded({ extended: true }));

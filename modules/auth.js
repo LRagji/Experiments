@@ -1,12 +1,12 @@
 let passport = require('passport');
 let strategy = require('passport-local').Strategy;
 let ensureLogin = require('connect-ensure-login');
-let flash = require('connect-flash');
 let hash = require('object-hash');
 let pgDal = require('../db/dataAccessLayer');
 let dal = new pgDal();
 
 class authentication {
+    
     constructor(expressApp) {
         this.authenticateLogIn = this.authenticateLogIn.bind(this);
         this.authenticatedInterceptor = this.authenticatedInterceptor.bind(this);
@@ -26,7 +26,6 @@ class authentication {
 
         expressApp.use(passport.initialize());
         expressApp.use(passport.session());
-        expressApp.use(flash());
     }
 
     authenticateLogIn(failureRedirect) {
