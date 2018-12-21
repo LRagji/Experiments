@@ -31,16 +31,19 @@ class cart {
 
             if (req.session.products !== undefined) {
                 let productIds = req.session.products.map(ele => ele.productId);
-                let productInfo = dal.getProducts(productIds);
-                productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
-                pageData[constants.shoppingCartProducts] = productInfo;
+                dal.getProducts(productIds).then((productInfo) => {
+                    productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
+                    pageData[constants.shoppingCartProducts] = productInfo;
+                    return pageData;
+                }).then((pagedata) => {
+                    if (req.session.locked !== undefined && req.session.locked.state === 2) {
+                        pagedata[constants.shoppingInfo] = req.session.locked;
+                    }
+                    res.render('../pages/cart', utils.constructPageData(req.user, pagedata));
+                }).catch((err) => {
+                    utils.navigateToError(req, res, err, undefined);
+                });
             }
-
-            if (req.session.locked !== undefined && req.session.locked.state === 2) {
-                pageData[constants.shoppingInfo] = req.session.locked;
-            }
-
-            res.render('../pages/cart', utils.constructPageData(req.user, pageData));
         }
         catch (err) {
             utils.navigateToError(req, res, err, undefined);
@@ -206,15 +209,15 @@ class cart {
 
             switch (req.body.operator) {
                 case "add":
-                    utils.addProductOrQuantityToCartItem(req, req.body.productId, 1);
+                    utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1);
                     res.redirect("/cart");
                     break;
                 case "sub":
-                    utils.subtractProductOrQuantityToCartItem(req, req.body.productId, 1);
+                    utils.subtractProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1);
                     res.redirect("/cart");
                     break;
                 case "rem":
-                    utils.subtractProductOrQuantityToCartItem(req, req.body.productId, constants.maxQuantity + 1);
+                    utils.subtractProductOrQuantityToCartItem(req, parseInt(req.body.productId), constants.maxQuantity + 1);
                     res.redirect("/cart");
                     break;
                 default:

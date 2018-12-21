@@ -1,5 +1,6 @@
 let utils = require('./utilities');
-
+let pgdal = require('../db/dataAccessLayer');
+let dal = new pgdal();
 class apiServer {
     constructor(server) {
         this.getHomePageProducts = this.getHomePageProducts.bind(this);
@@ -14,30 +15,20 @@ class apiServer {
     }
 
     getHomePageProducts(req, res) {
-        // TODO:Call the appropiate API
-        let arr = [];
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
-        for (let i = 0; i < size; i++) {
-            arr.push({
-                "id": (page * size) + i,
-                "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi " + ((page * size) + i),
-                "offerprice": (page * size) + i,
-                "price": (((page * size) + i) * 10),
-                "image": "Product2.jpg",
-                "shippingdetail": "Ships in 10 days."
 
-            })
-        }
-        if (req.query.page < 1)
-            res.status(206).send(arr);
-        else
-            res.status(200).send(arr);
+        dal.getAllProducts(page, size).then((arr) => {
+            if (arr.length === 0)
+                res.status(200).send(arr);
+            else
+                res.status(206).send(arr);
+        });
     }
 
     addProductToSession(req, res) {
         try {
-            utils.addProductOrQuantityToCartItem(req, req.body.productId, 1);
+            utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1);
 
             res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }

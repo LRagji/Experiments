@@ -42,10 +42,10 @@
                             </div>
                             <div class="col">
                                 <ul class="list-unstyled">
-                                    <li>Price:<b>&#8377;${product.price}</b></li>
+                                    <li>Price:<b>&#8377;${product.offerprice}</b></li>
                                     <li>Quantity:<b id="s">${product.quantity}</b></li>
-                                    <li>Discount:<b>&#8377;0</b></li>
-                                    <li><b>Total:&#8377;${product.price * product.quantity}</b></li>
+                                    <li>Discount:<b>&#8377;${(product.price-product.offerprice)*product.quantity}</b></li>
+                                    <li><b>Total:&#8377;${product.offerprice * product.quantity}</b></li>
                                 </ul>
                             </div>
                             <div class="col-md-2">
@@ -80,7 +80,7 @@
                                 <small class="mx-2 my-auto text-danger">Order once placed cannot be
                                     cancelled or altered</small>
                                 <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;
-                                    <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                    <%= pageData.scp.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %>
                                 </h3>
                                 <button type="submit" class="btn btn-primary" <%=pageData.cartItems <=0?'disabled':'' %>>Place
                                     Order</button>
@@ -402,7 +402,7 @@
                                     <div id="chequeCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;
-                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %>
                                             </h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
@@ -470,7 +470,7 @@
                                     <div id="bankTransferCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;
-                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %>
                                             </h2>
                                             <div class="row my-2">
                                                 <div class="col-md">
@@ -521,7 +521,7 @@
                                     <div id="gatewayCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;
-                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.price*ele.quantity),0) %>
+                                                <%= pageData.scp.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %>
                                             </h2>
                                             <div class="row my-2">
                                                 <div class="col">

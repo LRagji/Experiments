@@ -47,7 +47,7 @@ module.exports = {
 
         if (existingProduct === undefined) {
             if (req.session.products.length + 1 > constants.maxProducts) throw new Error("Cannot have more than " + constants.maxProducts + " products in cart.");
-            req.session.products.push({ "productId": req.body.productId, "quantity": productQuantity });
+            req.session.products.push({ "productId": productId, "quantity": productQuantity });
         }
         else {
             if ((existingProduct.quantity + productQuantity) > constants.maxQuantity) throw new Error("Quantity cannot exceed " + constants.maxQuantity + " per product.");
