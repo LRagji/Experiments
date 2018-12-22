@@ -10,7 +10,7 @@ class DAL {
         this.getUserByEmail = this.getUserByEmail.bind(this);
         this.createOrder = this.createOrder.bind(this);
         this.getOrderById = this.getOrderById.bind(this);
-        this.createUser= this.createUser.bind(this);
+        this.createUser = this.createUser.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -43,6 +43,54 @@ class DAL {
                 }
             );
         }
+        if (orders.length === 0)
+            orders.push({
+                "userId": 1,
+                "date": 1545477745147,
+                "status": "Awaiting Payment",
+                "products": [
+                    { "productId": 14, "quantity": 1 },
+                    { "productId": 13, "quantity": 1 },
+                    { "productId": 15, "quantity": 1 },
+                    { "productId": 12, "quantity": 1 }
+                ],
+                "shippingDetails": {
+                    "billing": {
+                        "bSalutation": "Mr.",
+                        "bFirstName": "Laukik",
+                        "bLastName": "Ragji",
+                        "bAdd1": "Add1",
+                        "bAdd2": "Add2",
+                        "bAdd3": "Add3",
+                        "bCity": "Mumbai",
+                        "bPincode": "400093",
+                        "bState": "Jammu & Kashmir",
+                        "bMobile": "9819569622"
+                    },
+                    "shipping": {
+                        "sSalutation": "Mr.",
+                        "sFirstName": "Laukik",
+                        "sLastName": "Ragji",
+                        "sAdd1": "Add1",
+                        "sAdd2": "Add2",
+                        "sAdd3": "Add3",
+                        "sCity": "Mumbai",
+                        "sPincode": "400093",
+                        "sState": "Jammu & Kashmir",
+                        "sMobile": "9819569622"
+                    }
+                },
+                "payment": {
+                    "type": "cheque",
+                    "no": "335562",
+                    "date": "2018-12-22",
+                    "bank name": "Hello Bank",
+                    "bank branch": "Some Branch",
+                    "deposited bank": "Canara",
+                    "amount": "5000"
+                },
+                "id": 1
+            });
     }
 
     pool() {
@@ -92,13 +140,24 @@ class DAL {
     createOrder(order) {
         //TODO:Compare order amount with calculated product amount from all products.
         console.log(order);
-        order.id = orders.length + 1;
+        if (order.hasOwnProperty("state")) delete order.state;
+        order.date = Date.now();
+        order.status = "Awaiting Payment";
+        order.id = orders.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1;
         orders.push(order);
         return order.id;
     }
 
     getOrderById(orderId) {
-        return orders.find((e) => e.id === orderId);
+        return new Promise((acc, rej) => {
+            try {
+                //TODO:Remove object Assign which is used to keep the array safe and clone the element
+                acc(Object.assign({}, orders.find((e) => e.id === orderId)));
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        });
     }
 
     createUser(salutation, firstName, lastName, mobile, email, password) {

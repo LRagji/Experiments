@@ -15,14 +15,19 @@ class pageSuccess {
         server.get(basePath + '/success', auth.authenticatedInterceptor(basePath + '/login'), this.renderSuccess);
     }
 
-    renderSuccess(req, res) {
+    async renderSuccess(req, res) {
         try {
             if (req.query.oid !== undefined) {
                 let orderId = parseInt(req.query.oid);
-                let order = dal.getOrderById(orderId);
+                let order = await dal.getOrderById(orderId);
 
-                if (order===undefined) throw new Error("Cannot find the order mentioned.")
+                if (order === undefined) throw new Error("Cannot find the order mentioned.")
                 if (order.userId !== req.user.id) res.redirect('/cart');
+
+                let productInfo = await dal.getProducts(order.products.map(p => p.productId))
+                productInfo.map(p => p.quantity = order.products.find(ele => ele.productId === p.id).quantity);
+                if (productInfo.length !== order.products.length) throw new Error("One or more products are discontinued from your order.");
+                order.products = productInfo;
 
                 let pageData = {};
                 pageData[constants.orderdetails] = order;
