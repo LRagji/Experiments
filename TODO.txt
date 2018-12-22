@@ -6,5 +6,7 @@
 
 --Functional
 13)Session timer is behaving erractically not refreshing on API or rerender calls
-14)Validations for client side and server for Shopping cart
+14)Validations for client side and server for 
+    1)Shopping cart
+    2)User registration
 17)Refactor dynamic pages such that each page has its own .js file.

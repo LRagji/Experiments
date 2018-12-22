@@ -1,5 +1,6 @@
 module.exports = {
-    "error": "exception",
+    error:"error",
+    "loginError": "loginError",
     "product": "product",
     "cartItems": "cartItems",
     "state":"state",
@@ -7,5 +8,6 @@ module.exports = {
     "shoppingInfo":"si",
     "orderdetails":"od",
     maxProducts: 25,
-    maxQuantity: 10
+    maxQuantity: 10,
+    registerError:"registerError"
 }

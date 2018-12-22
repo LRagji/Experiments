@@ -21,7 +21,7 @@
             <p>This is what we think happened:</p>
             <small>
                 <ul>
-                    <% pageData.exception.forEach(function(err){ %>
+                    <% pageData.error.forEach(function(err){ %>
                     <%- '<li><b>'+err.message+'</b><br/>'+ err.stack+'</li>' %>
                     <% }); %>
                 </ul>

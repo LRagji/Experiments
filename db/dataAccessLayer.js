@@ -1,6 +1,7 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: 'postgres', host: 'localhost', database: 'Experimental', password: 'P@55word', port: 5432, });
 let orders = [], products = [], users = [];
+let hash = require('object-hash');
 // TODO:Call the appropiate API
 class DAL {
     constructor() {
@@ -29,6 +30,7 @@ class DAL {
             users.push(
                 {
                     id: 1,
+                    salutation: "Mr",
                     first: "Laukik",
                     last: "R",
                     mobile: "123456789",
@@ -96,6 +98,30 @@ class DAL {
 
     getOrderById(orderId) {
         return orders.find((e) => e.id === orderId);
+    }
+
+    createUser(salutation, firstName, lastName, mobile, email, password) {
+        return new Promise((acc, rej) => {
+            try {
+                let newUser = {
+                    id: users.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
+                    salutation: salutation,
+                    first: firstName,
+                    last: lastName,
+                    mobile: mobile,
+                    email: email,
+                    password: hash(password, { algorithm: 'md5' }),
+                    meta: {
+                        "type": "normal"
+                    }
+                }
+                users.push(newUser);
+                acc(newUser);
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        });
     }
 }
 
