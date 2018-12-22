@@ -21,7 +21,7 @@ class cart {
         server.post('/cart/items', this.manipulateProductsInCart);
     }
 
-    renderCart(req, res) {
+    async  renderCart(req, res) {
         try {
             let pageData = {};
             pageData[constants.cartItems] = utils.getCartItemsCount(req);
@@ -31,18 +31,13 @@ class cart {
 
             if (req.session.products !== undefined) {
                 let productIds = req.session.products.map(ele => ele.productId);
-                dal.getProducts(productIds).then((productInfo) => {
-                    productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
-                    pageData[constants.shoppingCartProducts] = productInfo;
-                    return pageData;
-                }).then((pagedata) => {
-                    if (req.session.locked !== undefined && req.session.locked.state === 2) {
-                        pagedata[constants.shoppingInfo] = req.session.locked;
-                    }
-                    res.render('../pages/cart', utils.constructPageData(req.user, pagedata));
-                }).catch((err) => {
-                    utils.navigateToError(req, res, err, undefined);
-                });
+                let productInfo = await dal.getProducts(productIds)
+                productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
+                pageData[constants.shoppingCartProducts] = productInfo;
+                if (req.session.locked !== undefined && req.session.locked.state === 2) {
+                    pageData[constants.shoppingInfo] = req.session.locked;
+                }
+                res.render('../pages/cart', utils.constructPageData(req.user, pageData));
             }
         }
         catch (err) {

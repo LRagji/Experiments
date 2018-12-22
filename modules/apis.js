@@ -14,16 +14,16 @@ class apiServer {
         return server;
     }
 
-    getHomePageProducts(req, res) {
+    async  getHomePageProducts(req, res) {
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
 
-        dal.getAllProducts(page, size).then((arr) => {
-            if (arr.length === 0)
-                res.status(200).send(arr);
-            else
-                res.status(206).send(arr);
-        });
+        let products = await dal.getAllProducts(page, size);
+        if (products.length === 0)
+            res.status(200).send(products);
+        else
+            res.status(206).send(products);
+
     }
 
     addProductToSession(req, res) {

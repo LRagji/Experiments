@@ -10,6 +10,7 @@ class DAL {
         this.getUserByEmail = this.getUserByEmail.bind(this);
         this.createOrder = this.createOrder.bind(this);
         this.getOrderById = this.getOrderById.bind(this);
+        this.createUser= this.createUser.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {

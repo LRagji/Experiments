@@ -77,7 +77,7 @@ function showSucess(message) {
 function fillProductInfo(product) {
 
     return `<div class="card m-2 myshadow myproductcard">
-    <a href="/product?pid="+${product.id} >
+    <a href="/product?pid=${product.id}" >
     <center>
         <img class="productThumbnail" src="../static/resources/images/${product.image}" style="max-width:150px;max-height:170px" alt="Product Image">
     </center>

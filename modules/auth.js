@@ -6,7 +6,7 @@ let pgDal = require('../db/dataAccessLayer');
 let dal = new pgDal();
 
 class authentication {
-    
+
     constructor(expressApp) {
         this.authenticateLogIn = this.authenticateLogIn.bind(this);
         this.authenticatedInterceptor = this.authenticatedInterceptor.bind(this);
@@ -36,8 +36,9 @@ class authentication {
         return ensureLogin.ensureLoggedIn(loginRelativePath);
     }
 
-    authenticateLogin(username, password, done) {
-        dal.getUserByEmail(username).then((user) => {
+    async authenticateLogin(username, password, done) {
+        try {
+            let user = await dal.getUserByEmail(username)
             if (user !== undefined) {
                 if (user.password === hash(password, { algorithm: 'md5' })) {
                     console.info(username + ' logged in.');
@@ -52,11 +53,12 @@ class authentication {
                 console.warn('No user exits with ' + username);
                 return done(null, false, { message: 'No User exits with ' + username });
             }
-        }).catch((err) => {
+        }
+        catch (err) {
             console.error("Error while login for " + username);
             console.error(err);
             return done(null, false, { message: 'System error while logging in for ' + username });
-        });
+        };
     }
 }
 module.exports = authentication;

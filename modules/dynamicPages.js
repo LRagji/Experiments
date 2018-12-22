@@ -17,7 +17,7 @@ class dynamicPages {
         //All Pages
         securePages = new _secureApp(server, '/secure');//This has to be the first one for pass the user login. Donot change the sequence.
         cart = new cartPage(server);
-        
+
         this.homePage = this.homePage.bind(this);
         this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
@@ -56,22 +56,23 @@ class dynamicPages {
         res.render('../pages/index', utils.constructPageData(req.user, pageData));
     }
 
-    productPage(req, res) {
-        dal.getProductById(req.query.pid)
-            .then((product) => {
-                if (product === undefined) {
-                    throw new Error("No Product found in database for product id:" + req.query.pid);
-                }
-                else {
-                    let pageData = {};
-                    pageData[constants.product] = product;
-                    pageData[constants.cartItems] = utils.getCartItemsCount(req);
-                    res.render('../pages/product', utils.constructPageData(req.user, pageData));
-                }
-            })
-            .catch((err) => {
-                utils.navigateToError(req, res, err, textService["Unknown Product"]);
-            });
+    async productPage(req, res) {
+        try {
+            let product = await dal.getProductById(req.query.pid)
+
+            if (product === undefined) {
+                throw new Error("No Product found in database for product id:" + req.query.pid);
+            }
+            else {
+                let pageData = {};
+                pageData[constants.product] = product;
+                pageData[constants.cartItems] = utils.getCartItemsCount(req);
+                res.render('../pages/product', utils.constructPageData(req.user, pageData));
+            }
+        }
+        catch (err) {
+            utils.navigateToError(req, res, err, textService["Unknown Product"]);
+        }
     }
 
     renderHowToPlaceOrder(req, res) {
