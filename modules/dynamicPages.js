@@ -7,6 +7,8 @@ let utils = require('./utilities');
 let textService = require('./messages');
 let cartPage = require('../pages/cart');
 let cart = undefined;
+let productPage = require('../pages/product');
+let product = undefined;
 
 class dynamicPages {
 
@@ -17,9 +19,9 @@ class dynamicPages {
         //All Pages
         securePages = new _secureApp(server, '/secure');//This has to be the first one for pass the user login. Donot change the sequence.
         cart = new cartPage(server);
+        product= new productPage (server,dal,utils,constants,textService);
 
         this.homePage = this.homePage.bind(this);
-        this.productPage = this.productPage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
         this.renderHowToPlaceOrder = this.renderHowToPlaceOrder.bind(this);
         this.renderWhyShopHere = this.renderWhyShopHere.bind(this);
@@ -35,7 +37,6 @@ class dynamicPages {
 
     loadRoutes(server) {
         server.get('/', this.homePage);
-        server.get('/product', this.productPage);
         server.get('/error', this.renderErrorPage);
 
         //Static
@@ -54,25 +55,6 @@ class dynamicPages {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
         res.render('../pages/index', utils.constructPageData(req.user, pageData));
-    }
-
-    async productPage(req, res) {
-        try {
-            let product = await dal.getProductById(req.query.pid)
-
-            if (product === undefined) {
-                throw new Error("No Product found in database for product id:" + req.query.pid);
-            }
-            else {
-                let pageData = {};
-                pageData[constants.product] = product;
-                pageData[constants.cartItems] = utils.getCartItemsCount(req);
-                res.render('../pages/product', utils.constructPageData(req.user, pageData));
-            }
-        }
-        catch (err) {
-            utils.navigateToError(req, res, err, textService["Unknown Product"]);
-        }
     }
 
     renderHowToPlaceOrder(req, res) {

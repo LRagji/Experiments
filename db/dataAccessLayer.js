@@ -21,8 +21,17 @@ class DAL {
                     "offerprice": (parseFloat(i) * 100.00),
                     "price": (parseFloat(i) * 100.00 + 1000.00),
                     "image": "Product2.jpg",
-                    "shippingdetail": "Ships in " + i + " days."
-
+                    "shippingdetail": "Ships in " + i + " days.",
+                    "meta": {
+                        "code": "C" + i.toString(),
+                        "package_detail": "180 Softgels",
+                        "serving_size": "1 Softgels",
+                        "serving_per_container": "This bottle will last 180 days."
+                    },
+                    "mname": "NOW FOODS",
+                    "website": "https://www.health-mall.in",
+                    "description": '<ul><li>Protection from heart attack and stroke.</li><li>Lowers triglycerides, LDL and increases HDL.</li><li>Helps maintain healthy joints.</li><li>Key component of the brain and eye.</li><li>Important in the growth and development of the foetal brain during pregnancy.</li><li>Improves skin and eye health.</li><li>Helps in psoriasis and eczema.</li><li>Provide lubrication to the skin, arteries, veins and intestinal tract.</li><li>Helps in reducing depression.</li><li>Helps in Attention Deficit/Hyperactivity Disorder (ADHD)</li><li>Helps maintain normal blood sugar levels.</li><li>Lowers blood pressure.</li><li>Helps in Reducing breast, colon and prostate cancer.</li></ul>',
+                    "ingredients": '<table border="1" cellpadding="0" cellspacing="0" style="width:84.36%;" width="84%"><tbody><tr><td colspan="3" style="width:100.0%;"><p><strong>Supplement Facts:</strong></p></td></tr><tr><td colspan="3" style="width:100.0%;"><p><strong>Serving Size:</strong>&nbsp;1 Capsule</p></td></tr><tr><td>&nbsp;</td><td style="width:21.72%;"><p align="center"><strong>Amount Per Serving</strong></p></td><td style="width:20.22%;"><p align="center"><strong>% DV</strong></p></td></tr><tr><td><p>MegaNatural-BP<br>Grape Seed Extract<br>Vitus Vinifera Seed Standardized to 90% Polyphenols</p></td><td style="width:21.72%;"><p align="center">300 mg</p></td><td style="width:20.22%;"><p align="center">*</p></td></tr><tr><td colspan="3" style="width:100.0%;"><p>*Daily Value (DV) not established.</p></td></tr></tbody></table>'
                 })
             }
         }

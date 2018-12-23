@@ -4,7 +4,7 @@
 <head>
     <% include ./head %>
 
-    <title>Health Mall
+    <title>Health Mall-
         <%= pageData.product.name %>
     </title>
 </head>
@@ -25,13 +25,13 @@
         </div>
         <div class="row mx-0">
         
-            <div class="col-md-auto pl-0"><img class="img-thumbnail" src="./static/resources/images/Product1.jpg" alt="Product Image"></div>
+            <div class="col-md-auto pl-0"><img class="img-thumbnail" src=<%-'./static/resources/images/'+pageData.product.image %> alt="Product Image"></div>
             <div class="col">
                 <ul>
                     <li>Item # : <b><%= pageData.product.id %></b></li>
-                    <li> Manufacturer SKU : <b>733739016621</b></li>
+                    <li>Manufacturer SKU : <b>733739016621</b></li>
                     <li>Product Code : <b><%= pageData.product.meta.code %></b></li>
-                    <li> Package Details : <b><%= pageData.product.meta.package_detail %></b></li>
+                    <li>Package Details : <b><%= pageData.product.meta.package_detail %></b></li>
                     <li>Serving Size : <b><%= pageData.product.meta.serving_size %></b></li>
                     <li>Serving per Container : <b><%= pageData.product.meta.serving_per_container %></b></li>
                     <li>Visit<a target="blank" href="<%= pageData.product.website %>"> <%= pageData.product.mname %></a></li>

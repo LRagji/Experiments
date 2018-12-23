@@ -3,7 +3,7 @@ let constants = require('../modules/constants');
 let pgDal = require('../db/dataAccessLayer');
 let dal = new pgDal();
 
-class cart {
+class pageCart {
     constructor(server) {
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderCart = this.renderCart.bind(this);
@@ -236,4 +236,4 @@ class cart {
 
 }
 
-module.exports = cart;
+module.exports = pageCart;
