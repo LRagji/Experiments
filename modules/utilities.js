@@ -1,4 +1,5 @@
 let constants = require('./constants');
+let validator = require('validator');
 
 module.exports = {
     navigateToError(req, res, err, userMessage) {
@@ -83,5 +84,56 @@ module.exports = {
             throw new Error("Product doesnt exist in users cart.");
         }
     },
+
+    validateEmail(strInput) {
+        try {
+            return validator.isEmail(strInput);
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
+    validateMobilePhone(strInput) {
+        try {
+            return validator.isMobilePhone(strInput, "en-IN");
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
+    validateLength(strInput, maxLength, minLength) {
+        try {
+            return this.validateIsNotUndefiendNullEmpty(strInput) && typeof (strInput) === "string" && strInput.length >= minLength && strInput.length <= maxLength;
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
+    validateIsNotUndefiendNullEmpty(strInput) {
+        try {
+            return strInput !== undefined && strInput !== null && strInput !== "";
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+
+    },
+
+    validateIsInOptions(strInput, options) {
+        try {
+            return options.find((e) => e === strInput) !== undefined;
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    }
 
 }

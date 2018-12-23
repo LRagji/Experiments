@@ -4,6 +4,7 @@ let ensureLogin = require('connect-ensure-login');
 let hash = require('object-hash');
 let pgDal = require('../db/dataAccessLayer');
 let dal = new pgDal();
+let utils = require('./utilities');
 
 class authentication {
 
@@ -38,6 +39,14 @@ class authentication {
 
     async authenticateLogin(username, password, done) {
         try {
+            if (utils.validateEmail(username) === false) {
+                return done(null, false, { message: 'Not a valid email ' + username });
+            }
+
+            if (utils.validateLength(password,50,1) === false) {
+                return done(null, false, { message: 'Password fails length validation [50,1] ' + username });
+            }
+
             let user = await dal.getUserByEmail(username)
             if (user !== undefined) {
                 if (user.password === hash(password, { algorithm: 'md5' })) {

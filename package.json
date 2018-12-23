@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node_modules/nodemon/bin/nodemon.js index.js;",
     "winstart": "cls && node \node_modules\nodemon\bin\nodemon.js index.js;",
-    "winbundle":"cls && if exist dist rd /s /q dist && mkdir dist && bundle.bat"
+    "winbundle": "cls && if exist dist rd /s /q dist && mkdir dist && bundle.bat"
   },
   "repository": {
     "type": "",
@@ -34,7 +34,8 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "pg": "^7.7.1"
+    "pg": "^7.7.1",
+    "validator": "^10.10.0"
   },
   "devDependencies": {
     "morgan": "^1.9.1",

@@ -51,20 +51,50 @@ class pageLogin {
 
     async registerUser(req, res) {
         try {
-            let existingUser = await dal.getUserByEmail(req.body.registerEmail);
-            if (existingUser === undefined) {
-                let newUser = await dal.createUser(req.body.registerSalutation,
-                    req.body.registerFirstName,
-                    req.body.registerLastName,
-                    req.body.registerPhone,
-                    req.body.registerEmail,
-                    req.body.registerPass);
-                res.redirect("/secure/login");
+            if (utils.validateIsInOptions(req.body.registerSalutation, ["Mr.", "Miss.", "Prof.", "Dr."]) === false) {
+                req.flash("registerError", "Invalid Salutation.");
+                res.redirect("/secure/login?tab=register");
+                return;
             }
-            else {
+            if (utils.validateLength(req.body.registerFirstName, 50, 1) === false) {
+                req.flash("registerError", "Invalid First name [1-50].");
+                res.redirect("/secure/login?tab=register");
+                return;
+            }
+            if (utils.validateLength(req.body.registerLastName, 50, 1) === false) {
+                req.flash("registerError", "Invalid Last name [1-50].");
+                res.redirect("/secure/login?tab=register");
+                return;
+            }
+            if (utils.validateMobilePhone(req.body.registerPhone) === false) {
+                req.flash("registerError", "Invalid Phone.");
+                res.redirect("/secure/login?tab=register");
+                return;
+            }
+            if (utils.validateEmail(req.body.registerEmail) === false) {
+                req.flash("registerError", "Invalid Email.");
+                res.redirect("/secure/login?tab=register");
+                return;
+            }
+            if (utils.validateLength(req.body.registerPass, 50, 1) === false) {
+                req.flash("registerError", "Invalid Password [50,1].");
+                res.redirect("/secure/login?tab=register");
+                return;
+            }
+            if (await dal.getUserByEmail(req.body.registerEmail) !== undefined) {
                 req.flash("registerError", "User with email address already exists.");
                 res.redirect("/secure/login?tab=register");
+                return;
             }
+
+            let newUser = await dal.createUser(req.body.registerSalutation,
+                req.body.registerFirstName,
+                req.body.registerLastName,
+                req.body.registerPhone,
+                req.body.registerEmail,
+                req.body.registerPass);
+            res.redirect("/secure/login");
+
         }
         catch (err) {
             utils.navigateToError(req, res, err);
