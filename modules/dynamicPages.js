@@ -17,9 +17,9 @@ class dynamicPages {
         server.set('view engine', 'ejs');
 
         //All Pages
-        securePages = new _secureApp(server, '/secure');//This has to be the first one for pass the user login. Donot change the sequence.
+        securePages = new _secureApp(server, '/secure', dal, utils,constants);//This has to be the first one for pass the user login. Donot change the sequence.
         cart = new cartPage(server);
-        product= new productPage (server,dal,utils,constants,textService);
+        product = new productPage(server, dal, utils, constants, textService);
 
         this.homePage = this.homePage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);

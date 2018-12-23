@@ -7,6 +7,7 @@ module.exports = {
     "shoppingCartProducts": "scp",
     "shoppingInfo": "si",
     "orderdetails": "od",
+    menu:"menu",
     maxProducts: 25,
     maxQuantity: 10,
     registerError: "registerError",
