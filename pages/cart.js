@@ -77,16 +77,16 @@ class cart {
                         let copyBillingInfo = req.body.chkSameAsBilling === undefined ? false : true;
                         let shippingDetails = { billing: {}, shipping: {} };
 
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Salutation", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "FirstName", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "LastName", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Add1", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Add2", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Add3", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "City", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Pincode", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "State", shippingDetails);
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Mobile", shippingDetails);
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Salutation", shippingDetails, (value) => utils.validateIsInOptions(value, constants.salutations));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "FirstName", shippingDetails, (value) => utils.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "LastName", shippingDetails, (value) => utils.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Add1", shippingDetails, (value) => utils.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Add2", shippingDetails, (value) => utils.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Add3", shippingDetails, (value) => utils.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "City", shippingDetails, (value) => utils.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Pincode", shippingDetails, (value) => utils.validateIsPostcode(value));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "State", shippingDetails, (value) => utils.validateIsInOptions(value, constants.states));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Mobile", shippingDetails, (value) => utils.validateMobilePhone(value));
 
                         req.session.locked.shippingDetails = shippingDetails;
                         req.session.locked.state = 2;
@@ -108,14 +108,20 @@ class cart {
                         else {
                             //TODO:Server side data input validations
                             let orderId = undefined;
+                            let endDate = new Date();
+                            let startDate = new Date();
                             switch (req.body.paymentMode) {
 
                                 case "cheque":
-                                    if (req.body.chequeChequeNo === undefined) throw new Error("Incomplete or Invalid request for parameter:chequeChequeNo");
-                                    if (req.body.chequeDate === undefined) throw new Error("Incomplete or Invalid request for parameter:chequeDate");
-                                    if (req.body.chequeBankName === undefined) throw new Error("Incomplete or Invalid request for parameter:chequeBankName");
-                                    if (req.body.chequeBankBranch === undefined) throw new Error("Incomplete or Invalid request for parameter:chequeBankBranch");
-                                    if (req.body.chequeDepositedBank === undefined) throw new Error("Incomplete or Invalid request for parameter:chequeDepositedBank");
+                                    endDate = new Date();
+                                    startDate = new Date();
+                                    startDate.setDate(endDate.getDate() - 10); //Time windows is 10 days.
+
+                                    if (utils.validateLength(req.body.chequeChequeNo, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeChequeNo");
+                                    if (utils.validateIsDateBetween(req.body.chequeDate, startDate, endDate) === false) throw new Error("Incomplete or Invalid request for parameter:chequeDate");
+                                    if (utils.validateLength(req.body.chequeBankName, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeBankName");
+                                    if (utils.validateLength(req.body.chequeBankBranch, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeBankBranch");
+                                    if (utils.validateIsInOptions(req.body.chequeDepositedBank, constants.bankAccounts) === false) throw new Error("Incomplete or Invalid request for parameter:chequeDepositedBank");
                                     if (req.body.chequeDeclaration === undefined) throw new Error("Incomplete or Invalid request for parameter:chequeDeclaration");
 
                                     req.session.locked.payment = {
@@ -134,8 +140,12 @@ class cart {
                                     break;
 
                                 case "bankTransfer":
-                                    if (req.body.bankTransferRefNo === undefined) throw new Error("Incomplete or Invalid request for parameter:bankTransferRefNo");
-                                    if (req.body.bankTransferDate === undefined) throw new Error("Incomplete or Invalid request for parameter:bankTransferDate");
+                                    endDate = new Date();
+                                    startDate = new Date();
+                                    startDate.setDate(endDate.getDate() - 10); //Time windows is 10 days.
+
+                                    if (utils.validateLength(req.body.bankTransferRefNo, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:bankTransferRefNo");
+                                    if (utils.validateIsDateBetween(req.body.bankTransferDate, startDate, endDate) === false) throw new Error("Incomplete or Invalid request for parameter:bankTransferDate");
                                     if (req.body.bankTransferDeclaration === undefined) throw new Error("Incomplete or Invalid request for parameter:bankTransferDeclaration");
 
                                     req.session.locked.payment = {
@@ -188,11 +198,11 @@ class cart {
         delete req.session.locked;
     }
 
-    fillShippingDetails(body, copyBillingInfo, propertyName, shippingDetails) {
+    fillShippingDetails(body, copyBillingInfo, propertyName, shippingDetails, validationFunction) {
         const ship = "s";
         const bill = "b";
-        if (body[bill + propertyName] === undefined) throw new Error("Invalid or Incomplete request, Missing billing " + propertyName + " parameter.");
-        if (copyBillingInfo === false && body[ship + propertyName] === undefined) throw new Error("Invalid or Incomplete request, Missing shipping " + propertyName + " parameter.");
+        if (validationFunction(body[bill + propertyName]) === false) throw new Error("Invalid or Incomplete request, billing " + propertyName + " parameter.");
+        if (copyBillingInfo === false && validationFunction(body[ship + propertyName]) === false) throw new Error("Invalid or Incomplete request, shipping " + propertyName + " parameter.");
 
         shippingDetails.billing[bill + propertyName] = body[bill + propertyName];
         shippingDetails.shipping[ship + propertyName] = copyBillingInfo ? body[bill + propertyName] : body[ship + propertyName];

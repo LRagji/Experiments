@@ -126,7 +126,7 @@
                                                 <option>Dr.</option>
                                                 <option>Prof.</option>
                                             </select>
-                                            <input type="text" name="bFirstName" class="form-control" id="registerFirstName"
+                                            <input type="text" name="bFirstName" class="form-control" id="registerFirstName" minlength="1"  maxlength="50"
                                                 placeholder="First Name" value="${setBillingInputValue(pageData.si,'bFirstName')}" required>
                                         </div>
                                     </div>
@@ -138,7 +138,7 @@
                                 <div class="col">
                                     <input type="text" name="bLastName" class="form-control" placeholder="Last name"
                                     value="${setBillingInputValue(pageData.si,'bLastName')}"
-                                        required>
+                                       minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
                             <!-- Add 1 -->
@@ -146,7 +146,7 @@
                                 <div class="col">
                                     <input type="text" name="bAdd1" class="form-control" placeholder="Address 1"
                                     value="${setBillingInputValue(pageData.si,'bAdd1')}"
-                                        required>
+                                       minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
                             <!-- Add 2 -->
@@ -154,7 +154,7 @@
                                 <div class="col">
                                     <input type="text" name="bAdd2" class="form-control" placeholder="Address 2"
                                     value="${setBillingInputValue(pageData.si,'bAdd2')}"
-                                        required>
+                                      minlength="1"  maxlength="50"  required>
                                 </div>
                             </div>
                             <!-- Add 3 -->
@@ -162,14 +162,14 @@
                                 <div class="col">
                                     <input type="text" name="bAdd3" class="form-control" placeholder="Address 3"
                                     value="${setBillingInputValue(pageData.si,'bAdd3')}"
-                                        required>
+                                       minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
                             <!-- City -->
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="text" name="bCity" class="form-control" placeholder="City"
-                                    value="${setBillingInputValue(pageData.si,'bCity')}" required>
+                                    value="${setBillingInputValue(pageData.si,'bCity')}" minlength="1"  maxlength="50" required>
 
                                 </div>
                             </div>
@@ -261,7 +261,7 @@
                                                 <option>Dr.</option>
                                                 <option>Prof.</option>
                                             </select>
-                                            <input type="text" name="sFirstName" class="form-control" id="registerFirstName"
+                                            <input type="text" name="sFirstName" class="form-control" id="registerFirstName" minlength="1"  maxlength="50"
                                             value="${setShippingInputValue(pageData.si,'sFirstName')}" placeholder="First Name">
                                         </div>
                                     </div>
@@ -272,35 +272,35 @@
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sLastName" class="form-control" placeholder="Last name"
-                                    value="${setShippingInputValue(pageData.si,'sLastName')}"  required>
+                                    value="${setShippingInputValue(pageData.si,'sLastName')}" minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
                             <!--Ship Add 1 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd1" class="form-control" placeholder="Address 1"
-                                    value="${setShippingInputValue(pageData.si,'sAdd1')}" required>
+                                    value="${setShippingInputValue(pageData.si,'sAdd1')}" minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
                             <!--Ship Add 2 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd2" class="form-control" placeholder="Address 2"
-                                    value="${setShippingInputValue(pageData.si,'sAdd2')}" sAdd1 required>
+                                    value="${setShippingInputValue(pageData.si,'sAdd2')}" minlength="1"  maxlength="50" sAdd1 required>
                                 </div>
                             </div>
                             <!--Ship Add 3 -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sAdd3" class="form-control" placeholder="Address 3"
-                                    value="${setShippingInputValue(pageData.si,'sAdd3')}" required>
+                                    value="${setShippingInputValue(pageData.si,'sAdd3')}" minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
                             <!--Ship City -->
                             <div class="row m-1 collapseOnDuplicate">
                                 <div class="col">
                                     <input type="text" name="sCity" class="form-control" placeholder="City"
-                                    value="${setShippingInputValue(pageData.si,'sCity')}" required>
+                                    value="${setShippingInputValue(pageData.si,'sCity')}" minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
                             <!--Ship Pincode -->
@@ -418,11 +418,11 @@
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="chequeBankName" type="text" class="form-control"
-                                                        placeholder="Bank Name" required>
+                                                        placeholder="Bank Name" minlength="1"  maxlength="50" required>
                                                 </div>
                                                 <div class="col-md">
                                                     <input name="chequeBankBranch" type="text" class="form-control"
-                                                        placeholder="Bank Branch" required>
+                                                        placeholder="Bank Branch" minlength="1"  maxlength="50" required>
                                                 </div>
                                             </div>
                                             <div class="d-flex my-2">

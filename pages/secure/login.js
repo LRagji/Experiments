@@ -51,7 +51,7 @@ class pageLogin {
 
     async registerUser(req, res) {
         try {
-            if (utils.validateIsInOptions(req.body.registerSalutation, ["Mr.", "Miss.", "Prof.", "Dr."]) === false) {
+            if (utils.validateIsInOptions(req.body.registerSalutation, constants.salutations) === false) {
                 req.flash("registerError", "Invalid Salutation.");
                 res.redirect("/secure/login?tab=register");
                 return;

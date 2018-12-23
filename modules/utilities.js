@@ -134,6 +134,26 @@ module.exports = {
             console.error(err);
             return false;
         }
+    },
+
+    validateIsPostcode(strInput) {
+        try {
+            return validator.isPostalCode(strInput, 'IN');
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
+    validateIsDateBetween(strInput, startDate, endDate) {
+        try {
+            return validator.isAfter(strInput, startDate.toDateString()) && validator.isBefore(strInput, endDate.toDateString());
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
     }
 
 }
