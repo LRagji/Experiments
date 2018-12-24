@@ -1,7 +1,7 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: 'postgres', host: 'localhost', database: 'Experimental', password: 'P@55word', port: 5432, });
 let orders = [], products = [], users = [];
-let hash = require('object-hash');
+let util = require('../modules/utilities');
 // TODO:Call the appropiate API
 class DAL {
     constructor() {
@@ -11,6 +11,7 @@ class DAL {
         this.createOrder = this.createOrder.bind(this);
         this.getOrderById = this.getOrderById.bind(this);
         this.createUser = this.createUser.bind(this);
+        this.updateUserPassword = this.updateUserPassword.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -179,7 +180,7 @@ class DAL {
                     last: lastName,
                     mobile: mobile,
                     email: email,
-                    password: hash(password, { algorithm: 'md5' }),
+                    password: util.getHash(password),
                     meta: {
                         "type": "normal"
                     }
@@ -189,6 +190,19 @@ class DAL {
             }
             catch (ex) {
                 rej(ex);
+            }
+        });
+    }
+
+    updateUserPassword(userId, password) {
+        return new Promise((acc, rej) => {
+            let exisitingUser = users.find((e) => e.id === userId);
+            if (exisitingUser !== undefined) {
+                exisitingUser.password = util.getHash(password);
+                acc(exisitingUser);
+            }
+            else {
+                rej(new Error("Cannot find user with id:" + userId));
             }
         });
     }

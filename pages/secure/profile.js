@@ -1,5 +1,5 @@
 class pageProfile {
-    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService, ) {
+    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService ) {
         this.dal = dataAccessService;
         this.util = utilityService;
         this.const = constantsService;

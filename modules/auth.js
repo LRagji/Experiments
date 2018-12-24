@@ -1,7 +1,6 @@
 let passport = require('passport');
 let strategy = require('passport-local').Strategy;
 let ensureLogin = require('connect-ensure-login');
-let hash = require('object-hash');
 let pgDal = require('../db/dataAccessLayer');
 let dal = new pgDal();
 let utils = require('./utilities');
@@ -49,7 +48,7 @@ class authentication {
 
             let user = await dal.getUserByEmail(username)
             if (user !== undefined) {
-                if (user.password === hash(password, { algorithm: 'md5' })) {
+                if (user.password === utils.getHash(password)) {
                     console.info(username + ' logged in.');
                     return done(null, user);
                 }

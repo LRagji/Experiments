@@ -1,5 +1,6 @@
 let constants = require('./constants');
 let validator = require('validator');
+let hash = require('object-hash');
 
 module.exports = {
     navigateToError(req, res, err, userMessage) {
@@ -154,6 +155,10 @@ module.exports = {
             console.error(err);
             return false;
         }
+    },
+
+    getHash(strInput) {
+        return hash(strInput, { algorithm: 'md5' });
     }
 
 }
