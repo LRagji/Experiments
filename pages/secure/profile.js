@@ -1,5 +1,5 @@
 class pageProfile {
-    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService ) {
+    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService) {
         this.dal = dataAccessService;
         this.util = utilityService;
         this.const = constantsService;
@@ -30,7 +30,7 @@ class pageProfile {
 
     createMenu(user) {
         let menuItems = [];
-       
+
         menuItems.push({
             icon: "fas fa-shipping-fast",
             url: "/secure/orders",
@@ -46,8 +46,8 @@ class pageProfile {
             url: "/secure/logout",
             name: "Logout"
         });
-        switch (user.meta.type) {
-            case "admin":
+
+        if (this.util.isAdmin(user)) {
             menuItems.push({
                 icon: "fas fa-cube",
                 url: "/secure/products",
@@ -63,7 +63,6 @@ class pageProfile {
                 url: "/secure/users",
                 name: "User Management"
             })
-                break;
         }
         return menuItems;
     }

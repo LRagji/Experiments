@@ -9,6 +9,8 @@ let modPageProfile = require('../pages/secure/profile');
 let pageProfile = undefined;
 let modPagePassword = require('../pages/secure/password');
 let pagePassword = undefined;
+let modPageProducts = require('../pages/secure/products');
+let pageProducts = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath,dataAccessService, utilityService, constantsService) {
@@ -20,6 +22,7 @@ class secureapp {
         pageLogin = new modPageLogin(_secureApp, basePath, _auth);
         pageProfile = new modPageProfile(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
         pagePassword = new modPagePassword(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
+        pageProducts = new modPageProducts(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
     }
 }
 

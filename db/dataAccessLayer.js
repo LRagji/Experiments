@@ -11,7 +11,7 @@ class DAL {
         this.createOrder = this.createOrder.bind(this);
         this.getOrderById = this.getOrderById.bind(this);
         this.createUser = this.createUser.bind(this);
-        this.updateUserPassword = this.updateUserPassword.bind(this);
+        this.updateUserPassword = this.updateUserPassword.bind(this);//TODO:This can be update user call instead.
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -22,12 +22,14 @@ class DAL {
                     "offerprice": (parseFloat(i) * 100.00),
                     "price": (parseFloat(i) * 100.00 + 1000.00),
                     "image": "Product2.jpg",
-                    "shippingdetail": "Ships in " + i + " days.",
                     "meta": {
                         "code": "C" + i.toString(),
                         "package_detail": "180 Softgels",
                         "serving_size": "1 Softgels",
-                        "serving_per_container": "This bottle will last 180 days."
+                        "serving_per_container": "This bottle will last 180 days.",
+                        "shippingdetail": "Ships in " + i + " days.",
+                        "category":"Category"+i.toString(),
+                        "subCategory":"Sub Category"+i.toString()
                     },
                     "mname": "NOW FOODS",
                     "website": "https://www.health-mall.in",
@@ -53,6 +55,8 @@ class DAL {
                 }
             );
         }
+
+
         if (orders.length === 0)
             orders.push({
                 "userId": 1,

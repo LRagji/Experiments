@@ -91,7 +91,7 @@ function fillProductInfo(product) {
         </h3>
         </div>
         <div class="d-flex justify-content-center align-items-center">
-        <small>${product.shippingdetail}</small>
+        <small>${product.meta.shippingdetail}</small>
         </div>
         <div class="d-flex justify-content-center align-items-center">
         <button onClick=addProductToSession(${product.id},1) class="btn btn-success my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>

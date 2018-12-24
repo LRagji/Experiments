@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Products</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+    <div class="container mt-5">
+        <div class="card myshadow">
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new"
+                        aria-selected="true">New Product</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="existing-tab" data-toggle="tab" href="#existing" role="tab" aria-controls="exisitng"
+                        aria-selected="false">Exisiting Products</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="new-tab">
+
+
+                    <div class="card-body">
+                        <h5 class="card-title">New Product</h5>
+                        <form action="/secure/products" method="POST">
+                            <div class="row m-2">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="Product Name" minlength="1"
+                                        maxlength="50" required name="name">
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Category" minlength="1"
+                                        maxlength="20" required name="cat">
+                                </div>
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Sub Category" minlength="1"
+                                        maxlength="20" required name="subCat">
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Product Price" minlength="1"
+                                        maxlength="20" required name="price">
+                                </div>
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Offer Price" minlength="1"
+                                        maxlength="20" required name="offerPrice">
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Shipping detail" minlength="1"
+                                        maxlength="20" required name="shippingDetails">
+                                </div>
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Product Code" minlength="1"
+                                        maxlength="20" required name="code">
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Package detail" minlength="1"
+                                        maxlength="20" required name="packageDetail">
+                                </div>
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Serving size" minlength="1"
+                                        maxlength="20" required name="servingSize">
+                                </div>
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Serving per Container"
+                                        minlength="1" maxlength="20" required name="servingPerContainer">
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Manufacturer Name" minlength="1"
+                                        maxlength="20" required name="mName">
+                                </div>
+                                <div class="col-md">
+                                    <input type="text" class="form-control" placeholder="Manufacturer Website"
+                                        minlength="1" maxlength="20" required name="mWebsite">
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="imageUpload">Description</label>
+                                        <textarea class="form-control" name="desc" rows="4" cols="50"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="imageUpload">Ingredients</label>
+                                        <textarea class="form-control" name="ingredients" rows="4" cols="50"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row m-2">
+                                <div class="col">
+                                    <div class="d-flex">
+                                        <div class="form-group">
+                                            <label for="imageUpload">Product Image</label>
+                                            <input type="file" class="form-control-file" id="imageUpload" name="image"
+                                                required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary ml-auto mt-auto">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="existing" role="tabpanel" aria-labelledby="existing-tab">...</div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>

@@ -1,5 +1,3 @@
-let hash = require('object-hash');
-
 class pagePassword {
     constructor(server, basePath, auth, dataAccessService, utilityService, constantsService) {
         this.dal = dataAccessService;

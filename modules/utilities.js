@@ -159,6 +159,11 @@ module.exports = {
 
     getHash(strInput) {
         return hash(strInput, { algorithm: 'md5' });
+    },
+
+    isAdmin(user)
+    {
+        return user.meta.type === "admin";
     }
 
 }
