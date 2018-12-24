@@ -12,24 +12,35 @@
     <% include ../header %>
     <div class="container mt-5">
         <div class="card myshadow">
-
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <ul class="nav nav-pills bg-light" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new"
-                        aria-selected="true">New Product</a>
+                    <a class="nav-item nav-link active" id="exisiting-tab" data-toggle="tab" href="#exisiting" role="tab"
+                        aria-controls="exisiting" aria-selected="true">Exisiting Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="existing-tab" data-toggle="tab" href="#existing" role="tab" aria-controls="exisitng"
-                        aria-selected="false">Exisiting Products</a>
+                    <a class="nav-item nav-link" id="new-tab" data-toggle="tab" href="#new" role="tab" aria-controls="new"
+                        aria-selected="false">New Product</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="new" role="tabpanel" aria-labelledby="new-tab">
-
-
+                <div class="tab-pane fade show active" id="exisiting" role="tabpanel" aria-labelledby="exisiting-tab">
                     <div class="card-body">
-                        <h5 class="card-title">New Product</h5>
-                        <form action="/secure/products" method="POST">
+                        Search box with infinity scroll for all products.
+                    </div>
+                </div>
+
+                <!-- New Product -->
+                <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="new-tab">
+                    <div class="card-body">
+                        <% if (pageData.newProductError.length>=1) { %>
+                        <%- `<div class="alert alert alert-danger" role="alert">${pageData.newProductError[0]}</div>` %>
+                        <% } %>
+                        <% if (pageData.newProductSuccess.length>=1) { %>
+                        <%- `<div class="alert alert alert-success" role="alert">${pageData.newProductSuccess[0]}</div>` %>
+                        <% } %>
+                        
+                        <%- 
+                        `<form action="/secure/products${pageData.productinfo!==undefined?'/edit':''}" method="POST">
                             <div class="row m-2">
                                 <div class="col">
                                     <input type="text" class="form-control" placeholder="Product Name" minlength="1"
@@ -119,12 +130,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                        </form>
+                        </form>`
+                                               %>
                     </div>
-
                 </div>
-                <div class="tab-pane fade" id="existing" role="tabpanel" aria-labelledby="existing-tab">...</div>
             </div>
         </div>
     </div>
