@@ -165,6 +165,12 @@ class pageProducts {
                 return;
             }
 
+            if (this.util.validateIsUrl(req.body.mWebsite) === false) {
+                req.flash(this.const.newProductError, "Invalid manufacturer website.");
+                this.respondWithRightPage(req, IsNewProduct, productState, res);
+                return;
+            }
+
             if (this.util.validateLength(req.body.cat, 20, 1) === false) {
                 req.flash(this.const.newProductError, "Invalid category length [20,1].");
                 this.respondWithRightPage(req, IsNewProduct, productState, res);

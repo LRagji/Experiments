@@ -185,6 +185,11 @@ module.exports = {
         return this.validateIsWholeNumber(strInput) && this.validateIsFloatNumberBetween(strInput, max, min);
     },
 
+    validateIsUrl(strInput)
+    {
+        return validator.isURL(strInput);
+    },
+
     getHash(strInput) {
         return hash(strInput, { algorithm: 'md5' });
     },

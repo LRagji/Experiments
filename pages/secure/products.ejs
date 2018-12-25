@@ -109,7 +109,7 @@
                                         maxlength="20" required name="mName">
                                 </div>
                                 <div class="col-md">
-                                    <input type="url" class="form-control" placeholder="Manufacturer Website" pattern="https://.*"
+                                    <input type="url" class="form-control" placeholder="Manufacturer Website" pattern="https://.*" title="Please use https urls only with protocols"
                                         value="${pageData.productinfo!==undefined?pageData.productinfo.meta.mwebsite:''}"
                                         minlength="1" maxlength="100" required name="mWebsite">
                                 </div>
