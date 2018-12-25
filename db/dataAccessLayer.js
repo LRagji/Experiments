@@ -2,9 +2,11 @@ let pg = require('pg')
 let pgPool = new pg.Pool({ user: 'postgres', host: 'localhost', database: 'Experimental', password: 'P@55word', port: 5432, });
 let orders = [], products = [], users = [];
 let util = require('../modules/utilities');
+let fs = require('fs');
 // TODO:Call the appropiate API
 class DAL {
     constructor() {
+        //TODO: This binding list is not upto date
         this.getProductById = this.getProductById.bind(this);
         this.pool = this.pool.bind(this);
         this.getUserByEmail = this.getUserByEmail.bind(this);
@@ -15,7 +17,7 @@ class DAL {
 
         //TODO:Delete this mock data
         if (products.length === 0) {
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 1; i++) {
                 products.push({
                     "id": i,
                     "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi " + i,
@@ -27,7 +29,7 @@ class DAL {
                         "package_detail": "180 Softgels",
                         "serving_size": "1 Softgels",
                         "serving_per_container": "This bottle will last 180 days.",
-                        "shippingdetail": "Ships in " + i + " days.",
+                        "shippingdetail": i,
                         "category": "Category" + i.toString(),
                         "subCategory": "Sub Category" + i.toString(),
                         "mname": "NOW FOODS",
@@ -116,20 +118,39 @@ class DAL {
         return new Promise((acc, rej) => {
             let validatedProductid = parseInt(productId);
             if (isNaN(validatedProductid)) rej(Error("Invalid Product Id:" + productId));
-            var product = products.find((p) => p.id === validatedProductid);
-            acc(product);
+            let product = products.find((p) => p.id === validatedProductid);
+            if (product == undefined)
+                acc(undefined);
+            else
+                acc(Object.assign({}, product));
         });
     }
 
     getAllProducts(pageNo, size) {
         return new Promise((acc, rej) => {
-            if (products.length < (pageNo * size)) {
-                acc([]);
+
+            let startIndex = (pageNo * size);
+            let endIndex = (startIndex + size);
+            let fetchStart = 0, fetchLength = 0;
+
+            if (products.length < startIndex && products.length < endIndex) {
+                fetchStart = 0;
+                fetchLength = 0;
             }
-            else {
-                let productsClone = Array.from(products);
-                acc(productsClone.splice(pageNo === 0 ? 0 : ((pageNo * size) - size), size));
+
+            else if (products.length > startIndex && products.length < endIndex) {
+                fetchStart = startIndex;
+                fetchLength = (products.length - startIndex);
             }
+
+            else if (products.length > startIndex && products.length > endIndex) {
+                fetchStart = startIndex;
+                fetchLength = size;
+            }
+
+            let productsClone = Array.from(products);
+            acc(productsClone.splice(fetchStart, fetchLength));
+            return;
         });
     }
 
@@ -211,11 +232,14 @@ class DAL {
         });
     }
 
-    saveProduct(name, productPrice, offerPrice, image, desc, ingredients, meta) {
+    saveProduct(name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer) {
         return new Promise((acc, rej) => {
             try {
-                //TODO:Save Image on Server
-                acc({
+                if (imageBuffer !== undefined) {
+                    fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
+                }
+
+                let newProduct = {
                     id: products.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
                     "name": name,
                     "offerprice": parseFloat(offerPrice),
@@ -226,7 +250,7 @@ class DAL {
                         "package_detail": meta.package_detail,
                         "serving_size": meta.serving_size,
                         "serving_per_container": meta.serving_per_container,
-                        "shippingdetail": "Ships in " + meta.shippingdetail + " days.",
+                        "shippingdetail": meta.shippingdetail,
                         "category": meta.category,
                         "subCategory": meta.subCategory,
                         "mname": meta.manufactureName,
@@ -234,12 +258,54 @@ class DAL {
                     },
                     "description": desc,
                     "ingredients": ingredients
-                })
+                };
+                products.push(newProduct);
+                acc(newProduct);
+                console.log(newProduct);
             }
             catch (err) {
                 rej(err);
             }
         })
+    }
+
+    updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer) {
+        return new Promise((acc, rej) => {
+            try {
+                id = parseInt(id);
+                let idx = products.findIndex((v) => v.id === id);
+                if (idx < 0) rej("Product doesnot exits with Id:" + id);
+                if (imageBuffer !== undefined) {
+                    fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
+                }
+                let product = {
+                    id: id,
+                    "name": name,
+                    "offerprice": parseFloat(offerPrice),
+                    "price": parseFloat(productPrice),
+                    "image": image,
+                    "meta": {
+                        "code": meta.code,
+                        "package_detail": meta.package_detail,
+                        "serving_size": meta.serving_size,
+                        "serving_per_container": meta.serving_per_container,
+                        "shippingdetail": meta.shippingdetail,
+                        "category": meta.category,
+                        "subCategory": meta.subCategory,
+                        "mname": meta.mname,
+                        "mwebsite": meta.mwebsite
+                    },
+                    "description": desc,
+                    "ingredients": ingredients
+                };
+                products[idx] = Object.assign({}, product);
+                acc(product);
+                console.log(product);
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
     }
 }
 

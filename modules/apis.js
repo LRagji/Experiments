@@ -19,10 +19,10 @@ class apiServer {
         let size = parseInt(req.query.size);
 
         let products = await dal.getAllProducts(page, size);
-        if (products.length === 0)
-            res.status(200).send(products);
-        else
+        if (products.length === size)
             res.status(206).send(products);
+        else
+            res.status(200).send(products);
 
     }
 

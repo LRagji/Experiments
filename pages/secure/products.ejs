@@ -38,82 +38,99 @@
                         <% if (pageData.newProductSuccess.length>=1) { %>
                         <%- `<div class="alert alert alert-success" role="alert">${pageData.newProductSuccess[0]}</div>` %>
                         <% } %>
-                        
+
                         <%- 
-                        `<form action="/secure/products${pageData.productinfo!==undefined?'/edit':''}" method="POST">
+                        `<form action="/secure/products" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" id="pid" name="id" value="${(pageData.productinfo!==undefined && pageData.productinfo.id!==undefined)?pageData.productinfo.id:''}" />
                             <div class="row m-2">
                                 <div class="col">
                                     <input type="text" class="form-control" placeholder="Product Name" minlength="1"
+                                    value="${pageData.productinfo!==undefined?pageData.productinfo.name:''}"
                                         maxlength="50" required name="name">
                                 </div>
                             </div>
                             <div class="row m-2">
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Category" minlength="1"
+                                     value="${pageData.productinfo!==undefined?pageData.productinfo.meta.category:''}"
                                         maxlength="20" required name="cat">
                                 </div>
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Sub Category" minlength="1"
+                                    value="${pageData.productinfo!==undefined?pageData.productinfo.meta.subCategory:''}"
                                         maxlength="20" required name="subCat">
                                 </div>
                             </div>
                             <div class="row m-2">
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Product Price" minlength="1"
+                                        value="${pageData.productinfo!==undefined?pageData.productinfo.price:''}"
                                         maxlength="20" required name="price">
                                 </div>
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Offer Price" minlength="1"
+                                        value="${pageData.productinfo!==undefined?pageData.productinfo.offerprice:''}"
                                         maxlength="20" required name="offerPrice">
                                 </div>
                             </div>
                             <div class="row m-2">
                                 <div class="col-md">
-                                    <input type="text" class="form-control" placeholder="Shipping detail" minlength="1"
-                                        maxlength="20" required name="shippingDetails">
+                                    <input type="text" class="form-control" placeholder="Ships time in days" minlength="1"
+                                        value="${pageData.productinfo!==undefined?pageData.productinfo.meta.shippingdetail:''}"
+                                        maxlength="3" required name="shippingDetails">
                                 </div>
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Product Code" minlength="1"
+                                         value="${pageData.productinfo!==undefined?pageData.productinfo.meta.code:''}"
                                         maxlength="20" required name="code">
                                 </div>
                             </div>
                             <div class="row m-2">
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Package detail" minlength="1"
+                                         value="${pageData.productinfo!==undefined?pageData.productinfo.meta.package_detail:''}"
                                         maxlength="20" required name="packageDetail">
                                 </div>
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Serving size" minlength="1"
+                                       value="${pageData.productinfo!==undefined?pageData.productinfo.meta.serving_size:''}"
                                         maxlength="20" required name="servingSize">
                                 </div>
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Serving per Container"
-                                        minlength="1" maxlength="20" required name="servingPerContainer">
+                                        value="${pageData.productinfo!==undefined?pageData.productinfo.meta.serving_per_container:''}"
+                                        minlength="1" maxlength="100" required name="servingPerContainer">
                                 </div>
                             </div>
                             <div class="row m-2">
                                 <div class="col-md">
                                     <input type="text" class="form-control" placeholder="Manufacturer Name" minlength="1"
+                                        value="${pageData.productinfo!==undefined?pageData.productinfo.meta.mname:''}"
                                         maxlength="20" required name="mName">
                                 </div>
                                 <div class="col-md">
-                                    <input type="text" class="form-control" placeholder="Manufacturer Website"
-                                        minlength="1" maxlength="20" required name="mWebsite">
+                                    <input type="url" class="form-control" placeholder="Manufacturer Website" pattern="https://.*"
+                                        value="${pageData.productinfo!==undefined?pageData.productinfo.meta.mwebsite:''}"
+                                        minlength="1" maxlength="100" required name="mWebsite">
                                 </div>
                             </div>
                             <div class="row m-2">
                                 <div class="col-md">
                                     <div class="form-group">
-                                        <label for="imageUpload">Description</label>
-                                        <textarea class="form-control" name="desc" rows="4" cols="50"></textarea>
+                                        <label for="desc">Description</label>
+                                        <textarea id="desc" class="form-control" name="desc" rows="4" cols="50">
+                                        ${pageData.productinfo!==undefined?pageData.productinfo.description:''}
+                                    </textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="row m-2">
                                 <div class="col-md">
                                     <div class="form-group">
-                                        <label for="imageUpload">Ingredients</label>
-                                        <textarea class="form-control" name="ingredients" rows="4" cols="50"></textarea>
+                                        <label for="ingredients">Ingredients</label>
+                                        <textarea id="ingredients" class="form-control" name="ingredients" rows="4" cols="50">
+                                        ${pageData.productinfo!==undefined?pageData.productinfo.ingredients:''}
+                                        </textarea>
                                     </div>
                                 </div>
                             </div>
@@ -122,12 +139,20 @@
                                 <div class="col">
                                     <div class="d-flex">
                                         <div class="form-group">
-                                            <label for="imageUpload">Product Image</label>
-                                            <input type="file" class="form-control-file" id="imageUpload" name="image"
+                                                <div class="form-group form-check">
+                                                        <input name="useDefaultImage" onChange="toggleImageUpload(this)" type="checkbox" class="form-check-input" id="useDefaultImage">
+                                                        <label class="form-check-label" for="exampleCheck1">Use default/exisitng image</label>
+                                                      </div>
+                                            <input id="uploadImage" accept="image/jpeg" type="file" class="form-control-file" id="imageUpload" name="image"
                                                 required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary ml-auto mt-auto">Save</button>
+                                        <input type="hidden" id="imageName" name="imageName" value="${(pageData.productinfo!==undefined && pageData.productinfo.image!==undefined)?pageData.productinfo.image:Date.now()}" />
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col">
+                                        <button type="submit" class="btn btn-primary ml-auto mt-auto">Save</button>
                                 </div>
                             </div>
                         </form>`
@@ -139,6 +164,26 @@
     </div>
     <!-- Footer -->
     <% include ../footer %>
+    <script>
+        let params = (new URL(document.location)).searchParams;
+        if (params.has('tab')) {
+            if (params.get('tab').toLowerCase() === 'new') $("#new-tab").click();
+        }
+        if ($("#pid").val() !== undefined && $("#pid").val() !== "") {
+            $("#new-tab").text("Product Id: " + $("#pid").val());
+        }
+
+        function toggleImageUpload(e) {
+            if (e.checked === true) {
+                $("#uploadImage").prop("disabled", true);
+                $("#uploadImage").hide();
+            }
+            else {
+                $("#uploadImage").show();
+                $("#uploadImage").prop("disabled", false);
+            }
+        }
+    </script>
 </body>
 
 </html>

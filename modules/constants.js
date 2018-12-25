@@ -4,6 +4,7 @@ module.exports = {
     changePassError: "changePassError",
     newProductError: "newProductError",
     newProductSuccess: "newProductSuccess",
+    newProductState:"newProductState",
     productinfo:"productinfo",
     product: "product",
     cartItems: "cartItems",

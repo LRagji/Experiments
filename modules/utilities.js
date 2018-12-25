@@ -157,12 +157,39 @@ module.exports = {
         }
     },
 
+    validateIsFloatNumberBetween(strInput, max, min) {
+        try {
+            let inputFloat = parseFloat(strInput);
+            let inputMax = parseFloat(max);
+            let inputMin = parseFloat(min);
+            return inputFloat >= inputMin && inputFloat <= inputMax;
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
+    validateIsWholeNumber(strInput) {
+        try {
+            let inputFloat = parseFloat(strInput);
+            return Math.round(inputFloat) === inputFloat;
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
+    validateIsWholeNumberBetween(strInput, max, min) {
+        return this.validateIsWholeNumber(strInput) && this.validateIsFloatNumberBetween(strInput, max, min);
+    },
+
     getHash(strInput) {
         return hash(strInput, { algorithm: 'md5' });
     },
 
-    isAdmin(user)
-    {
+    isAdmin(user) {
         return user.meta.type === "admin";
     }
 

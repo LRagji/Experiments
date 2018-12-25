@@ -3,7 +3,7 @@ var spinner = $('#loadingSpinner');
 var loadingMessage = $('#loadingMessage');
 var shoppingBadge = $('#shoppingCart');
 var alertPanel = $('#alertPane');
-var pageNo = 1;
+var pageNo = 0;
 var size = 10;
 
 $.fn.isInViewport = function () {
