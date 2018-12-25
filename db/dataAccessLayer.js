@@ -20,16 +20,16 @@ class DAL {
             for (let i = 0; i < 1; i++) {
                 products.push({
                     "id": i,
-                    "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veggi " + i,
+                    "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
                     "offerprice": (parseFloat(i) * 100.00),
                     "price": (parseFloat(i) * 100.00 + 1000.00),
-                    "image": "Product2.jpg",
+                    "image": "default.jpg",
                     "meta": {
                         "code": "C" + i.toString(),
                         "package_detail": "180 Softgels",
                         "serving_size": "1 Softgels",
                         "serving_per_container": "This bottle will last 180 days.",
-                        "shippingdetail": i,
+                        "shippingdetail": i+1,
                         "category": "Category" + i.toString(),
                         "subCategory": "Sub Category" + i.toString(),
                         "mname": "NOW FOODS",

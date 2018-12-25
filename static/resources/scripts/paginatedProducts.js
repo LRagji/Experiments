@@ -79,7 +79,7 @@ function fillProductInfo(product) {
     return `<div class="card m-2 myshadow myproductcard">
     <a href="/product?pid=${product.id}" >
     <center>
-        <img class="productThumbnail" src="../static/resources/images/${product.image}" style="max-width:150px;max-height:170px" alt="Product Image">
+        <img class="productThumbnail" src="../static/resources/images/products/${product.image}" style="max-width:150px;max-height:170px" alt="Product Image">
     </center>
     </a>
     <div class="card-body bg-light">
