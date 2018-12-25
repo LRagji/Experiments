@@ -44,6 +44,8 @@ apiServer = new api(app);
 //Static Content
 app.use('/static', express.static('static'));
 
+//TODO:Need to remove this thrid party from fixed route
+app.get("/nicEditorIcons.gif",(req,res)=>res.redirect("/static/resources/images/nicEditorIcons.gif"))
 
 app.listen(_port, () => {
     console.log('Application active on ' + _port);

@@ -118,9 +118,9 @@
                                 <div class="col-md">
                                     <div class="form-group">
                                         <label for="desc">Description</label>
-                                        <textarea id="desc" class="form-control" name="desc" rows="4" cols="50">
-                                        ${pageData.productinfo!==undefined?pageData.productinfo.description:''}
-                                    </textarea>
+                                        <textarea id="desc" style="width:600px" class="form-control  name="desc">
+                                            ${pageData.productinfo!==undefined?pageData.productinfo.description:''}
+                                        </textarea>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@
                                 <div class="col-md">
                                     <div class="form-group">
                                         <label for="ingredients">Ingredients</label>
-                                        <textarea id="ingredients" class="form-control" name="ingredients" rows="4" cols="50">
+                                        <textarea id="ingredients" style="width:600px" class="form-control" name="ingredients" rows="4" cols="50">
                                         ${pageData.productinfo!==undefined?pageData.productinfo.ingredients:''}
                                         </textarea>
                                     </div>
@@ -164,6 +164,7 @@
     </div>
     <!-- Footer -->
     <% include ../footer %>
+    <script type="text/javascript" src="../../static/resources/scripts/nicedit.js"></script>
     <script>
         let params = (new URL(document.location)).searchParams;
         if (params.has('tab')) {
@@ -183,7 +184,41 @@
                 $("#uploadImage").prop("disabled", false);
             }
         }
+
+        $(document).ready(function () {
+            new nicEditor({
+                buttonList: ['fontSize',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikeThrough',
+                    'subscript',
+                    'superscript',
+                    'html',
+                    'left', 
+                    'center', 
+                    'right', 
+                    'ol', 
+                    'ul']
+            }).panelInstance('desc');
+            new nicEditor({
+                buttonList: ['fontSize',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikeThrough',
+                    'subscript',
+                    'superscript',
+                    'html',
+                    'left', 
+                    'center', 
+                    'right', 
+                    'ol', 
+                    'ul']
+            }).panelInstance('ingredients');
+        });
     </script>
+  
 </body>
 
 </html>
