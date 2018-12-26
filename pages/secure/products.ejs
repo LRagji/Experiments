@@ -25,7 +25,7 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="exisiting" role="tabpanel" aria-labelledby="exisiting-tab">
                     <div class="card-body">
-                        Search box with infinity scroll for all products.
+                      
                     </div>
                 </div>
 
@@ -152,8 +152,8 @@
                                 <div class="col">
                                     <div class="d-flex" >
                                         <button type="submit" id="submitForm" class="btn btn-primary ml-auto mt-auto">Save</button>
-                                        <button type="button" onClick="window.location.href='/secure/products?tab=new'" class="btn btn-secondary ml-2 mt-auto">Cancel</button>
-                                        ${pageData.productinfo!== undefined && pageData.productinfo.id!== undefined ? '<input name="delete" type="checkbox" class="form-check-input" hidden id="delete"> <button type="button" onClick="markForDeletion()" class="btn btn-danger ml-2 mt-auto">Delete</button>':''}
+                                       
+                                        ${pageData.productinfo!== undefined && pageData.productinfo.id!== undefined ? '<input name="delete" type="checkbox" class="form-check-input" hidden id="delete">  <button type="button" onClick="onClear()" class="btn btn-secondary ml-2 mt-auto">Cancel</button> <button type="button" onClick="markForDeletion()" class="btn btn-danger ml-2 mt-auto">Delete</button>':''}
                                     </div>
                                 </div>
                             </div>
@@ -189,11 +189,14 @@
             }
         }
 
-        function markForDeletion ()
-        {
+        function markForDeletion() {
             $("#delete").prop("checked", true);
-            $('#newProductForm :input').prop('required',false);
+            $('#newProductForm :input').prop('required', false);
             $("#submitForm").click();
+        }
+
+        function onClear() {
+            window.location.href = '/secure/products?tab=new';
         }
 
         $(document).ready(function () {
