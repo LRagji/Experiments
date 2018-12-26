@@ -83,6 +83,19 @@ class pageProducts {
 
             let IsNewProduct = req.body.id === "";
 
+            if (req.body.delete === "on") {
+                if (IsNewProduct) {
+                    req.flash(this.const.newProductError, "Invalid request product cannot be deleted.");
+                    res.redirect("/secure/products?tab=new");
+                }
+                else {
+                    await this.dal.deleteProduct(req.body.id);
+                    req.flash(this.const.newProductSuccess, "Product deleted successfully");
+                    res.redirect("/secure/products?tab=new");
+                }
+                return;
+            }
+
             if (!IsNewProduct && this.util.validateIsWholeNumberBetween(req.body.id, 50000, 0) === false) {
                 throw new Error("Invalid System Product ID:" + req.body.id);
             }

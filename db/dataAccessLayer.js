@@ -14,6 +14,7 @@ class DAL {
         this.getOrderById = this.getOrderById.bind(this);
         this.createUser = this.createUser.bind(this);
         this.updateUserPassword = this.updateUserPassword.bind(this);//TODO:This can be update user call instead.
+        this.deleteProduct = this.deleteProduct;
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -29,7 +30,7 @@ class DAL {
                         "package_detail": "180 Softgels",
                         "serving_size": "1 Softgels",
                         "serving_per_container": "This bottle will last 180 days.",
-                        "shippingdetail": i+1,
+                        "shippingdetail": i + 1,
                         "category": "Category" + i.toString(),
                         "subCategory": "Sub Category" + i.toString(),
                         "mname": "NOW FOODS",
@@ -301,6 +302,25 @@ class DAL {
                 products[idx] = Object.assign({}, product);
                 acc(product);
                 console.log(product);
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    deleteProduct(productId) {
+        return new Promise((acc, rej) => {
+            try {
+                productId = parseInt(productId);
+                let idx = products.findIndex((v) => v.id === productId);
+                if (idx > -1) {
+                    products.splice(idx, 1);
+                    acc();
+                }
+                else {
+                    rej(new Error("No product found for Id:" + productId));
+                }
             }
             catch (err) {
                 rej(err);
