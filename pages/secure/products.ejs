@@ -25,7 +25,16 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="exisiting" role="tabpanel" aria-labelledby="exisiting-tab">
                     <div class="card-body">
-                      
+                        <!-- RESULTS -->
+                        <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap"></div>
+                        <div id="loadingSpinner" class="my-2">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span id="loadingMessage">Loading Products</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -232,6 +241,7 @@
             }).panelInstance('ingredients');
         });
     </script>
+    <script src="../static/resources/scripts/paginatedProducts.1.js"></script>
 
 </body>
 
