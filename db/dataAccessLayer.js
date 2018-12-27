@@ -1,5 +1,5 @@
 let pg = require('pg')
-let pgPool = new pg.Pool({ user: 'postgres', host: 'localhost', database: 'Experimental', password: 'P@55word', port: 5432, });
+let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST ||'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS ||'P@55word', port: 5432, });
 let orders = [], products = [], users = [];
 let util = require('../modules/utilities');
 let fs = require('fs');
