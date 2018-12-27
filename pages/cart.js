@@ -32,7 +32,23 @@ class pageCart {
             if (req.session.products !== undefined) {
                 let productIds = req.session.products.map(ele => ele.productId);
                 let productInfo = await dal.getProducts(productIds)
+
                 productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
+                productIds.forEach(pid => {
+                    let product = productInfo.find((p) => p.id === pid);
+                    let productKVP = req.session.products.find(ele => ele.productId === pid);
+                    if (product === undefined) {
+                        {
+                            //Product is deleted? then remove it from cart.
+                            utils.subtractProductOrQuantityToCartItem(req,productKVP.productId,(productKVP.quantity+1));
+                        }
+                    }
+                    else {
+                        if (productKVP.offerprice !== product.offerprice) productKVP.offerprice = product.offerprice;  //Check if the cart has updated offer price. TODO:Move this to dal or utilities if possible as it is session manupilation.
+                        product.quantity = productKVP.quantity;//Set quantity in product info
+                    }
+                });
+
                 pageData[constants.shoppingCartProducts] = productInfo;
                 if (req.session.locked !== undefined && req.session.locked.state === 2) {
                     pageData[constants.shoppingInfo] = req.session.locked;
