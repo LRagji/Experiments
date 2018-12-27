@@ -24,7 +24,7 @@ class pageCart {
     async  renderCart(req, res) {
         try {
             let pageData = {};
-            pageData[constants.cartItems] = utils.getCartItemsCount(req);
+           
             pageData[constants.state] = req.session.locked === undefined ? undefined : req.session.locked.state;
             pageData[constants.shoppingCartProducts] = [];
             pageData[constants.shoppingInfo] = undefined;
@@ -53,6 +53,8 @@ class pageCart {
                 if (req.session.locked !== undefined && req.session.locked.state === 2) {
                     pageData[constants.shoppingInfo] = req.session.locked;
                 }
+                
+                pageData[constants.cartItems] = utils.getCartItemsCount(req);
                 res.render('../pages/cart', utils.constructPageData(req.user, pageData));
             }
         }
