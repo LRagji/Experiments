@@ -30,18 +30,6 @@
                 <!-- Content -->
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                     <div class="card-body">
-                      <!-- Header -->
-            <div class="d-flex bg-secondary text-white px-3">
-                    <span class="display-1 text-uppercase">Invoice</span>
-                    <ul class="ml-auto list-unstyled p-2">
-                        <li><small>Health Mall</small></li>
-                        <li><small>nutracure@gmail.com</small></li>
-                        <li><small>Payment Type:
-                                <%=pageData.od.payment.type %></small></li>
-                        <li><small>Invoice No:
-                                <%=pageData.od.id %></small></li>
-                    </ul>
-                </div>
                 <!-- Content -->
                 <div class="d-flex p-2">
                     <div class="m-3">
@@ -101,6 +89,19 @@
                 </div>
                 <hr class="bg-primary">
                 <% pageData.od.products.forEach(function(product){ %>
+                <% if (product.discontinued===true) { %>
+                <%- 
+                `<div class="row m-1">
+                    <div class="col-md">
+                    <div class="alert alert-dark text-center" role="alert">
+                    Product: <strong class="text-center">${product.id}</strong> is no more available or is discontinued.<br/>
+                    Quantity:${product.quantity}
+                    </div>
+                    </div>
+                </div>
+                <hr>`
+                %>
+                <% } else{ %>  
                 <%- 
                 `<div class="row m-1">
                     <div class="col-md-1">
@@ -121,6 +122,7 @@
                 </div>
                 <hr>`
                 %>
+                <% } %>
                 <% }); %>
                     </div>
                 </div>

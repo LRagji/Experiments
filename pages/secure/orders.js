@@ -14,12 +14,21 @@ class pageOrders {
         server.get(basePath + '/orders', auth.authenticatedInterceptor(basePath + '/login'), this.renderOrders);
     }
 
-   async renderOrders(req, res) {
+    async renderOrders(req, res) {
         try {
             let order = await this.dal.getOrderById(1);
             let productInfo = await this.dal.getProducts(order.products.map(p => p.productId))
+
+            order.products.forEach((prductKVP) => {
+                if (productInfo.find((p) => { p.id === prductKVP.productId }) === undefined) {
+                    productInfo.push({
+                        id: prductKVP.productId,
+                        discontinued: true,
+                    });
+                }
+            });
+
             productInfo.map(p => p.quantity = order.products.find(ele => ele.productId === p.id).quantity);
-            //if (productInfo.length !== order.products.length) throw new Error("One or more products are discontinued from your order.");
             order.products = productInfo;
 
             let pageData = {};
@@ -33,4 +42,4 @@ class pageOrders {
         }
     }
 }
-module.exports=pageOrders;
+module.exports = pageOrders;
