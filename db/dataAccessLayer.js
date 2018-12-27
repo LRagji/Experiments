@@ -66,10 +66,10 @@ class DAL {
                 "date": 1545477745147,
                 "status": "Awaiting Payment",
                 "products": [
-                    { "productId": 14, "quantity": 1 },
-                    { "productId": 13, "quantity": 1 },
-                    { "productId": 15, "quantity": 1 },
-                    { "productId": 12, "quantity": 1 }
+                    { "productId": 14, "quantity": 1, "offerprice": 100 },
+                    { "productId": 13, "quantity": 1, "offerprice": 100 },
+                    { "productId": 15, "quantity": 1, "offerprice": 100 },
+                    { "productId": 12, "quantity": 1, "offerprice": 100 }
                 ],
                 "shippingDetails": {
                     "billing": {

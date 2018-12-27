@@ -20,16 +20,22 @@ class pageOrders {
             let productInfo = await this.dal.getProducts(order.products.map(p => p.productId))
 
             order.products.forEach((prductKVP) => {
-                if (productInfo.find((p) => { p.id === prductKVP.productId }) === undefined) {
+                let pi = productInfo.find((p) => p.id === prductKVP.productId);
+                if (pi === undefined) {
                     productInfo.push({
                         id: prductKVP.productId,
                         discontinued: true,
-                        offerprice: prductKVP.offerprice
+                        offerprice: prductKVP.offerprice,
+                        quantity: prductKVP.quantity
                     });
                 }
+                else {
+                    pi.offerprice = prductKVP.offerprice;
+                    pi.quantity = prductKVP.quantity
+                }
+
             });
 
-            productInfo.map(p => p.quantity = order.products.find(ele => ele.productId === p.id).quantity);
             order.products = productInfo;
 
             let pageData = {};
