@@ -115,7 +115,8 @@ class pageCart {
                                 case "cheque":
                                     endDate = new Date();
                                     startDate = new Date();
-                                    startDate.setDate(endDate.getDate() - 10); //Time windows is 10 days.
+                                    endDate.setDate(endDate.getDate() + 2); //Time windows is current + 2 days.
+                                    startDate.setDate(endDate.getDate() - 10); //Time windows is (current +2)-10) days .
 
                                     if (utils.validateLength(req.body.chequeChequeNo, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeChequeNo");
                                     if (utils.validateIsDateBetween(req.body.chequeDate, startDate, endDate) === false) throw new Error("Incomplete or Invalid request for parameter:chequeDate");
