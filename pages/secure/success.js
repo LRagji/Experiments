@@ -25,8 +25,24 @@ class pageSuccess {
                 if (order.userId !== req.user.id) res.redirect('/cart');
 
                 let productInfo = await dal.getProducts(order.products.map(p => p.productId))
-                productInfo.map(p => p.quantity = order.products.find(ele => ele.productId === p.id).quantity);
-                if (productInfo.length !== order.products.length) throw new Error("One or more products are discontinued from your order.");
+
+                order.products.forEach((prductKVP) => {
+                    let pi = productInfo.find((p) => p.id === prductKVP.productId);
+                    if (pi === undefined) {
+                        productInfo.push({
+                            id: prductKVP.productId,
+                            discontinued: true,
+                            offerprice: prductKVP.offerprice,
+                            quantity: prductKVP.quantity
+                        });
+                    }
+                    else {
+                        pi.offerprice = prductKVP.offerprice;
+                        pi.quantity = prductKVP.quantity
+                    }
+
+                });
+
                 order.products = productInfo;
 
                 let pageData = {};

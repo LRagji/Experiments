@@ -210,12 +210,12 @@ class pageCart {
         shippingDetails.shipping[ship + propertyName] = copyBillingInfo ? body[bill + propertyName] : body[ship + propertyName];
     }
 
-    manipulateProductsInCart(req, res) {
+    async manipulateProductsInCart(req, res) {
         try {
 
             switch (req.body.operator) {
                 case "add":
-                    utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1);
+                    await utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, dal);
                     res.redirect("/cart");
                     break;
                 case "sub":

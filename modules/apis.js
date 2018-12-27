@@ -26,9 +26,9 @@ class apiServer {
 
     }
 
-    addProductToSession(req, res) {
+    async  addProductToSession(req, res) {
         try {
-            utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1);
+            await utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, dal);
 
             res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
         }

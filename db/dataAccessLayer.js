@@ -161,7 +161,7 @@ class DAL {
             let result = [];
             ids.forEach(id => {
                 let x = products.find((p) => p.id === id);
-                if (x !== undefined) result.push(x);
+                if (x !== undefined) result.push(Object.assign({}, x));
             });
             acc(result);
         });

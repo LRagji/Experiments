@@ -27,7 +27,7 @@ module.exports = {
         return req.session.products.length;
     },
 
-    addProductOrQuantityToCartItem(req, productId, productQuantity) {
+    async addProductOrQuantityToCartItem(req, productId, productQuantity, dataAccessLayer) {
 
         if (req.session.products === undefined) {
             req.session.products = [];
@@ -45,11 +45,14 @@ module.exports = {
 
         if (productQuantity > constants.maxQuantity) throw new Error("Quantity cannot exceed " + constants.maxQuantity + " per product.");
 
+        let requestedProduct = await dataAccessLayer.getProductById(productId);
+        if (requestedProduct === undefined) throw new Error("Product doesnot exists :" + productId);
+
         let existingProduct = req.session.products.find((element) => { return element.productId === productId });
 
         if (existingProduct === undefined) {
             if (req.session.products.length + 1 > constants.maxProducts) throw new Error("Cannot have more than " + constants.maxProducts + " products in cart.");
-            req.session.products.push({ "productId": productId, "quantity": productQuantity });
+            req.session.products.push({ "productId": productId, "quantity": productQuantity, offerprice: requestedProduct.offerprice });
         }
         else {
             if ((existingProduct.quantity + productQuantity) > constants.maxQuantity) throw new Error("Quantity cannot exceed " + constants.maxQuantity + " per product.");
@@ -185,8 +188,7 @@ module.exports = {
         return this.validateIsWholeNumber(strInput) && this.validateIsFloatNumberBetween(strInput, max, min);
     },
 
-    validateIsUrl(strInput)
-    {
+    validateIsUrl(strInput) {
         return validator.isURL(strInput);
     },
 

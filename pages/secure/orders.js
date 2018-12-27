@@ -24,6 +24,7 @@ class pageOrders {
                     productInfo.push({
                         id: prductKVP.productId,
                         discontinued: true,
+                        offerprice: prductKVP.offerprice
                     });
                 }
             });
