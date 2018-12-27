@@ -18,7 +18,7 @@ class DAL {
 
         //TODO:Delete this mock data
         if (products.length === 0) {
-            for (let i = 0; i < 1; i++) {
+            for (let i = 0; i < 51; i++) {
                 products.push({
                     "id": i,
                     "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
@@ -61,7 +61,7 @@ class DAL {
 
 
         if (orders.length === 0)
-        for (let i = 0; i < 51; i++)
+        for (let i = 0; i < 1; i++)
             orders.push({
                 "userId": 1,
                 "date": 1545477745147,
