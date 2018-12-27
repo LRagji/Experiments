@@ -327,6 +327,17 @@ class DAL {
             }
         });
     }
+
+    getTopOrdersForUser(userId, topSize) {
+        return new Promise((acc, rej) => {
+            let userOrders = [];
+            orders.forEach((order) => {
+                if (order.userId === userId && userOrders.length < topSize)
+                    userOrders.push(Object.assign({}, order));
+            });
+            acc(userOrders);
+        });
+    }
 }
 
 module.exports = DAL;

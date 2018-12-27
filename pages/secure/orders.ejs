@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Change Info</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+    <div class="container mt-5">
+        <h4>Your last 50 Orders:</h4>
+        <div class="accordion myshadow" id="accordionExample">
+            <div class="card">
+                <!-- Head -->
+                <div class="card-header" id="headingOne">
+                    <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        <h4>ORDER #1</h4>
+                    </button>
+                    <div class="row">
+                        <div class="col-sm-auto px-1"><small class="text-muted">&#8377;8000.00</small></div>
+                        <div class="col-sm-auto px-1"><small class="text-muted">Dated: 11-2-2018</small></div>
+                        <div class="col-sm-auto px-1"><small class="text-muted">Status: Waiting approval</small></div>
+                        <div class="col-auto"></div>
+                    </div>
+                </div>
+                <!-- Content -->
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                      <!-- Header -->
+            <div class="d-flex bg-secondary text-white px-3">
+                    <span class="display-1 text-uppercase">Invoice</span>
+                    <ul class="ml-auto list-unstyled p-2">
+                        <li><small>Health Mall</small></li>
+                        <li><small>nutracure@gmail.com</small></li>
+                        <li><small>Payment Type:
+                                <%=pageData.od.payment.type %></small></li>
+                        <li><small>Invoice No:
+                                <%=pageData.od.id %></small></li>
+                    </ul>
+                </div>
+                <!-- Content -->
+                <div class="d-flex p-2">
+                    <div class="m-3">
+                        <span class="text-muted">Billed To:</span>
+                        <ul class="ml-auto list-unstyled p-2">
+                            <li><small><b>
+                                        <%=pageData.od.shippingDetails.billing.bSalutation +' '+ pageData.od.shippingDetails.billing.bFirstName +' '+ pageData.od.shippingDetails.billing.bLastName %></b>
+                                    (
+                                    <%=pageData.od.shippingDetails.billing.bMobile%>)</small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.billing.bAdd1%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.billing.bAdd2%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.billing.bAdd3%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.billing.bCity+': '+pageData.od.shippingDetails.billing.bPincode%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.billing.bState%></small></li>
+                        </ul>
+                    </div>
+                    <div class="m-3">
+                        <span class="text-muted">Deliver To:</span>
+                        <ul class="ml-auto list-unstyled p-2">
+                            <li><small><b>
+                                        <%=pageData.od.shippingDetails.shipping.sSalutation +' '+ pageData.od.shippingDetails.shipping.sFirstName +' '+ pageData.od.shippingDetails.shipping.sLastName %></b>
+                                    (
+                                    <%=pageData.od.shippingDetails.shipping.sMobile%>)</small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.shipping.sAdd1%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.shipping.sAdd2%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.shipping.sAdd3%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.shipping.sCity+': '+pageData.od.shippingDetails.shipping.sPincode%></small></li>
+                            <li><small>
+                                    <%=pageData.od.shippingDetails.shipping.sState%></small></li>
+                        </ul>
+                    </div>
+                    <div class="m-3 ml-auto">
+                        <ul class="ml-auto list-unstyled p-2">
+                            <li>
+                                <span><span class="text-muted">Dated: </span>
+                                    <%=new Date(pageData.od.date).toDateString()%></span>
+                            </li>
+                            <li>
+                                <span><span class="text-muted">Status: </span>
+                                    <%=pageData.od.status%></span>
+                            </li>
+                        </ul>
+                        <h3 class="ml-auto">
+                            <small><small class="text-muted">Invoice Total</small></small>
+                            &#8377;<%= pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %>
+                        </h3>
+                    </div>
+                </div>
+                <hr class="bg-primary">
+                <% pageData.od.products.forEach(function(product){ %>
+                <%- 
+                `<div class="row m-1">
+                    <div class="col-md-1">
+                        <img class="productThumbnail" src="../static/resources/images/products/${product.image}" style="max-width:50px;max-height:70px"
+                            alt="Product Image">
+                    </div>
+                    <div class="col-md-6">
+                        <strong>${product.name}</strong>
+                    </div>
+                    <div class="col">
+                        <ul class="list-inline-item">
+                            <li class="list-inline-item" >Price:<b>&#8377;${product.offerprice}</b></li>
+                            <li class="list-inline-item" >Quantity:<b id="s">${product.quantity}</b></li>
+                            <li class="list-inline-item" >Discount:<b>&#8377;${(product.price-product.offerprice)*product.quantity}</b></li>
+                            <li class="list-inline-item" ><b>Total:&#8377;${product.offerprice * product.quantity}</b></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>`
+                %>
+                <% }); %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                            aria-expanded="false" aria-controls="collapseTwo">
+                            Collapsible Group Item #2
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't
+                        heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+                            aria-expanded="false" aria-controls="collapseThree">
+                            Collapsible Group Item #3
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                        3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt
+                        laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin
+                        coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes
+                        anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+                        occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't
+                        heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>
