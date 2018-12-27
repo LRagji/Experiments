@@ -12,6 +12,7 @@ module.exports = {
     shoppingCartProducts: "scp",
     shoppingInfo: "si",
     orderdetails: "od",
+    orders:"o",
     menu: "menu",
     maxProducts: 25,
     maxQuantity: 10,

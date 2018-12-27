@@ -16,30 +16,33 @@ class pageOrders {
 
     async renderOrders(req, res) {
         try {
-            let order = await this.dal.getOrderById(1);
-            let productInfo = await this.dal.getProducts(order.products.map(p => p.productId))
+            let topOrders = await this.dal.getTopOrdersForUser(req.user.id, 10);
+            for (let idx = 0; idx < topOrders.length; idx++) {
+                let order = topOrders[idx];
 
-            order.products.forEach((prductKVP) => {
-                let pi = productInfo.find((p) => p.id === prductKVP.productId);
-                if (pi === undefined) {
-                    productInfo.push({
-                        id: prductKVP.productId,
-                        discontinued: true,
-                        offerprice: prductKVP.offerprice,
-                        quantity: prductKVP.quantity
-                    });
-                }
-                else {
-                    pi.offerprice = prductKVP.offerprice;
-                    pi.quantity = prductKVP.quantity
-                }
+                let productInfo = await this.dal.getProducts(order.products.map(p => p.productId))
 
-            });
+                order.products.forEach((prductKVP) => {
+                    let pi = productInfo.find((p) => p.id === prductKVP.productId);
+                    if (pi === undefined) {
+                        productInfo.push({
+                            id: prductKVP.productId,
+                            discontinued: true,
+                            offerprice: prductKVP.offerprice,
+                            quantity: prductKVP.quantity
+                        });
+                    }
+                    else {
+                        pi.offerprice = prductKVP.offerprice;
+                        pi.quantity = prductKVP.quantity
+                    }
 
-            order.products = productInfo;
+                });
 
+                order.products = productInfo;
+            }
             let pageData = {};
-            pageData[this.const.orderdetails] = order;
+            pageData[this.const.orders] = topOrders;
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
             res.render('../pages/secure/orders', this.util.constructPageData(req.user, pageData));
         }

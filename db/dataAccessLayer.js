@@ -1,5 +1,5 @@
 let pg = require('pg')
-let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST ||'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS ||'P@55word', port: 5432, });
+let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
 let orders = [], products = [], users = [];
 let util = require('../modules/utilities');
 let fs = require('fs');
@@ -18,7 +18,7 @@ class DAL {
 
         //TODO:Delete this mock data
         if (products.length === 0) {
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 1; i++) {
                 products.push({
                     "id": i,
                     "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
@@ -61,15 +61,16 @@ class DAL {
 
 
         if (orders.length === 0)
+        for (let i = 0; i < 1; i++)
             orders.push({
                 "userId": 1,
                 "date": 1545477745147,
                 "status": "Awaiting Payment",
                 "products": [
-                    { "productId": 14, "quantity": 1, "offerprice": 100 },
-                    { "productId": 13, "quantity": 1, "offerprice": 100 },
-                    { "productId": 15, "quantity": 1, "offerprice": 100 },
-                    { "productId": 12, "quantity": 1, "offerprice": 100 }
+                    { "productId": 14, "quantity": 1, "offerprice": 100/i },
+                    { "productId": 13, "quantity": 1, "offerprice": 10*i },
+                    { "productId": i, "quantity": 1, "offerprice": 10/i },
+                    { "productId": 12, "quantity": 1, "offerprice": 100*i }
                 ],
                 "shippingDetails": {
                     "billing": {
@@ -106,7 +107,7 @@ class DAL {
                     "deposited bank": "Canara",
                     "amount": "5000"
                 },
-                "id": 1
+                "id": i
             });
     }
 
@@ -330,12 +331,17 @@ class DAL {
 
     getTopOrdersForUser(userId, topSize) {
         return new Promise((acc, rej) => {
-            let userOrders = [];
-            orders.forEach((order) => {
-                if (order.userId === userId && userOrders.length < topSize)
-                    userOrders.push(Object.assign({}, order));
-            });
-            acc(userOrders);
+            try {
+                let userOrders = [];
+                orders.forEach((order) => {
+                    if (order.userId === userId && userOrders.length < topSize)
+                        userOrders.push(Object.assign({}, order));
+                });
+                acc(userOrders);
+            }
+            catch (err) {
+                rej(err);
+            }
         });
     }
 }
