@@ -61,7 +61,7 @@ class DAL {
 
 
         if (orders.length === 0)
-        for (let i = 0; i < 1; i++)
+        for (let i = 0; i < 51; i++)
             orders.push({
                 "userId": 1,
                 "date": 1545477745147,
