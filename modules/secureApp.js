@@ -15,6 +15,9 @@ let modPageOrders = require('../pages/secure/orders');
 let pageOrders = undefined;
 let modPageBanner = require('../pages/secure/bannermanagement');
 let pageBanner = undefined;
+let modPageUser = require('../pages/secure/usermanagement');
+let pageUser = undefined;
+
 
 class secureapp {
     constructor(_secureApp, basePath,dataAccessService, utilityService, constantsService) {
@@ -29,6 +32,7 @@ class secureapp {
         pageProducts = new modPageProducts(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
         pageOrders = new modPageOrders(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
         pageBanner = new modPageBanner(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
+        pageUser = new modPageUser(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
     }
 }
 
