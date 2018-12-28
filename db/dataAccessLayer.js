@@ -61,54 +61,54 @@ class DAL {
 
 
         if (orders.length === 0)
-        for (let i = 0; i < 1; i++)
-            orders.push({
-                "userId": 1,
-                "date": 1545477745147,
-                "status": "Awaiting Payment",
-                "products": [
-                    { "productId": 14, "quantity": 1, "offerprice": 100/i },
-                    { "productId": 13, "quantity": 1, "offerprice": 10*i },
-                    { "productId": i, "quantity": 1, "offerprice": 10/i },
-                    { "productId": 12, "quantity": 1, "offerprice": 100*i }
-                ],
-                "shippingDetails": {
-                    "billing": {
-                        "bSalutation": "Mr.",
-                        "bFirstName": "Laukik",
-                        "bLastName": "Ragji",
-                        "bAdd1": "Add1",
-                        "bAdd2": "Add2",
-                        "bAdd3": "Add3",
-                        "bCity": "Mumbai",
-                        "bPincode": "400093",
-                        "bState": "Jammu & Kashmir",
-                        "bMobile": "9819569622"
+            for (let i = 0; i < 1; i++)
+                orders.push({
+                    "userId": 1,
+                    "date": 1545477745147,
+                    "status": "Awaiting Payment",
+                    "products": [
+                        { "productId": 14, "quantity": 1, "offerprice": 100 / i },
+                        { "productId": 13, "quantity": 1, "offerprice": 10 * i },
+                        { "productId": i, "quantity": 1, "offerprice": 10 / i },
+                        { "productId": 12, "quantity": 1, "offerprice": 100 * i }
+                    ],
+                    "shippingDetails": {
+                        "billing": {
+                            "bSalutation": "Mr.",
+                            "bFirstName": "Laukik",
+                            "bLastName": "Ragji",
+                            "bAdd1": "Add1",
+                            "bAdd2": "Add2",
+                            "bAdd3": "Add3",
+                            "bCity": "Mumbai",
+                            "bPincode": "400093",
+                            "bState": "Jammu & Kashmir",
+                            "bMobile": "9819569622"
+                        },
+                        "shipping": {
+                            "sSalutation": "Mr.",
+                            "sFirstName": "Laukik",
+                            "sLastName": "Ragji",
+                            "sAdd1": "Add1",
+                            "sAdd2": "Add2",
+                            "sAdd3": "Add3",
+                            "sCity": "Mumbai",
+                            "sPincode": "400093",
+                            "sState": "Jammu & Kashmir",
+                            "sMobile": "9819569622"
+                        }
                     },
-                    "shipping": {
-                        "sSalutation": "Mr.",
-                        "sFirstName": "Laukik",
-                        "sLastName": "Ragji",
-                        "sAdd1": "Add1",
-                        "sAdd2": "Add2",
-                        "sAdd3": "Add3",
-                        "sCity": "Mumbai",
-                        "sPincode": "400093",
-                        "sState": "Jammu & Kashmir",
-                        "sMobile": "9819569622"
-                    }
-                },
-                "payment": {
-                    "type": "cheque",
-                    "no": "335562",
-                    "date": "2018-12-22",
-                    "bank name": "Hello Bank",
-                    "bank branch": "Some Branch",
-                    "deposited bank": "Canara",
-                    "amount": "5000"
-                },
-                "id": i
-            });
+                    "payment": {
+                        "type": "cheque",
+                        "no": "335562",
+                        "date": "2018-12-22",
+                        "bank name": "Hello Bank",
+                        "bank branch": "Some Branch",
+                        "deposited bank": "Canara",
+                        "amount": "5000"
+                    },
+                    "id": i
+                });
     }
 
     pool() {
@@ -338,6 +338,26 @@ class DAL {
                         userOrders.push(Object.assign({}, order));
                 });
                 acc(userOrders);
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    saveBanners(banner1Buff, banner2Buff, banner3Buff) {
+        return new Promise((acc, rej) => {
+            try {
+                if (banner1Buff !== undefined) {
+                    fs.writeFileSync('static/resources/images/banners/banner1.jpg', banner1Buff);
+                }
+                if (banner2Buff !== undefined) {
+                    fs.writeFileSync('static/resources/images/banners/banner2.jpg', banner2Buff);
+                }
+                if (banner3Buff !== undefined) {
+                    fs.writeFileSync('static/resources/images/banners/banner3.jpg', banner3Buff);
+                }
+                acc();
             }
             catch (err) {
                 rej(err);

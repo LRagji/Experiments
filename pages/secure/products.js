@@ -17,18 +17,12 @@ class pageProducts {
     }
 
     loadRoutes(server, basePath, auth) {
-        server.get(basePath + '/products', auth.authenticatedInterceptor(basePath + '/login'), this.renderProducts);
-        server.post(basePath + '/products', auth.authenticatedInterceptor(basePath + '/login'), upload.single('image'), this.saveProduct);
+        server.get(basePath + '/products', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.renderProducts);
+        server.post(basePath + '/products', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, upload.single('image'), this.saveProduct);
     }
 
     async renderProducts(req, res) {
         try {
-
-            if (this.util.isAdmin(req.user) === false) {
-                console.warn("Security Alert: User(" + req.user.id + ") tried to access non privilaged (products) page.");
-                res.redirect("/secure/profile");
-                return;
-            }
 
             let existingProduct = undefined;
             if (req.query.pid != undefined) {
@@ -54,12 +48,6 @@ class pageProducts {
 
     async saveProduct(req, res) {
         try {
-
-            if (this.util.isAdmin(req.user) === false) {
-                console.warn("Security Alert: User(" + req.user.id + ") tried to access non privilaged (products) page.");
-                res.redirect("/secure/profile");
-                return;
-            }
 
             let productState = {
                 "name": req.body.name,

@@ -1,6 +1,8 @@
 module.exports = {
     error: "error",
     loginError: "loginError",
+    bannerUploadError:"bue",
+    bannerUploadSuccess:"bus",
     changePassError: "changePassError",
     newProductError: "newProductError",
     newProductSuccess: "newProductSuccess",

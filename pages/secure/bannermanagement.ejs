@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Banner Management</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+
+    <div class="container my-5">
+
+        <form action="/secure/banner" method="post" enctype="multipart/form-data">
+            <% if (pageData.bue.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.bue[0]}</div>` %>
+            <% } %>
+            <% if (pageData.bus.length>=1) { %>
+            <%- `<div class="alert alert alert-success" role="alert">${pageData.bus[0]}</div>` %>
+            <% } %>
+            <input accept="image/jpeg" type="file" name="banner1" />
+            <input accept="image/jpeg" type="file" name="banner2" />
+            <input accept="image/jpeg" type="file" name="banner3" />
+            <button type="submit" id="submitForm" class="btn btn-primary ml-auto mt-auto">Save</button>
+        </form>
+
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>

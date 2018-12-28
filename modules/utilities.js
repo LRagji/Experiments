@@ -198,6 +198,17 @@ module.exports = {
 
     isAdmin(user) {
         return user.meta.type === "admin";
+    },
+
+    onlyAdmin(req, res, next) {
+        if (require('../modules/utilities').isAdmin(req.user) === false) {
+            console.warn("Security Alert: User(" + req.user.id + ") tried to access non privileged " + req.originalUrl + " resource.");
+            res.redirect("/secure/profile");
+            return;
+        }
+        else {
+            next();
+        }
     }
 
 }
