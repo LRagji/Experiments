@@ -57,12 +57,17 @@ class pageProfile {
                 icon: "far fa-square",
                 url: "/secure/banner",
                 name: "Banner Management"
-            })
+            });
             menuItems.push({
                 icon: "fas fa-users",
                 url: "/secure/users",
                 name: "User Management"
-            })
+            });
+            menuItems.push({
+                icon: "fa fa-link",
+                url: "/secure/healthlinks",
+                name: "Health Links"
+            });
         }
         return menuItems;
     }
