@@ -39,7 +39,7 @@
                         <li class="list-inline-item">
                             <form action="/secure/users/promotion" method="POST">
                                 <input type="hidden"  name="userid" value="${user.id}" />
-                                <input type="hidden"name="status" value="${user.meta.type==='admin'?'normal':'admin'}" />
+                                <input type="hidden"name="promotion" value="${user.meta.type==='admin'?'normal':'admin'}" />
                                 <button type="submit" class="btn btn-secondary">${user.meta.type==='admin'?'Demote to Normal':'Promote to Admin'}</button>
                             </form>
                         </li>

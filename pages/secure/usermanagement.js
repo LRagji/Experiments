@@ -59,7 +59,17 @@ class pageUserManangement {
 
     async processUserPromotion(req, res) {
         try {
+            let userId = parseInt(req.body.userid);
 
+            if (req.body.promotion !== "normal" && req.body.promotion !== "admin") {
+                req.flash(this.const.userManagementError, "Invalid property promotion" + req.body.promotion);
+                res.redirect("/secure/users");
+                return;
+            }
+
+            await this.dal.updateUserAccountType(userId, req.body.promotion);
+            res.redirect("/secure/users");
+            return;
         }
         catch (err) {
             this.util.navigateToError(req, res, err);
@@ -68,7 +78,17 @@ class pageUserManangement {
 
     async defaultUserSecret(req, res) {
         try {
+            let userId = parseInt(req.body.userid);
 
+            if (parseInt(req.body.password) !== userId) {
+                req.flash(this.const.userManagementError, "Invalid request");
+                res.redirect("/secure/users");
+                return;
+            }
+
+            await this.dal.resetUserAccountPassword(userId);
+            res.redirect("/secure/users");
+            return;
         }
         catch (err) {
             this.util.navigateToError(req, res, err);
@@ -78,6 +98,10 @@ class pageUserManangement {
     validateIsSelfUser(req, res, next) {
         try {
             let userId = parseInt(req.body.userid);
+            if (userId < 0) {
+                req.flash(this.const.userManagementError, "Invalid User id(" + userId + ").");
+                res.redirect("/secure/users");
+            }
             if (req.user.id === userId) {
                 req.flash(this.const.userManagementError, "Cannot edit current logged in user.");
                 res.redirect("/secure/users");

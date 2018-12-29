@@ -17,6 +17,8 @@ class DAL {
         this.deleteProduct = this.deleteProduct;
         this.getAllUsersExcept = this.getAllUsersExcept.bind(this);
         this.updateUserActivationState = this.updateUserActivationState.bind(this);
+        this.updateUserAccountType=this.updateUserAccountType.bind(this);
+        this.resetUserAccountPassword=this.resetUserAccountPassword.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -400,7 +402,6 @@ class DAL {
                 else {
                     rej(new Error("User with id" + userId + " not found."));
                 }
-
             }
             catch (err) {
                 rej(err);
@@ -408,6 +409,42 @@ class DAL {
         });
     }
 
+    updateUserAccountType(userId, accountType) {
+        return new Promise((acc, rej) => {
+            try {
+                let user = users.find((u) => u.id === userId);
+                if (user !== undefined) {
+                    user.meta.type = accountType;
+                    acc();
+                }
+                else {
+                    rej(new Error("User with id" + userId + " not found."));
+                }
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    resetUserAccountPassword(userId)
+    {
+        return new Promise((acc, rej) => {
+            try {
+                let user = users.find((u) => u.id === userId);
+                if (user !== undefined) {
+                    user.password = util.getHash("P@55word");
+                    acc();
+                }
+                else {
+                    rej(new Error("User with id" + userId + " not found."));
+                }
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
+    }
     //End Users
 }
 
