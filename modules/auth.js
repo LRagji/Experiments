@@ -42,19 +42,25 @@ class authentication {
                 return done(null, false, { message: 'Not a valid email ' + username });
             }
 
-            if (utils.validateLength(password,50,1) === false) {
+            if (utils.validateLength(password, 50, 1) === false) {
                 return done(null, false, { message: 'Password fails length validation [50,1] ' + username });
             }
 
             let user = await dal.getUserByEmail(username)
             if (user !== undefined) {
-                if (user.password === utils.getHash(password)) {
-                    console.info(username + ' logged in.');
-                    return done(null, user);
+                if (user.meta.status === "active") {
+                    if (user.password === utils.getHash(password)) {
+                        console.info(username + ' logged in.');
+                        return done(null, user);
+                    }
+                    else {
+                        console.warn('Invalid password for ' + username);
+                        return done(null, false, { message: 'Invalid password for ' + username });
+                    }
                 }
                 else {
-                    console.warn('Invalid password for ' + username);
-                    return done(null, false, { message: 'Invalid password for ' + username });
+                    console.warn('User(' + user.id + ') is not active in system(' + user.meta.status + ')');
+                    return done(null, false, { message: 'User(' + user.id + ') is not active in system(' + user.meta.status + ')' });
                 }
             }
             else {

@@ -15,6 +15,8 @@ class DAL {
         this.createUser = this.createUser.bind(this);
         this.updateUserPassword = this.updateUserPassword.bind(this);//TODO:This can be update user call instead.
         this.deleteProduct = this.deleteProduct;
+        this.getAllUsersExcept = this.getAllUsersExcept.bind(this);
+        this.updateUserActivationState = this.updateUserActivationState.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -43,20 +45,22 @@ class DAL {
         }
 
         if (users.length === 0) {
-            users.push(
-                {
-                    id: 1,
-                    salutation: "Mr",
-                    first: "Laukik",
-                    last: "R",
-                    mobile: "123456789",
-                    email: "Laukik.Ragji@gmail.com",
-                    password: "81d7df2cd5d931a654f48a43a8442d5d",
-                    meta: {
-                        "type": "admin"
+            for (let i = 0; i < 10; i++) //7389 Total users
+                users.push(
+                    {
+                        id: i,
+                        salutation: "Mr",
+                        first: "Laukik",
+                        last: i,
+                        mobile: "123456789",
+                        email: i === 0 ? "Laukik.Ragji@gmail.com" : i + "@gmail.com",
+                        password: "81d7df2cd5d931a654f48a43a8442d5d",
+                        meta: {
+                            "status": "active",
+                            "type": i === 0 ? "admin" : "normal"
+                        }
                     }
-                }
-            );
+                );
         }
 
 
@@ -168,12 +172,6 @@ class DAL {
         });
     }
 
-    getUserByEmail(email) {
-        return new Promise((acc, rej) => {
-            acc(users.find((u) => u.email.toLowerCase() === email.toLowerCase()));
-        });
-    }
-
     createOrder(order) {
         //TODO:Compare order amount with calculated product amount from all products.
         console.log(order);
@@ -190,30 +188,6 @@ class DAL {
             try {
                 //TODO:Remove object Assign which is used to keep the array safe and clone the element
                 acc(Object.assign({}, orders.find((e) => e.id === orderId)));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
-    }
-
-    createUser(salutation, firstName, lastName, mobile, email, password) {
-        return new Promise((acc, rej) => {
-            try {
-                let newUser = {
-                    id: users.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
-                    salutation: salutation,
-                    first: firstName,
-                    last: lastName,
-                    mobile: mobile,
-                    email: email,
-                    password: util.getHash(password),
-                    meta: {
-                        "type": "normal"
-                    }
-                }
-                users.push(newUser);
-                acc(newUser);
             }
             catch (ex) {
                 rej(ex);
@@ -364,6 +338,77 @@ class DAL {
             }
         });
     }
+
+    // Users
+    createUser(salutation, firstName, lastName, mobile, email, password) {
+        return new Promise((acc, rej) => {
+            try {
+                let newUser = {
+                    id: users.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
+                    salutation: salutation,
+                    first: firstName,
+                    last: lastName,
+                    mobile: mobile,
+                    email: email,
+                    password: util.getHash(password),
+                    meta: {
+                        "type": "normal",
+                        "status": "active"
+                    }
+                }
+                users.push(newUser);
+                acc(newUser);
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        });
+    }
+
+    getUserByEmail(email) {
+        return new Promise((acc, rej) => {
+            try {
+                acc(users.find((u) => u.email.toLowerCase() === email.toLowerCase()));
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        });
+    }
+
+    getAllUsersExcept(userId) {
+        return new Promise((acc, rej) => {
+            try {
+                let responseArray = [];
+                users.forEach((user) => { if (userId !== user.id) responseArray.push(Object.assign({}, user)); });
+                acc(responseArray);
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        });
+    }
+
+    updateUserActivationState(userId, status) {
+        return new Promise((acc, rej) => {
+            try {
+                let user = users.find((u) => u.id === userId);
+                if (user !== undefined) {
+                    user.meta.status = status;
+                    acc();
+                }
+                else {
+                    rej(new Error("User with id" + userId + " not found."));
+                }
+
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    //End Users
 }
 
 module.exports = DAL;

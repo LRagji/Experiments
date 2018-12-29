@@ -10,39 +10,53 @@
     <!-- Main Nav -->
     <% include ../header %>
     <div class="container my-5">
+        <% if (pageData.ume.length>=1) { %>
+        <%- `<div class="alert alert alert-danger" role="alert">${pageData.ume[0]}</div>` %>
+        <% } %>
         <h3>All Users:</h3>
-        <div class="card myshadow my-2">
+        <% pageData.umu.forEach(function(user){ %>
+        <%-  
+        `<div class="card myshadow my-2">
             <div class="card-body">
                 <h3>
-                    <small class="text-muted">Mr.</small>
-                    Laukik Ragji
+                    <small class="text-muted">${user.salutation}</small>
+                    ${user.first} ${user.last}
                 </h3>
                 <ul class="list-inline">
-                    <li class="list-inline-item"><i class="fas fa-mobile-alt"></i>9819569622</li>
-                    <li class="list-inline-item"><i class="far fa-envelope"></i>Laukik.Ragji@gmail.com</li>
-                    <li class="list-inline-item"><i class="far fa-smile"></i>Admin</li>
+                    <li class="list-inline-item"><i class="fas fa-mobile-alt"></i> ${user.mobile}</li>
+                    <li class="list-inline-item"><i class="far fa-envelope"></i> ${user.email}</li>
+                    <li class="list-inline-item text-uppercase"><i class="far fa-smile"></i> ${user.meta.type}</li>
                 </ul>
                 <div class="d-flex">
                     <ul class="list-inline ml-auto mr-0">
                         <li class="list-inline-item">
-                            <form>
-                                <button type="button" class="btn btn-secondary">Deactivate</button>
+                            <form action="/secure/users/activation" method="POST">
+                                <input type="hidden"name="userid" value="${user.id}" />
+                                <input type="hidden"name="status" value="${user.meta.status==='active'?'Deactivate':'Activate'}" />
+                                <button type="submit" class="btn btn-secondary">${user.meta.status==='active'?'Deactivate':'Activate'}</button>
                             </form>
                         </li>
                         <li class="list-inline-item">
-                            <form>
-                                <button type="button" class="btn btn-secondary">Promote to Admin</button>
+                            <form action="/secure/users/promotion" method="POST">
+                                <input type="hidden"  name="userid" value="${user.id}" />
+                                <input type="hidden"name="status" value="${user.meta.type==='admin'?'normal':'admin'}" />
+                                <button type="submit" class="btn btn-secondary">${user.meta.type==='admin'?'Demote to Normal':'Promote to Admin'}</button>
                             </form>
                         </li>
                         <li class="list-inline-item">
-                            <form>
-                                <button type="button" class="btn btn-secondary">Reset to default password</button>
+                            <form action="/secure/users/secret" method="POST">
+                                <input type="hidden"  name="userid" value="${user.id}" />
+                                <input type="hidden"  name="password" value="${user.id}" />
+                                <button type="submit" class="btn btn-secondary">Reset to default password</button>
                             </form>
                         </li>
                     </ul>
                 </div>
             </div>
-        </div>
+        </div>`
+
+        %>
+        <% }); %>
     </div>
     <!-- Footer -->
     <% include ../footer %>

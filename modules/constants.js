@@ -7,6 +7,8 @@ module.exports = {
     newProductError: "newProductError",
     newProductSuccess: "newProductSuccess",
     newProductState:"newProductState",
+    userManagementError:"ume",
+    userManagementUsers:"umu",
     productinfo:"productinfo",
     product: "product",
     cartItems: "cartItems",
