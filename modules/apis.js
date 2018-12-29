@@ -5,6 +5,7 @@ class apiServer {
     constructor(server) {
         this.getHomePageProducts = this.getHomePageProducts.bind(this);
         this.addProductToSession = this.addProductToSession.bind(this);
+       
         this.loadRoutes(server);
     }
 
@@ -14,19 +15,24 @@ class apiServer {
         return server;
     }
 
-    async  getHomePageProducts(req, res) {
-        let page = parseInt(req.query.page);
-        let size = parseInt(req.query.size);
+    async getHomePageProducts(req, res) {
+        try {
+            let page = parseInt(req.query.page);
+            let size = parseInt(req.query.size);
 
-        let products = await dal.getAllProducts(page, size);
-        if (products.length === size)
-            res.status(206).send(products);
-        else
-            res.status(200).send(products);
-
+            let products = await dal.getAllProducts(page, size);
+            if (products.length === size)
+                res.status(206).send(products);
+            else
+                res.status(200).send(products);
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).send([]);
+        }
     }
 
-    async  addProductToSession(req, res) {
+    async addProductToSession(req, res) {
         try {
             await utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, dal);
 

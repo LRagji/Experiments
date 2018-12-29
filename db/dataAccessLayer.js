@@ -15,10 +15,10 @@ class DAL {
         this.createUser = this.createUser.bind(this);
         this.updateUserPassword = this.updateUserPassword.bind(this);//TODO:This can be update user call instead.
         this.deleteProduct = this.deleteProduct;
-        this.getAllUsersExcept = this.getAllUsersExcept.bind(this);
+        this.getAllUsersPagedExcept = this.getAllUsersPagedExcept.bind(this);
         this.updateUserActivationState = this.updateUserActivationState.bind(this);
-        this.updateUserAccountType=this.updateUserAccountType.bind(this);
-        this.resetUserAccountPassword=this.resetUserAccountPassword.bind(this);
+        this.updateUserAccountType = this.updateUserAccountType.bind(this);
+        this.resetUserAccountPassword = this.resetUserAccountPassword.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -47,7 +47,7 @@ class DAL {
         }
 
         if (users.length === 0) {
-            for (let i = 0; i < 10; i++) //7389 Total users
+            for (let i = 0; i < 50; i++) //7389 Total users
                 users.push(
                     {
                         id: i,
@@ -136,29 +136,32 @@ class DAL {
 
     getAllProducts(pageNo, size) {
         return new Promise((acc, rej) => {
+            try {
+                let startIndex = (pageNo * size);
+                let endIndex = (startIndex + size);
+                let fetchStart = 0, fetchLength = 0;
 
-            let startIndex = (pageNo * size);
-            let endIndex = (startIndex + size);
-            let fetchStart = 0, fetchLength = 0;
+                if (products.length < startIndex && products.length < endIndex) {
+                    fetchStart = 0;
+                    fetchLength = 0;
+                }
 
-            if (products.length < startIndex && products.length < endIndex) {
-                fetchStart = 0;
-                fetchLength = 0;
+                else if (products.length > startIndex && products.length < endIndex) {
+                    fetchStart = startIndex;
+                    fetchLength = (products.length - startIndex);
+                }
+
+                else if (products.length > startIndex && products.length > endIndex) {
+                    fetchStart = startIndex;
+                    fetchLength = size;
+                }
+
+                let productsClone = Array.from(products);
+                acc(productsClone.splice(fetchStart, fetchLength));
             }
-
-            else if (products.length > startIndex && products.length < endIndex) {
-                fetchStart = startIndex;
-                fetchLength = (products.length - startIndex);
+            catch (ex) {
+                rej(ex);
             }
-
-            else if (products.length > startIndex && products.length > endIndex) {
-                fetchStart = startIndex;
-                fetchLength = size;
-            }
-
-            let productsClone = Array.from(products);
-            acc(productsClone.splice(fetchStart, fetchLength));
-            return;
         });
     }
 
@@ -378,11 +381,37 @@ class DAL {
         });
     }
 
-    getAllUsersExcept(userId) {
+    getAllUsersPagedExcept(pageNo, size, userId) {
         return new Promise((acc, rej) => {
             try {
+                let startIndex = (pageNo * size);
+                let endIndex = (startIndex + size);
+                let fetchStart = 0, fetchLength = 0;
+
+                if (users.length < startIndex && users.length < endIndex) {
+                    fetchStart = 0;
+                    fetchLength = 0;
+                }
+
+                else if (users.length > startIndex && users.length < endIndex) {
+                    fetchStart = startIndex;
+                    fetchLength = (users.length - startIndex);
+                }
+
+                else if (users.length > startIndex && users.length > endIndex) {
+                    fetchStart = startIndex;
+                    fetchLength = size;
+                }
+
                 let responseArray = [];
-                users.forEach((user) => { if (userId !== user.id) responseArray.push(Object.assign({}, user)); });
+                while (fetchLength > 0) {
+                    let user = users[(fetchStart + fetchLength)];
+                    if ( user !==undefined && userId !== user.id) {
+                        responseArray.push(Object.assign({}, user));
+                    }
+                    fetchLength--;
+                }
+
                 acc(responseArray);
             }
             catch (ex) {
@@ -427,8 +456,7 @@ class DAL {
         });
     }
 
-    resetUserAccountPassword(userId)
-    {
+    resetUserAccountPassword(userId) {
         return new Promise((acc, rej) => {
             try {
                 let user = users.find((u) => u.id === userId);

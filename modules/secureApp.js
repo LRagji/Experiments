@@ -17,22 +17,24 @@ let modPageBanner = require('../pages/secure/bannermanagement');
 let pageBanner = undefined;
 let modPageUser = require('../pages/secure/usermanagement');
 let pageUser = undefined;
-
+let modSecureApi = require('../pages/secure/secureAPI');
+let secureApi = undefined;
 
 class secureapp {
-    constructor(_secureApp, basePath,dataAccessService, utilityService, constantsService) {
+    constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService) {
         let _auth = new authenticationModule(_secureApp);
         this.basePath = basePath;
         this.securePagePath = "../pages/secure/";
 
         pageSuccess = new modPageSuccess(_secureApp, basePath, _auth);
         pageLogin = new modPageLogin(_secureApp, basePath, _auth);
-        pageProfile = new modPageProfile(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
-        pagePassword = new modPagePassword(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
-        pageProducts = new modPageProducts(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
-        pageOrders = new modPageOrders(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
-        pageBanner = new modPageBanner(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
-        pageUser = new modPageUser(_secureApp, basePath, _auth,dataAccessService, utilityService, constantsService);
+        pageProfile = new modPageProfile(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+        pagePassword = new modPagePassword(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+        pageProducts = new modPageProducts(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+        pageOrders = new modPageOrders(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+        pageBanner = new modPageBanner(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+        pageUser = new modPageUser(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+        secureApi = new modSecureApi(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
     }
 }
 
