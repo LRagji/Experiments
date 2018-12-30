@@ -26,8 +26,7 @@ class pageUserManangement {
             let pageData = {};
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
             pageData[this.const.userManagementError] = req.flash(this.const.userManagementError);
-            //pageData[this.const.userManagementUsers] = await this.dal.getAllUsersExcept(req.user.id);
-            res.render('../pages/secure/usermanagement', this.util.constructPageData(req.user, pageData));
+            res.render('../pages/secure/usermanagement', await this.util.constructPageData(req.user, pageData, this.dal));
         }
         catch (err) {
             this.util.navigateToError(req, res, err);

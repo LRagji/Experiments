@@ -13,10 +13,16 @@ module.exports = {
         res.redirect('/error');
     },
 
-    constructPageData(user, data) {
+    async constructPageData(user, data, dataAccessLayer) {
+        let footerLinks = [];
+        if (dataAccessLayer !== undefined)
+            footerLinks = await dataAccessLayer.getHealthLinksIndex()
+        else
+            throw new Error("Where is the dal!!?");
         return {
             user: user,
-            pageData: data
+            pageData: data,
+            footerLinks: footerLinks
         }
     },
 

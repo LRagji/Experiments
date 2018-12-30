@@ -48,7 +48,7 @@ class pageSuccess {
                 let pageData = {};
                 pageData[constants.orderdetails] = order;
                 pageData[constants.cartItems] = utils.getCartItemsCount(req);
-                res.render('../pages/secure/success', utils.constructPageData(req.user, pageData));
+                res.render('../pages/secure/success', await utils.constructPageData(req.user, pageData,dal));
             }
             else {
                 res.redirect('/cart');

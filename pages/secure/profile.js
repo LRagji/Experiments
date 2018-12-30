@@ -15,13 +15,13 @@ class pageProfile {
         server.get(basePath + '/profile', auth.authenticatedInterceptor(basePath + '/login'), this.renderProfile);
     }
 
-    renderProfile(req, res) {
+    async renderProfile(req, res) {
         try {
             let pageData = {};
 
             pageData[this.const.menu] = this.createMenu(req.user);
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/profile', this.util.constructPageData(req.user, pageData));
+            res.render('../pages/secure/profile', await this.util.constructPageData(req.user, pageData, this.dal));
         }
         catch (err) {
             this.util.navigateToError(req, res, err);

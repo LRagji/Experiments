@@ -6,33 +6,10 @@
             <div class="col-md-2 mx-auto">
                 <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Health Links</h5>
                 <ul class="list-unstyled">
-                    <li>
-                        <a class="text-white" href="/howtoorder">How to place order</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/whyshophere">Why shop here</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/requestaproduct">Request a product</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/howtoorder">How to place order</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/whyshophere">Why shop here</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/requestaproduct">Request a product</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/howtoorder">How to place order</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/whyshophere">Why shop here</a>
-                    </li>
-                    <li>
-                        <a class="text-white" href="/requestaproduct">Request a product</a>
-                    </li>
+                    <% footerLinks.forEach(function(link){ %>
+                    <%-  ` <li><a class="text-white" href="${link.url}">${link.name}</a></li>` %>
+                    <% }); %>
+
                 </ul>
             </div>
 

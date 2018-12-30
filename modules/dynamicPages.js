@@ -9,6 +9,8 @@ let cartPage = require('../pages/cart');
 let cart = undefined;
 let productPage = require('../pages/product');
 let product = undefined;
+let modeHomePage = require('../pages/index');
+let homePage = undefined;
 
 class dynamicPages {
 
@@ -17,11 +19,11 @@ class dynamicPages {
         server.set('view engine', 'ejs');
 
         //All Pages
-        securePages = new _secureApp(server, '/secure', dal, utils,constants);//This has to be the first one for pass the user login. Donot change the sequence.
+        securePages = new _secureApp(server, '/secure', dal, utils, constants);//This has to be the first one for pass the user login. Donot change the sequence.
         cart = new cartPage(server);
         product = new productPage(server, dal, utils, constants, textService);
+        homePage = new modeHomePage(server, dal, utils, constants, textService);
 
-        this.homePage = this.homePage.bind(this);
         this.renderErrorPage = this.renderErrorPage.bind(this);
         this.renderHowToPlaceOrder = this.renderHowToPlaceOrder.bind(this);
         this.renderWhyShopHere = this.renderWhyShopHere.bind(this);
@@ -36,7 +38,6 @@ class dynamicPages {
     }
 
     loadRoutes(server) {
-        server.get('/', this.homePage);
         server.get('/error', this.renderErrorPage);
 
         //Static
@@ -51,61 +52,55 @@ class dynamicPages {
         return server;
     }
 
-    homePage(req, res) {
+    async renderHowToPlaceOrder(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/index', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/howtoplaceorder', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderHowToPlaceOrder(req, res) {
+    async renderWhyShopHere(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/howtoplaceorder', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/whyshophere', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderWhyShopHere(req, res) {
+    async renderRequestAProduct(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/whyshophere', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/requestaproduct', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderRequestAProduct(req, res) {
+    async renderShippingTerms(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/requestaproduct', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/shippingterms', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderShippingTerms(req, res) {
+    async renderPrivacyPolicy(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/shippingterms', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/privacypolicy', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderPrivacyPolicy(req, res) {
+    async renderTermsAndConditions(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/privacypolicy', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/termsandconditions', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderTermsAndConditions(req, res) {
+    async renderAboutUs(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/termsandconditions', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/about', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderAboutUs(req, res) {
+    async renderContactUs(req, res) {
         let pageData = {};
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/about', utils.constructPageData(req.user, pageData));
+        res.render('../pages/static/contact', await utils.constructPageData(req.user, pageData, dal));
     }
 
-    renderContactUs(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/contact', utils.constructPageData(req.user, pageData));
-    }
-
-    renderErrorPage(req, res) {
+    async renderErrorPage(req, res) {
         let exception = req.flash(constants.error);
         if (exception.length <= 0) {
             //This is the case when user directly request for a error page
@@ -122,7 +117,7 @@ class dynamicPages {
         let pageData = {};
         pageData[constants.error] = exception;
         pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/error', utils.constructPageData(req.user, pageData));
+        res.render('../pages/error', await utils.constructPageData(req.user, pageData, dal));
     }
 }
 

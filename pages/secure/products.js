@@ -37,7 +37,7 @@ class pageProducts {
             pageData[this.const.newProductError] = req.flash(this.const.newProductError);
             pageData[this.const.newProductSuccess] = req.flash(this.const.newProductSuccess);
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/products', this.util.constructPageData(req.user, pageData));
+            res.render('../pages/secure/products', await this.util.constructPageData(req.user, pageData,this.dal));
 
         }
         catch (err) {

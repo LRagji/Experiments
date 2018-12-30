@@ -21,10 +21,10 @@ class pageCart {
         server.post('/cart/items', this.manipulateProductsInCart);
     }
 
-    async  renderCart(req, res) {
+    async renderCart(req, res) {
         try {
             let pageData = {};
-           
+
             pageData[constants.state] = req.session.locked === undefined ? undefined : req.session.locked.state;
             pageData[constants.shoppingCartProducts] = [];
             pageData[constants.shoppingInfo] = undefined;
@@ -40,7 +40,7 @@ class pageCart {
                     if (product === undefined) {
                         {
                             //Product is deleted? then remove it from cart.
-                            utils.subtractProductOrQuantityToCartItem(req,productKVP.productId,(productKVP.quantity+1));
+                            utils.subtractProductOrQuantityToCartItem(req, productKVP.productId, (productKVP.quantity + 1));
                         }
                     }
                     else {
@@ -53,9 +53,9 @@ class pageCart {
                 if (req.session.locked !== undefined && req.session.locked.state === 2) {
                     pageData[constants.shoppingInfo] = req.session.locked;
                 }
-                
+
                 pageData[constants.cartItems] = utils.getCartItemsCount(req);
-                res.render('../pages/cart', utils.constructPageData(req.user, pageData));
+                res.render('../pages/cart', await utils.constructPageData(req.user, pageData, dal));
             }
         }
         catch (err) {

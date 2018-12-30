@@ -27,7 +27,7 @@ class DAL {
 
         //TODO:Delete this mock data
         if (products.length === 0) {
-            for (let i = 0; i < 51; i++) {
+            for (let i = 0; i < 1; i++) {
                 products.push({
                     "id": i,
                     "name": "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
@@ -138,14 +138,14 @@ class DAL {
     async getHealthLinksIndex() {
         return new Promise((acc, rej) => {
             try {
-                if (!memC.hasdata()) {
+                if (!memC.hasData()) {
                     let allIndexes = healthLinks;
                     allIndexes.forEach(kvp => {
                         memC.insert(kvp.name, kvp.url);
                     });
                 }
 
-                acc(memC.fetchAllKeyValuePairs());
+                acc(memC.fetchAllKeyValuePairs((k, v) => { return { "name": k, "link": v } }));
 
             } catch (err) {
                 rej(err);

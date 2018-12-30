@@ -18,11 +18,11 @@ class pageLinks {
         try {
             let pageData = {};
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/healthlinks', this.util.constructPageData(req.user, pageData));
+            res.render('../pages/secure/healthlinks', await this.util.constructPageData(req.user, pageData, this.dal));
         }
         catch (err) {
             this.util.navigateToError(req, res, err);
         }
     }
 }
-module.exports=pageLinks;
+module.exports = pageLinks;

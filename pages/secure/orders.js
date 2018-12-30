@@ -44,7 +44,7 @@ class pageOrders {
             let pageData = {};
             pageData[this.const.orders] = topOrders;
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/orders', this.util.constructPageData(req.user, pageData));
+            res.render('../pages/secure/orders', await this.util.constructPageData(req.user, pageData,this.dal));
         }
 
         catch (err) {

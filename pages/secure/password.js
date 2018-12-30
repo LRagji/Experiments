@@ -16,12 +16,12 @@ class pagePassword {
         server.post(basePath + '/password', auth.authenticatedInterceptor(basePath + '/login'), this.changePassword);
     }
 
-    renderPassword(req, res) {
+    async renderPassword(req, res) {
         try {
             let pageData = {};
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
             pageData[this.const.changePassError] = req.flash(this.const.changePassError);
-            res.render('../pages/secure/password', this.util.constructPageData(req.user, pageData));
+            res.render('../pages/secure/password', await this.util.constructPageData(req.user, pageData, this.dal));
         }
 
         catch (err) {

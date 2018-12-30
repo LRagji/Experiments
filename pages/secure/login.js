@@ -30,7 +30,7 @@ class pageLogin {
         }
     }
 
-    renderLoginPage(req, res) {
+    async renderLoginPage(req, res) {
         if (req.user !== undefined) {
             res.redirect("/secure/profile");
         }
@@ -39,7 +39,7 @@ class pageLogin {
             pageData[constants.loginError] = req.flash("error");
             pageData[constants.registerError] = req.flash("registerError");
             pageData[constants.cartItems] = utils.getCartItemsCount(req);
-            res.render('../pages/secure/login', utils.constructPageData(req.user, pageData));
+            res.render('../pages/secure/login', await utils.constructPageData(req.user, pageData, dal));
         }
     }
 

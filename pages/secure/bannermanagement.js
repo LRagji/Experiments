@@ -21,13 +21,13 @@ class pageBannerManangement {
         server.post(basePath + '/banner', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, banners, this.processBanners);
     }
 
-    renderBannerManagement(req, res) {
+   async renderBannerManagement(req, res) {
         try {
             let pageData = {};
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
             pageData[this.const.bannerUploadError] = req.flash(this.const.bannerUploadError);
             pageData[this.const.bannerUploadSuccess] = req.flash(this.const.bannerUploadSuccess);
-            res.render('../pages/secure/bannermanagement', this.util.constructPageData(req.user, pageData));
+            res.render('../pages/secure/bannermanagement', await this.util.constructPageData(req.user, pageData,this.dal));
         }
         catch (err) {
             this.util.navigateToError(req, res, err);
