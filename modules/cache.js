@@ -15,6 +15,15 @@ class memCache {
         return cache.get(key);
     }
 
+    delete(key) {
+        if (cache.del(key)) {
+            console.debug("Current size for cache is " + cache.memsize() + " with " + cache.size + "entries.");
+        }
+        else {
+            throw new Error("Failed to remove the item from cache.");
+        }
+    }
+
     update(key, value) {
         if (cache.del(key)) {
             cache.put(key, value);
