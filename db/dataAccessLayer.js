@@ -24,6 +24,7 @@ class DAL {
         this.insertHealthLink = this.insertHealthLink.bind(this);
         this.updateHealthLink = this.updateHealthLink.bind(this);
         this.deleteHealthLink = this.deleteHealthLink.bind(this);
+        this.getAllHealthLinks = this.getAllHealthLinks.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -122,12 +123,8 @@ class DAL {
         }
 
         if (healthLinks.length === 0) {
-            for (let i = 0; i < 1; i++)
-                healthLinks.push({
-                    "name": "Link " + i,
-                    "url": "./healthLinks?id=" + encodeURIComponent(i),
-                    "contens": "Random html text for link " + i
-                });
+            for (let i = 0; i < 1;)
+                this.insertHealthLink("Link " + i, "Random html text for link " + i).then(i++);
         }
     }
 
@@ -136,17 +133,21 @@ class DAL {
     }
 
     async getHealthLinksIndex() {
+
+        if (!memC.hasData()) {
+            let allIndexes = await this.getAllHealthLinks();
+            allIndexes.forEach(kvp => {
+                memC.insert(kvp.name, kvp.url);
+            });
+        }
+
+        return memC.fetchAllKeyValuePairs((k, v) => { return { "name": k, "link": v } });
+    }
+
+    async getAllHealthLinks() {
         return new Promise((acc, rej) => {
             try {
-                if (!memC.hasData()) {
-                    let allIndexes = healthLinks;
-                    allIndexes.forEach(kvp => {
-                        memC.insert(kvp.name, kvp.url);
-                    });
-                }
-
-                acc(memC.fetchAllKeyValuePairs((k, v) => { return { "name": k, "link": v } }));
-
+                acc(healthLinks);
             } catch (err) {
                 rej(err);
             }
@@ -158,14 +159,14 @@ class DAL {
             try {
 
                 if (healthLinks.find((l) => l.name === name) !== undefined) throw new Error(name + " name already exists.");
-
-                healthLinks.push({
+                let healthLinkObj = {
                     "name": name,
                     "url": "./healthLinks?id=" + encodeURIComponent(name),
-                    "contens": contents
-                });
+                    "contents": contents
+                };
+                healthLinks.push(healthLinkObj);
 
-                memC.insert(name, kvp);
+                memC.insert(healthLinkObj.name, healthLinkObj.url);
 
                 acc();
 

@@ -11,11 +11,60 @@
     <!-- Main Nav -->
     <% include ../header %>
 
-    <div class="container my-5">
-        Health Links Mark 1
+    <div class="container mt-5">
+        <h4>Health Links</h4>
+        <div class="accordion myshadow" id="healthlinks">
+
+            <% pageData.fpl.forEach(function(link){ %>
+            <% link.uiid='hl'+Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1) %>
+            <div class="card">
+
+                <div class="card-header" id="<%-link.uiid%>">
+                    <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapse<%-link.uiid%>"
+                        aria-expanded="false" aria-controls="collapse<%-link.uiid%>">
+                        <h4>
+                            <%-link.name-%>
+                        </h4>
+                    </button>
+                </div>
+
+                <div id="collapse<%-link.uiid%>" class="collapse" aria-labelledby="<%-link.uiid%>" data-parent="#healthlinks">
+                    <div class="card-body">
+                        <textarea id="desc" style="width:600px" class="form-control" name="desc">
+                            <%=link.contents%>
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <% }); %>
+        </div>
     </div>
     <!-- Footer -->
     <% include ../footer %>
+    <script type="text/javascript" src="../../static/resources/scripts/nicedit.js"></script>
+    <script>
+        $(document).ready(function () {
+            nicEditors.allTextAreas({
+                buttonList: ['fontSize',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikeThrough',
+                    'subscript',
+                    'superscript',
+                    'html',
+                    'left',
+                    'center',
+                    'right',
+                    'ol',
+                    'ul']
+            });
+        })
+    </script>
+
 </body>
 
 </html>

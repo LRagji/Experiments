@@ -17,6 +17,7 @@ class pageLinks {
     async renderLinks(req, res) {
         try {
             let pageData = {};
+            pageData[this.const.footerPageLinks] = await this.dal.getAllHealthLinks();
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
             res.render('../pages/secure/healthlinks', await this.util.constructPageData(req.user, pageData, this.dal));
         }

@@ -17,6 +17,7 @@ module.exports = {
     shoppingInfo: "si",
     orderdetails: "od",
     orders:"o",
+    footerPageLinks:"fpl",
     menu: "menu",
     maxProducts: 25,
     maxQuantity: 10,
