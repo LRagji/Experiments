@@ -9,8 +9,10 @@ let cartPage = require('../pages/cart');
 let cart = undefined;
 let productPage = require('../pages/product');
 let product = undefined;
-let modeHomePage = require('../pages/index');
+let modHomePage = require('../pages/index');
 let homePage = undefined;
+let modHealthLinksPage = require('../pages/healthlinks');
+let healthLinksPage = undefined;
 
 class dynamicPages {
 
@@ -22,7 +24,8 @@ class dynamicPages {
         securePages = new _secureApp(server, '/secure', dal, utils, constants);//This has to be the first one for pass the user login. Donot change the sequence.
         cart = new cartPage(server);
         product = new productPage(server, dal, utils, constants, textService);
-        homePage = new modeHomePage(server, dal, utils, constants, textService);
+        homePage = new modHomePage(server, dal, utils, constants, textService);
+        healthLinksPage = new modHealthLinksPage(server, dal, utils, constants, textService);
 
         this.renderErrorPage = this.renderErrorPage.bind(this);
         this.renderHowToPlaceOrder = this.renderHowToPlaceOrder.bind(this);

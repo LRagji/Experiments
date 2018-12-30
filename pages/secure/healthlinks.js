@@ -58,7 +58,7 @@ class pageLinks {
                 return;
             }
 
-            if (this.util.validateLength(req.body.contents, 2000, 1) === false) {
+            if (this.util.validateLength(req.body.contents, 105788, 1) === false) {
                 req.flash(this.const.footerLinksErr, "Invalid Input parameter content length.");
                 res.redirect("/secure/healthlinks");
                 return;

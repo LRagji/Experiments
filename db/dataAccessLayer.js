@@ -25,6 +25,7 @@ class DAL {
         this.updateHealthLink = this.updateHealthLink.bind(this);
         this.deleteHealthLink = this.deleteHealthLink.bind(this);
         this.getAllHealthLinks = this.getAllHealthLinks.bind(this);
+        this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -135,7 +136,7 @@ class DAL {
     async getHealthLinksIndex() {
 
         if (!memC.hasData()) {
-            console.log("Cache miss for Health Links")
+            console.log("Cache miss for Health Links");
             let allIndexes = await this.getAllHealthLinks();
             allIndexes.forEach(kvp => {
                 memC.insert(kvp.name, kvp.url);
@@ -162,7 +163,7 @@ class DAL {
                 if (healthLinks.find((l) => l.name === name) !== undefined) throw new Error(name + " name already exists.");
                 let healthLinkObj = {
                     "name": name,
-                    "url": "./healthLinks?id=" + encodeURIComponent(name),
+                    "url": "/healthLinks?id=" + encodeURIComponent(name),
                     "contents": contents
                 };
                 healthLinks.push(healthLinkObj);
@@ -209,6 +210,18 @@ class DAL {
                 rej(err);
             }
         });
+    }
+
+    async getHealthLinkContentFor(name) {
+        return new Promise((acc, rej) => {
+            try {
+                let dbHealthLinkIdx = healthLinks.findIndex((l) => l.name === name);
+                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
+                acc(Object.assign({}, healthLinks[dbHealthLinkIdx]));
+            } catch (err) {
+                rej(err);
+            }
+        })
     }
 
     getProductById(productId) {
