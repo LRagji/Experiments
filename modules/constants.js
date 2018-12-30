@@ -18,6 +18,7 @@ module.exports = {
     orderdetails: "od",
     orders:"o",
     footerPageLinks:"fpl",
+    footerLinksErr:"fle",
     menu: "menu",
     maxProducts: 25,
     maxQuantity: 10,

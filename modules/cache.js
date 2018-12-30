@@ -11,7 +11,6 @@ class memCache {
 
     insert(key, value) {
         cache.put(key, value);
-        console.debug("Current size for cache is " + cache.memsize() + " with " + cache.size() + " entries.");
     }
 
     fetch(key) {
@@ -20,7 +19,6 @@ class memCache {
 
     delete(key) {
         if (cache.del(key)) {
-            console.debug("Current size for cache is " + cache.memsize() + " with " + cache.size() + " entries.");
         }
         else {
             throw new Error("Failed to remove the item from cache.");
@@ -30,7 +28,6 @@ class memCache {
     update(key, value) {
         if (cache.del(key)) {
             cache.put(key, value);
-            console.debug("Current size for cache is " + cache.memsize() + " with " + cache.size() + " entries.");
         }
         else {
             throw new Error("Failed to remove the item from cache.");

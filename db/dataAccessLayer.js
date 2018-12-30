@@ -135,6 +135,7 @@ class DAL {
     async getHealthLinksIndex() {
 
         if (!memC.hasData()) {
+            console.log("Cache miss for Health Links")
             let allIndexes = await this.getAllHealthLinks();
             allIndexes.forEach(kvp => {
                 memC.insert(kvp.name, kvp.url);
