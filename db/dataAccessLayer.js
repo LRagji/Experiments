@@ -1,8 +1,10 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
-let orders = [], products = [], users = [];
+let orders = [], products = [], users = [], healthLinks = [];
 let util = require('../modules/utilities');
 let fs = require('fs');
+let reqMemC = require('../modules/cache');
+let memC = new reqMemC();
 // TODO:Call the appropiate API
 class DAL {
     constructor() {
@@ -19,6 +21,9 @@ class DAL {
         this.updateUserActivationState = this.updateUserActivationState.bind(this);
         this.updateUserAccountType = this.updateUserAccountType.bind(this);
         this.resetUserAccountPassword = this.resetUserAccountPassword.bind(this);
+        this.insertHealthLink = this.insertHealthLink.bind(this);
+        this.updateHealthLink = this.updateHealthLink.bind(this);
+        this.deleteHealthLink = this.deleteHealthLink.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -65,8 +70,7 @@ class DAL {
                 );
         }
 
-
-        if (orders.length === 0)
+        if (orders.length === 0) {
             for (let i = 0; i < 1; i++)
                 orders.push({
                     "userId": 1,
@@ -115,10 +119,94 @@ class DAL {
                     },
                     "id": i
                 });
+        }
+
+        if (healthLinks.length === 0) {
+            for (let i = 0; i < 1; i++)
+                healthLinks.push({
+                    "name": "Link " + i,
+                    "url": "./healthLinks?id=" + encodeURIComponent(i),
+                    "contens": "Random html text for link " + i
+                });
+        }
     }
 
     pool() {
         return pgPool;
+    }
+
+    async getHealthLinksIndex() {
+        return new Promise((acc, rej) => {
+            try {
+                if (!memC.hasdata()) {
+                    let allIndexes = healthLinks;
+                    allIndexes.forEach(kvp => {
+                        memC.insert(kvp.name, kvp.url);
+                    });
+                }
+
+                acc(memC.fetchAllKeyValuePairs());
+
+            } catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    async insertHealthLink(name, contents) {
+        return new Promise((acc, rej) => {
+            try {
+
+                if (healthLinks.find((l) => l.name === name) !== undefined) throw new Error(name + " name already exists.");
+
+                healthLinks.push({
+                    "name": name,
+                    "url": "./healthLinks?id=" + encodeURIComponent(name),
+                    "contens": contents
+                });
+
+                memC.insert(name, kvp);
+
+                acc();
+
+            } catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    async deleteHealthLink(name) {
+        return new Promise((acc, rej) => {
+            try {
+                let dbHealthLinkIdx = healthLinks.findIndex((l) => l.name === name);
+                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
+
+                healthLinks.splice(dbHealthLinkIdx, 1);
+
+                memC.delete(name);
+
+                acc();
+
+            } catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    async updateHealthLink(name, contents) {
+        return new Promise((acc, rej) => {
+            try {
+                let dbHealthLinkIdx = healthLinks.findIndex((l) => l.name === name);
+                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
+
+                healthLinks[dbHealthLinkIdx].contents = contents;
+
+                acc();
+
+            } catch (err) {
+                rej(err);
+            }
+        });
     }
 
     getProductById(productId) {
@@ -406,7 +494,7 @@ class DAL {
                 let responseArray = [];
                 while (fetchLength > 0) {
                     let user = users[(fetchStart + fetchLength)];
-                    if ( user !==undefined && userId !== user.id) {
+                    if (user !== undefined && userId !== user.id) {
                         responseArray.push(Object.assign({}, user));
                     }
                     fetchLength--;

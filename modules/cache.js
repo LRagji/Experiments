@@ -4,6 +4,9 @@ class memCache {
         this.insert = this.insert.bind(this);
         this.fetch = this.fetch.bind(this);
         this.update = this.update.bind(this);
+        this.delete = this.delete.bind(this);
+        this.hasData = this.hasData.bind(this);
+        this.fetchAllKeyValuePairs = this.fetchAllKeyValuePairs.bind(this);
     }
 
     insert(key, value) {
@@ -32,6 +35,18 @@ class memCache {
         else {
             throw new Error("Failed to remove the item from cache.");
         }
+    }
+
+    hasData() {
+        return cache.size > 0;
+    }
+
+    fetchAllKeyValuePairs() {
+        let results = [];
+        cache.keys.forEach(key => {
+            results.push({ key: this.fetch(key) });
+        });
+        return results;
     }
 }
 
