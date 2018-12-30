@@ -28,7 +28,7 @@ class pageProduct {
                 let pageData = {};
                 pageData[this.const.product] = product;
                 pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-                res.render('../pages/product', this.util.constructPageData(req.user, pageData));
+                res.render('../pages/product', await this.util.constructPageData(req.user, pageData,this.dal));
             }
         }
         catch (err) {

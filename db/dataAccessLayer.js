@@ -1,6 +1,6 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
-let orders = [], products = [], users = [], healthLinks = [];
+let orders = [], products = [], users = [], healthLinks = [], FAQ = [];
 let util = require('../modules/utilities');
 let fs = require('fs');
 let reqMemC = require('../modules/cache');
@@ -26,6 +26,11 @@ class DAL {
         this.deleteHealthLink = this.deleteHealthLink.bind(this);
         this.getAllHealthLinks = this.getAllHealthLinks.bind(this);
         this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
+        this.createFAQ = this.createFAQ.bind(this);
+        this.updateFAQ = this.updateFAQ.bind(this);
+        this.deleteFAQ = this.deleteFAQ.bind(this);
+        this.getAllFAQ = this.getAllFAQ.bind(this);
+        this.getFAQ = this.getFAQ.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -127,12 +132,95 @@ class DAL {
             for (let i = 0; i < 1;)
                 this.insertHealthLink("Link " + i, "Random html text for link " + i).then(i++);
         }
+
+        if (FAQ.length === 0) {
+            for (let i = 0; i < 1;)
+                this.createFAQ("Who am i?" + i, "I am friendly neighbourhood spider man" + i).then(i++);
+        }
     }
 
     pool() {
         return pgPool;
     }
+    // START Product FAQ
 
+    async createFAQ(question, answer) {
+        return new Promise((acc, rej) => {
+            try {
+                let FAQObject = {
+                    id: FAQ.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
+                    Q: question,
+                    A: answer
+                };
+                FAQ.push(FAQObject);
+                acc(Object.assign({}, FAQObject));
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        })
+    }
+
+    async updateFAQ(id, question, answer) {
+        return new Promise((acc, rej) => {
+            try {
+                let faqIdx = FAQ.findIndex((q) => q.id === id);
+                if (faqIdx < 0) throw new Error("FAQ " + name + " doesnot exists.");
+                FAQ[faqIdx].Q = question;
+                FAQ[faqIdx].A = answer;
+                acc(Object.assign({}, FAQ[faqIdx]));
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        })
+    }
+
+    async deleteFAQ(id) {
+        return new Promise((acc, rej) => {
+            try {
+                let faqIdx = FAQ.findIndex((q) => q.id === id);
+                if (faqIdx < 0) throw new Error("FAQ " + name + " doesnot exists.");
+                FAQ.splic(faqIdx, 1);
+                acc();
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        })
+    }
+
+    async getFAQ(id) {
+        return new Promise((acc, rej) => {
+            try {
+                let faqIdx = FAQ.findIndex((q) => q.id === id);
+                if (faqIdx < 0) throw new Error("FAQ " + name + " doesnot exists.");
+                acc(Object.assign({}, FAQ[faqIdx]));
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        })
+    }
+
+    async getAllFAQ() {
+        return new Promise((acc, rej) => {
+            try {
+                let results = [];
+                FAQ.forEach((faq) => {
+                    results.push(Object.assign({}, faq));
+                })
+                acc(results);
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        })
+    }
+    // END Product FAQ
+
+
+    //START Health Links
     async getHealthLinksIndex() {
 
         if (!memC.hasData()) {
@@ -223,6 +311,7 @@ class DAL {
             }
         })
     }
+    // END Health Links
 
     getProductById(productId) {
         // TODO:Call the appropiate API
