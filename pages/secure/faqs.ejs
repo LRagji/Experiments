@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-FAQs</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+
+    <div class="container mt-5">
+        <div class="d-flex">
+            <h4>Frequently Asked Questions</h4>
+        </div>
+        <form action="faqs/new" method="POST" class="form-inline">
+            <div class="input-group mb-2 w-75">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Question</div>
+                </div>
+                <input type="text" name="Q" class="form-control" placeholder="Question" minlength="1" maxlength="200"
+                    required>
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> New FAQs</button>
+        </form>
+        <div class="accordion myshadow" id="faqs">
+
+            <% pageData.faqs.forEach(function(faq){ %>
+            <% if (pageData.fe.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.fe[0]}</div>` %>
+            <% } %>
+            <div class="card">
+
+                <div class="card-header" id="faq<%-faq.id%>">
+                    <div class="d-flex">
+                        <button class="btn btn-link pl-0 text-truncate" type="button" data-toggle="collapse"
+                            data-target="#collapse<%-faq.id%>" aria-expanded="false" aria-controls="collapse<%-faq.id%>">
+                            <%-faq.id-%>)
+                            <%-faq.Q-%>
+                        </button>
+                        <form action="faqs/delete" method="POST" class="ml-auto my-auto">
+                            <input type="hidden" name="id" value="<%-faq.id-%>" />
+                            <button type="submit" class="btn btn-secondary"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="collapse<%-faq.id%>" class="collapse" aria-labelledby="faq<%-faq.id%>" data-parent="#faqs">
+                    <div class="card-body">
+                        <form action="faqs/edit" method="POST">
+                            <input type="hidden" name="id" value="<%-faq.id-%>" />
+                            <div class="input-group mb-2 mr-sm-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">Question</div>
+                                </div>
+                                <input type="text" name="Q" class="form-control" placeholder="Question" minlength="1"
+                                    maxlength="200" value="<%=faq.Q%>" required>
+                            </div>
+
+                            <textarea id="desc" style="width:600px" class="form-control" name="A" required>
+                                <%=faq.A%>
+                            </textarea>
+                            <div class="d-flex my-2">
+                                <button type="submit" class="btn btn-secondary ml-auto">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <% }); %>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>

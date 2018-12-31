@@ -135,7 +135,7 @@ class DAL {
 
         if (FAQ.length === 0) {
             for (let i = 0; i < 1;)
-                this.createFAQ("Who am i?" + i, "I am friendly neighbourhood spider man" + i).then(i++);
+                this.createFAQ("Who am i ?" + i, "I am your friendly neighbourhood spider man." + i).then(i++);
         }
     }
 
@@ -181,7 +181,7 @@ class DAL {
             try {
                 let faqIdx = FAQ.findIndex((q) => q.id === id);
                 if (faqIdx < 0) throw new Error("FAQ " + name + " doesnot exists.");
-                FAQ.splic(faqIdx, 1);
+                FAQ.splice(faqIdx, 1);
                 acc();
             }
             catch (ex) {

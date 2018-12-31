@@ -68,6 +68,11 @@ class pageProfile {
                 url: "/secure/healthlinks",
                 name: "Health Links"
             });
+            menuItems.push({
+                icon: "fas fa-question",
+                url: "/secure/faqs",
+                name: "F.A.Q's"
+            });
         }
         return menuItems;
     }

@@ -6,6 +6,8 @@ module.exports = {
     changePassError: "changePassError",
     newProductError: "newProductError",
     newProductSuccess: "newProductSuccess",
+    FAQS:"faqs",
+    FAQSError:"fe",
     newProductState:"newProductState",
     userManagementError:"ume",
     userManagementUsers:"umu",

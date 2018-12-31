@@ -21,6 +21,8 @@ let modSecureApi = require('../pages/secure/secureAPI');
 let secureApi = undefined;
 let modPageApi = require('../pages/secure/healthlinks');
 let pageHealthLinks = undefined;
+let modPageFAQs = require('../pages/secure/faqs');
+let pageFAQs = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService) {
@@ -38,6 +40,7 @@ class secureapp {
         pageUser = new modPageUser(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
         pageHealthLinks = new modPageApi(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
         secureApi = new modSecureApi(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+        pageFAQs = new modPageFAQs(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
     }
 }
 
