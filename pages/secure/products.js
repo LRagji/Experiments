@@ -33,6 +33,7 @@ class pageProducts {
             }
 
             let pageData = {};
+            pageData[this.const.FAQS] = await this.dal.getAllFAQ();
             pageData[this.const.productinfo] = existingProduct === undefined ? req.flash(this.const.newProductState)[0] : existingProduct;
             pageData[this.const.newProductError] = req.flash(this.const.newProductError);
             pageData[this.const.newProductSuccess] = req.flash(this.const.newProductSuccess);
