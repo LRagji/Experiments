@@ -141,21 +141,29 @@
                                         ${pageData.productinfo!==undefined?pageData.productinfo.ingredients:''}
                                         </textarea>
                                     </div>
+                                     <hr>
                                 </div>
                             </div>
-                            <div class="card-columns">` %>
-                        <% pageData.faqs.forEach(function(faq){ %>
-                        <div class="row m-2">
-                            <div class="col">
-                                <hr>
-                                <h4>F.A.Q's</h4>
-
-                                <hr>
+                            <div class="row m-2">
+                                <div class="col">
+                                    <h4>F.A.Q's</h4>
+                                </div>
                             </div>
-                        </div>
+                             <div class="row m-2">
+                                <div class="col">
+                                <div class="card-columns">` %>
+                        <% pageData.faqs.forEach(function(faq){ %>
+                       <%-`<div class="form-check">
+                            <input class="form-check-input" ${pageData.productinfo!==undefined?(pageData.productinfo.faq.indexOf(faq.id)>=0?'checked':''):''} name="faq[]" type="checkbox" value=${faq.id} id="c${faq.id}">
+                            <label class="form-check-label" for="c${faq.id}">
+                             ${faq.Q}
+                            </label>
+                        </div>`%>
                         <% }); %>
-                        <%- 
-                            `</div>
+                           <%- `</div>
+                                <hr>
+                                </div>
+                            </div>
                             <div class="row m-2">
                                 <div class="col">
                                         <div class="form-group">

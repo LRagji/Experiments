@@ -38,7 +38,7 @@ class pageProducts {
             pageData[this.const.newProductError] = req.flash(this.const.newProductError);
             pageData[this.const.newProductSuccess] = req.flash(this.const.newProductSuccess);
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/products', await this.util.constructPageData(req.user, pageData,this.dal));
+            res.render('../pages/secure/products', await this.util.constructPageData(req.user, pageData, this.dal));
 
         }
         catch (err) {
@@ -57,6 +57,7 @@ class pageProducts {
                 "image": undefined,
                 "description": req.body.desc,
                 "ingredients": req.body.ingredients,
+                "faq": req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
                 meta: {
                     "code": req.body.code,
                     "package_detail": req.body.packageDetail,
@@ -87,6 +88,12 @@ class pageProducts {
 
             if (!IsNewProduct && this.util.validateIsWholeNumberBetween(req.body.id, 50000, 0) === false) {
                 throw new Error("Invalid System Product ID:" + req.body.id);
+            }
+
+            if (req.body.faq !== undefined && this.util.validateIsArrayLengthBetween(req.body.faq, 50, 0) === false) {
+                req.flash(this.const.newProductError, "Donot select F.A.Q more than 50.");
+                this.respondWithRightPage(req, IsNewProduct, productState, res);
+                return;
             }
 
             if (this.util.validateLength(req.body.name, 50, 1) === false) {
@@ -236,7 +243,8 @@ class pageProducts {
                         "mname": req.body.mName,
                         "mwebsite": req.body.mWebsite
                     },
-                    req.file !== undefined ? req.file.buffer : undefined
+                    req.file !== undefined ? req.file.buffer : undefined,
+                    req.body.faq
                 );
             }
             else {
@@ -260,7 +268,8 @@ class pageProducts {
                         "mname": req.body.mName,
                         "mwebsite": req.body.mWebsite
                     },
-                    req.file !== undefined ? req.file.buffer : undefined
+                    req.file !== undefined ? req.file.buffer : undefined,
+                    req.body.faq
                 );
             }
             req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);

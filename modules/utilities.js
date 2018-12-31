@@ -194,6 +194,10 @@ module.exports = {
         return this.validateIsWholeNumber(strInput) && this.validateIsFloatNumberBetween(strInput, max, min);
     },
 
+    validateIsArrayLengthBetween(object, max, min) {
+        return Array.isArray(object) && object.length <= max && object.length >= min;
+    },
+
     validateIsUrl(strInput) {
         return validator.isURL(strInput);
     },
