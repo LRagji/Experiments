@@ -60,7 +60,7 @@
                                     maxlength="200" value="<%=faq.Q%>" required>
                             </div>
 
-                            <textarea id="desc" style="width:600px" class="form-control" name="A" required>
+                            <textarea id="desc" class="form-control" name="A" required>
                                 <%=faq.A%>
                             </textarea>
                             <div class="d-flex my-2">
@@ -76,6 +76,16 @@
     </div>
     <!-- Footer -->
     <% include ../footer %>
+    <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("textarea").each(function () {
+                CKEDITOR.replace(this, {
+                    customConfig: '/static/resources/scripts/editor_config.js'
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

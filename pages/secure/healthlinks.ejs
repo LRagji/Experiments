@@ -19,8 +19,8 @@
                     <div class="input-group-prepend">
                         <div class="input-group-text">Link Name</div>
                     </div>
-                    <input type="text" name="name" class="form-control" placeholder="Link Name"
-                        minlength="1" maxlength="50" required>
+                    <input type="text" name="name" class="form-control" placeholder="Link Name" minlength="1" maxlength="50"
+                        required>
                 </div>
 
                 <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> New Link</button>
@@ -73,25 +73,15 @@
     </div>
     <!-- Footer -->
     <% include ../footer %>
-    <script type="text/javascript" src="../../static/resources/scripts/nicedit.js"></script>
+    <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
-            nicEditors.allTextAreas({
-                buttonList: ['fontSize',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikeThrough',
-                    'subscript',
-                    'superscript',
-                    'html',
-                    'left',
-                    'center',
-                    'right',
-                    'ol',
-                    'ul']
+            $("textarea").each(function () {
+                CKEDITOR.replace(this, {
+                    customConfig: '/static/resources/scripts/editor_config.js'
+                });
             });
-        })
+        });
     </script>
 
 </body>

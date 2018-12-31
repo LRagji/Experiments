@@ -4,7 +4,9 @@
 <head>
     <% include ./head %>
 
-    <title>Health Mall- <%-pageData.flv.name -%></title>
+    <title>Health Mall-
+        <%-pageData.flv.name -%>
+    </title>
 </head>
 
 <body class="bg-light">
@@ -13,10 +15,18 @@
 
     <!-- Site Content -->
     <div class="container">
-        <h1>
-            <%-pageData.flv.name -%>
-        </h1>
-        <%-pageData.flv.contents -%>
+        <div class="row">
+            <div class="col">
+                <h1>
+                    <%-pageData.flv.name -%>
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <%-pageData.flv.contents -%>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->

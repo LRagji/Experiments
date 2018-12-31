@@ -176,7 +176,7 @@
     </div>
     <!-- Footer -->
     <% include ../footer %>
-    <script type="text/javascript" src="../../static/resources/scripts/nicedit.js"></script>
+    <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
     <script>
         let params = (new URL(document.location)).searchParams;
         if (params.has('tab')) {
@@ -209,36 +209,11 @@
         }
 
         $(document).ready(function () {
-            new nicEditor({
-                buttonList: ['fontSize',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikeThrough',
-                    'subscript',
-                    'superscript',
-                    'html',
-                    'left',
-                    'center',
-                    'right',
-                    'ol',
-                    'ul']
-            }).panelInstance('desc');
-            new nicEditor({
-                buttonList: ['fontSize',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikeThrough',
-                    'subscript',
-                    'superscript',
-                    'html',
-                    'left',
-                    'center',
-                    'right',
-                    'ol',
-                    'ul']
-            }).panelInstance('ingredients');
+            $("textarea").each(function () {
+                CKEDITOR.replace(this, {
+                    customConfig: '/static/resources/scripts/editor_config.js'
+                });
+            });
         });
     </script>
     <script src="../static/resources/scripts/paginatedproducts1.js"></script>

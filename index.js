@@ -50,10 +50,6 @@ apiServer = new api(app);
 console.log("Hosting static items..");
 app.use('/static', express.static('static'));
 
-//TODO:Need to remove this thrid party from fixed route
-console.log("Rerouting some static items..");
-app.get("/nicEditorIcons.gif", (req, res) => res.redirect("/static/resources/images/nicEditorIcons.gif"))
-
 console.log("App engine starting..");
 app.listen(_port, () => {
     console.log('Application active on ' + _port);
