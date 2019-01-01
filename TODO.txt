@@ -10,3 +10,5 @@
     1)Shopping cart
     2)User registration
 17)Refactor dynamic pages such that each page has its own .js file.
+18)API response should update the session timming.
+19)Taxation, GST number in orders.
