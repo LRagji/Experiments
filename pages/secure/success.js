@@ -1,10 +1,9 @@
-let constants = require('../../modules/constants');
-let utils = require('../../modules/utilities');
-let pgdal = require('../../db/dataAccessLayer');
-let dal = new pgdal();
-
 class pageSuccess {
-    constructor(server, basePath, auth) {
+    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService) {
+        this.dal = dataAccessService;
+        this.util = utilityService;
+        this.const = constantsService;
+
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderSuccess = this.renderSuccess.bind(this);
 
@@ -19,12 +18,12 @@ class pageSuccess {
         try {
             if (req.query.oid !== undefined) {
                 let orderId = parseInt(req.query.oid);
-                let order = await dal.getOrderById(orderId);
+                let order = await this.dal.getOrderById(orderId);
 
                 if (order === undefined) throw new Error("Cannot find the order mentioned.")
                 if (order.userId !== req.user.id) res.redirect('/cart');
 
-                let productInfo = await dal.getProducts(order.products.map(p => p.productId))
+                let productInfo = await this.dal.getProducts(order.products.map(p => p.productId))
 
                 order.products.forEach((prductKVP) => {
                     let pi = productInfo.find((p) => p.id === prductKVP.productId);
@@ -46,16 +45,16 @@ class pageSuccess {
                 order.products = productInfo;
 
                 let pageData = {};
-                pageData[constants.orderdetails] = order;
-                pageData[constants.cartItems] = utils.getCartItemsCount(req);
-                res.render('../pages/secure/success', await utils.constructPageData(req.user, pageData,dal));
+                pageData[this.const.orderdetails] = order;
+                pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
+                res.render('../pages/secure/success', await this.util.constructPageData(req.user, pageData, this.dal));
             }
             else {
                 res.redirect('/cart');
             }
         }
         catch (err) {
-            utils.navigateToError(req, res, err, undefined);
+            this.util.navigateToError(req, res, err, undefined);
         }
     }
 }

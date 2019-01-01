@@ -24,10 +24,10 @@ let modPageSettings = require('../pages/secure/appsettings');
 let pageSettings = undefined;
 
 class secureapp {
-    constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService,textService,authenticationService) {
-      
-        pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService);
-        pageLogin = new modPageLogin(_secureApp, basePath, authenticationService);
+    constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
+
+        pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageLogin = new modPageLogin(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
         pageProfile = new modPageProfile(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
         pagePassword = new modPagePassword(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
         pageProducts = new modPageProducts(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);

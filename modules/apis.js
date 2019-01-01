@@ -1,8 +1,9 @@
-let utils = require('./utilities');
-let pgdal = require('../db/dataAccessLayer');
-let dal = new pgdal();
 class apiServer {
-    constructor(server) {
+    constructor(server, dataAccessService, utilityService, constantsService) {
+        this.dal = dataAccessService;
+        this.util = utilityService;
+        this.const = constantsService;
+
         this.getHomePageProducts = this.getHomePageProducts.bind(this);
         this.addProductToSession = this.addProductToSession.bind(this);
 
@@ -20,11 +21,11 @@ class apiServer {
         try {
             let page = parseInt(req.query.page);
             let size = parseInt(req.query.size);
-            let keyword = req.query.s!==undefined?req.query.s.trim():"";
-            let category = req.query.c!==undefined?req.query.c.trim():"";
-            let subcategory = req.query.sc!==undefined?req.query.sc.trim():"";
+            let keyword = req.query.s !== undefined ? req.query.s.trim() : "";
+            let category = req.query.c !== undefined ? req.query.c.trim() : "";
+            let subcategory = req.query.sc !== undefined ? req.query.sc.trim() : "";
 
-            let products = await dal.getAllProducts(page, size, keyword, category, subcategory);
+            let products = await this.dal.getAllProducts(page, size, keyword, category, subcategory);
             if (products.length === size)
                 res.status(206).send(products);
             else
@@ -38,13 +39,13 @@ class apiServer {
 
     async addProductToSession(req, res) {
         try {
-            await utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, dal);
+            await this.util.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, this.dal);
 
-            res.status(201).send({ "TotalProducts": utils.getCartItemsCount(req) });
+            res.status(201).send({ "TotalProducts": this.util.getCartItemsCount(req) });
         }
         catch (err) {
             console.error(err);
-            res.status(413).send({ "TotalProducts": utils.getCartItemsCount(req) });
+            res.status(413).send({ "TotalProducts": this.util.getCartItemsCount(req) });
         }
     }
 }

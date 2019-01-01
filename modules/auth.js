@@ -1,13 +1,14 @@
 let passport = require('passport');
 let strategy = require('passport-local').Strategy;
 let ensureLogin = require('connect-ensure-login');
-let pgDal = require('../db/dataAccessLayer');
-let dal = new pgDal();
-let utils = require('./utilities');
 
 class authentication {
 
-    constructor(expressApp) {
+    constructor(expressApp, dataAccessService, utilityService, constantsService) {
+        this.dal = dataAccessService;
+        this.util = utilityService;
+        this.const = constantsService;
+
         this.authenticateLogIn = this.authenticateLogIn.bind(this);
         this.authenticatedInterceptor = this.authenticatedInterceptor.bind(this);
         this.authenticateLogin = this.authenticateLogin.bind(this);
@@ -38,18 +39,18 @@ class authentication {
 
     async authenticateLogin(username, password, done) {
         try {
-            if (utils.validateEmail(username) === false) {
+            if (this.util.validateEmail(username) === false) {
                 return done(null, false, { message: 'Not a valid email ' + username });
             }
 
-            if (utils.validateLength(password, 50, 1) === false) {
+            if (this.util.validateLength(password, 50, 1) === false) {
                 return done(null, false, { message: 'Password fails length validation [50,1] ' + username });
             }
 
-            let user = await dal.getUserByEmail(username)
+            let user = await this.dal.getUserByEmail(username)
             if (user !== undefined) {
                 if (user.meta.status === "active") {
-                    if (user.password === utils.getHash(password)) {
+                    if (user.password === this.util.getHash(password)) {
                         console.info(username + ' logged in.');
                         return done(null, user);
                     }

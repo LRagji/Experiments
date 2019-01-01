@@ -15,6 +15,9 @@ let apiServer = null;
 var minifyHTML = require('express-minify-html');
 let authenticationModule = require('./modules/auth');
 let authenticationService = null;
+let constants = require('./modules/constants');
+let util = require('./modules/utilities');
+
 
 //Minify on the fly
 app.use(minifyHTML({
@@ -42,15 +45,15 @@ app.use(appSession.build(dal.pool(), _cookiesecret, _timeout));
 
 //Authentication Pages
 console.log("Piping authentication service..");
-authenticationService = new authenticationModule(app);
+authenticationService = new authenticationModule(app, dal, util, constants);
 
 //Dynamic & Secured Pages
 console.log("Initializing dynamic pages..");
-webServer = new dynamicPages(app, authenticationService);
+webServer = new dynamicPages(app, authenticationService,dal, util, constants);
 
 //API Server
 console.log("Initializing API server..");
-apiServer = new api(app);
+apiServer = new api(app,dal, util, constants);
 
 //Static Content
 console.log("Hosting static items..");

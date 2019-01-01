@@ -1,9 +1,5 @@
 let _secureApp = require('./secureApp');
-let pgdal = require('../db/dataAccessLayer');
-let dal = new pgdal();
 let securePages = null;
-let constants = require('./constants');
-let utils = require('./utilities');
 let textService = require('./messages');
 let cartPage = require('../pages/cart');
 let cart = undefined;
@@ -18,23 +14,28 @@ let searchPage = undefined;
 
 class dynamicPages {
 
-    constructor(server, authService) {
+    constructor(server, authService, dataAccessService, utilityService, constantsService) {
+
+        this.dal = dataAccessService;
+        this.util = utilityService;
+        this.const = constantsService;
+
         //All views
         server.set('view engine', 'ejs');
 
         //All Pages
-        cart = new cartPage(server, dal, utils, constants, textService);
-        product = new productPage(server, dal, utils, constants, textService);
-        homePage = new modHomePage(server, dal, utils, constants, textService);
-        healthLinksPage = new modHealthLinksPage(server, dal, utils, constants, textService);
-        searchPage = new modSearchPage(server, dal, utils, constants, textService);
+        cart = new cartPage(server, this.dal, this.util, this.const, textService);
+        product = new productPage(server, this.dal, this.util, this.const, textService);
+        homePage = new modHomePage(server, this.dal, this.util, this.const, textService);
+        healthLinksPage = new modHealthLinksPage(server, this.dal, this.util, this.const, textService);
+        searchPage = new modSearchPage(server, this.dal, this.util, this.const, textService);
 
         this.renderErrorPage = this.renderErrorPage.bind(this);
         this.renderStaticPage = this.renderStaticPage.bind(this);
 
         this.loadRoutes(server);
 
-        securePages = new _secureApp(server, '/secure', dal, utils, constants, textService, authService);
+        securePages = new _secureApp(server, '/secure', this.dal, this.util, this.const, textService, authService);
     }
 
     loadRoutes(server) {
@@ -55,13 +56,13 @@ class dynamicPages {
     renderStaticPage(pagePath) {
         return async (req, res) => {
             let pageData = {};
-            pageData[constants.cartItems] = utils.getCartItemsCount(req);
-            res.render(pagePath, await utils.constructPageData(req.user, pageData, dal));
+            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
+            res.render(pagePath, await this.util.constructPageData(req.user, pageData, this.dal));
         };
     }
 
     async renderErrorPage(req, res) {
-        let exception = req.flash(constants.error);
+        let exception = req.flash(this.const.error);
         if (exception.length <= 0) {
             //This is the case when user directly request for a error page
             exception.push(new Error("Unknown Error"));
@@ -75,9 +76,9 @@ class dynamicPages {
 
         }
         let pageData = {};
-        pageData[constants.error] = exception;
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/error', await utils.constructPageData(req.user, pageData, dal));
+        pageData[this.const.error] = exception;
+        pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
+        res.render('../pages/error', await this.util.constructPageData(req.user, pageData, this.dal));
     }
 }
 
