@@ -20,6 +20,7 @@ module.exports = {
     orderdetails: "od",
     orders:"o",
     footerPageLinks:"fpl",
+    searchKeyword:"sk",
     footerLinksErr:"fle",
     footerLinksView:"flv",
     menu: "menu",

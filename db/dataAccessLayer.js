@@ -371,6 +371,10 @@ class DAL {
         });
     }
 
+    async searchProducts(searchTerm, pageNo, size) {
+        return await this.getAllProducts(pageNo, size)
+    }
+
     createOrder(order) {
         //TODO:Compare order amount with calculated product amount from all products.
         console.log(order);

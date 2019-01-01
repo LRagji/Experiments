@@ -13,6 +13,8 @@ let modHomePage = require('../pages/index');
 let homePage = undefined;
 let modHealthLinksPage = require('../pages/healthlinks');
 let healthLinksPage = undefined;
+let modSearchPage = require('../pages/search');
+let searchPage = undefined;
 
 class dynamicPages {
 
@@ -26,6 +28,7 @@ class dynamicPages {
         product = new productPage(server, dal, utils, constants, textService);
         homePage = new modHomePage(server, dal, utils, constants, textService);
         healthLinksPage = new modHealthLinksPage(server, dal, utils, constants, textService);
+        searchPage = new modSearchPage(server, dal, utils, constants, textService);
 
         this.renderErrorPage = this.renderErrorPage.bind(this);
         this.renderHowToPlaceOrder = this.renderHowToPlaceOrder.bind(this);

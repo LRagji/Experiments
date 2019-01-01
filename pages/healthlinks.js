@@ -22,7 +22,7 @@ class pageHealthLinks {
             let pageData = {};
             pageData[this.const.footerLinksView] = await this.dal.getHealthLinkContentFor(req.query.id);
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages//healthlinks', await this.util.constructPageData(req.user, pageData, this.dal));
+            res.render('../pages/healthlinks', await this.util.constructPageData(req.user, pageData, this.dal));
         }
         catch (err) {
             this.util.navigateToError(req, res, err);
