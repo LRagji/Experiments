@@ -23,7 +23,7 @@ class dynamicPages {
         server.set('view engine', 'ejs');
 
         //All Pages
-        cart = new cartPage(server);
+        cart = new cartPage(server, dal, utils, constants, textService);
         product = new productPage(server, dal, utils, constants, textService);
         homePage = new modHomePage(server, dal, utils, constants, textService);
         healthLinksPage = new modHealthLinksPage(server, dal, utils, constants, textService);

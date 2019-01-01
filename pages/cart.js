@@ -1,10 +1,11 @@
-let utils = require('../modules/utilities');
-let constants = require('../modules/constants');
-let pgDal = require('../db/dataAccessLayer');
-let dal = new pgDal();
-
 class pageCart {
-    constructor(server) {
+    constructor(server, dataAccessService, utilityService, constantsService, textService) {
+
+        this.dal = dataAccessService;
+        this.util = utilityService;
+        this.const = constantsService;
+        this.textService = textService;
+
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderCart = this.renderCart.bind(this);
         this.processCart = this.processCart.bind(this);
@@ -25,13 +26,13 @@ class pageCart {
         try {
             let pageData = {};
 
-            pageData[constants.state] = req.session.locked === undefined ? undefined : req.session.locked.state;
-            pageData[constants.shoppingCartProducts] = [];
-            pageData[constants.shoppingInfo] = undefined;
+            pageData[this.const.state] = req.session.locked === undefined ? undefined : req.session.locked.state;
+            pageData[this.const.shoppingCartProducts] = [];
+            pageData[this.const.shoppingInfo] = undefined;
 
             if (req.session.products !== undefined) {
                 let productIds = req.session.products.map(ele => ele.productId);
-                let productInfo = await dal.getProducts(productIds)
+                let productInfo = await this.dal.getProducts(productIds)
 
                 productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
                 productIds.forEach(pid => {
@@ -40,7 +41,7 @@ class pageCart {
                     if (product === undefined) {
                         {
                             //Product is deleted? then remove it from cart.
-                            utils.subtractProductOrQuantityToCartItem(req, productKVP.productId, (productKVP.quantity + 1));
+                            this.util.subtractProductOrQuantityToCartItem(req, productKVP.productId, (productKVP.quantity + 1));
                         }
                     }
                     else {
@@ -49,17 +50,17 @@ class pageCart {
                     }
                 });
 
-                pageData[constants.shoppingCartProducts] = productInfo;
+                pageData[this.const.shoppingCartProducts] = productInfo;
                 if (req.session.locked !== undefined && req.session.locked.state === 2) {
-                    pageData[constants.shoppingInfo] = req.session.locked;
+                    pageData[this.const.shoppingInfo] = req.session.locked;
                 }
 
-                pageData[constants.cartItems] = utils.getCartItemsCount(req);
-                res.render('../pages/cart', await utils.constructPageData(req.user, pageData, dal));
+                pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
+                res.render('../pages/cart', await this.util.constructPageData(req.user, pageData, this.dal));
             }
         }
         catch (err) {
-            utils.navigateToError(req, res, err, undefined);
+            this.util.navigateToError(req, res, err, undefined);
         }
     }
 
@@ -77,7 +78,7 @@ class pageCart {
                 switch (req.body.state) {
                     case "1":
                         if (req.session.locked !== undefined) throw new Error("This session is already under a checkout process on some other device.");
-                        if (utils.getCartItemsCount(req) <= 0) throw new Error("There are no products to checkout.");
+                        if (this.util.getCartItemsCount(req) <= 0) throw new Error("There are no products to checkout.");
                         req.session.locked = {
                             "userId": req.user.id,
                             "state": 1,
@@ -88,23 +89,23 @@ class pageCart {
                     case "2":
                         //TODO:Server side data input validations
                         if (req.session.locked === undefined) throw new Error("This session may have been cancelled on other device.");
-                        if (utils.getCartItemsCount(req) <= 0) throw new Error("There are no products to checkout.");
+                        if (this.util.getCartItemsCount(req) <= 0) throw new Error("There are no products to checkout.");
                         if (req.session.locked.userId !== req.user.id) throw new Error("This user cannot checkout cart for other user.");
                         if (req.session.locked.state !== 1) throw new Error("Please complete your order on previous step.");
 
                         let copyBillingInfo = req.body.chkSameAsBilling === undefined ? false : true;
                         let shippingDetails = { billing: {}, shipping: {} };
 
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Salutation", shippingDetails, (value) => utils.validateIsInOptions(value, constants.salutations));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "FirstName", shippingDetails, (value) => utils.validateLength(value, 50, 1));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "LastName", shippingDetails, (value) => utils.validateLength(value, 50, 1));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Add1", shippingDetails, (value) => utils.validateLength(value, 50, 1));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Add2", shippingDetails, (value) => utils.validateLength(value, 50, 1));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Add3", shippingDetails, (value) => utils.validateLength(value, 50, 1));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "City", shippingDetails, (value) => utils.validateLength(value, 50, 1));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Pincode", shippingDetails, (value) => utils.validateIsPostcode(value));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "State", shippingDetails, (value) => utils.validateIsInOptions(value, constants.states));
-                        this.fillShippingDetails(req.body, copyBillingInfo, "Mobile", shippingDetails, (value) => utils.validateMobilePhone(value));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Salutation", shippingDetails, (value) => this.util.validateIsInOptions(value, this.const.salutations));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "FirstName", shippingDetails, (value) => this.util.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "LastName", shippingDetails, (value) => this.util.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Add1", shippingDetails, (value) => this.util.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Add2", shippingDetails, (value) => this.util.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Add3", shippingDetails, (value) => this.util.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "City", shippingDetails, (value) => this.util.validateLength(value, 50, 1));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Pincode", shippingDetails, (value) => this.util.validateIsPostcode(value));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "State", shippingDetails, (value) => this.util.validateIsInOptions(value, this.const.states));
+                        this.fillShippingDetails(req.body, copyBillingInfo, "Mobile", shippingDetails, (value) => this.util.validateMobilePhone(value));
 
                         req.session.locked.shippingDetails = shippingDetails;
                         req.session.locked.state = 2;
@@ -112,7 +113,7 @@ class pageCart {
 
                     case "3":
                         if (req.session.locked === undefined) throw new Error("This session may have been cancelled on other device.");
-                        if (utils.getCartItemsCount(req) <= 0) throw new Error("There are no products to checkout.");
+                        if (this.util.getCartItemsCount(req) <= 0) throw new Error("There are no products to checkout.");
                         if (req.session.locked.userId !== req.user.id) throw new Error("This user cannot checkout cart for other user.");
                         if (req.session.locked.state !== 2) throw new Error("Please complete your order on previous step.");
 
@@ -136,11 +137,11 @@ class pageCart {
                                     endDate.setDate(endDate.getDate() + 2); //Time windows is current + 2 days.
                                     startDate.setDate(endDate.getDate() - 10); //Time windows is (current +2)-10) days .
 
-                                    if (utils.validateLength(req.body.chequeChequeNo, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeChequeNo");
-                                    if (utils.validateIsDateBetween(req.body.chequeDate, startDate, endDate) === false) throw new Error("Incomplete or Invalid request for parameter:chequeDate");
-                                    if (utils.validateLength(req.body.chequeBankName, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeBankName");
-                                    if (utils.validateLength(req.body.chequeBankBranch, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeBankBranch");
-                                    if (utils.validateIsInOptions(req.body.chequeDepositedBank, constants.bankAccounts) === false) throw new Error("Incomplete or Invalid request for parameter:chequeDepositedBank");
+                                    if (this.util.validateLength(req.body.chequeChequeNo, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeChequeNo");
+                                    if (this.util.validateIsDateBetween(req.body.chequeDate, startDate, endDate) === false) throw new Error("Incomplete or Invalid request for parameter:chequeDate");
+                                    if (this.util.validateLength(req.body.chequeBankName, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeBankName");
+                                    if (this.util.validateLength(req.body.chequeBankBranch, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:chequeBankBranch");
+                                    if (this.util.validateIsInOptions(req.body.chequeDepositedBank, this.const.bankAccounts) === false) throw new Error("Incomplete or Invalid request for parameter:chequeDepositedBank");
                                     if (req.body.chequeDeclaration === undefined) throw new Error("Incomplete or Invalid request for parameter:chequeDeclaration");
 
                                     req.session.locked.payment = {
@@ -153,7 +154,7 @@ class pageCart {
                                         "amount": req.body.amount
                                     }
 
-                                    orderId = dal.createOrder(req.session.locked);
+                                    orderId = this.dal.createOrder(req.session.locked);
                                     this.clearShoppingCartSession(req);
                                     redirectPage = '/secure/success?oid=' + orderId; //TODO:Confirm if these are right page links
                                     break;
@@ -164,8 +165,8 @@ class pageCart {
                                     endDate.setDate(endDate.getDate() + 2); //Time windows is current + 2 days.
                                     startDate.setDate(endDate.getDate() - 10); //Time windows is (current +2)-10) days .
 
-                                    if (utils.validateLength(req.body.bankTransferRefNo, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:bankTransferRefNo");
-                                    if (utils.validateIsDateBetween(req.body.bankTransferDate, startDate, endDate) === false) throw new Error("Incomplete or Invalid request for parameter:bankTransferDate");
+                                    if (this.util.validateLength(req.body.bankTransferRefNo, 50, 1) === false) throw new Error("Incomplete or Invalid request for parameter:bankTransferRefNo");
+                                    if (this.util.validateIsDateBetween(req.body.bankTransferDate, startDate, endDate) === false) throw new Error("Incomplete or Invalid request for parameter:bankTransferDate");
                                     if (req.body.bankTransferDeclaration === undefined) throw new Error("Incomplete or Invalid request for parameter:bankTransferDeclaration");
 
                                     req.session.locked.payment = {
@@ -175,7 +176,7 @@ class pageCart {
                                         "amount": req.body.amount
                                     }
 
-                                    orderId = dal.createOrder(req.session.locked);
+                                    orderId = this.dal.createOrder(req.session.locked);
                                     this.clearShoppingCartSession(req);
                                     redirectPage = '/secure/success?oid=' + orderId; //TODO:Confirm if these are right page links
                                     break;
@@ -188,7 +189,7 @@ class pageCart {
                                         "amount": req.body.amount
                                     }
 
-                                    orderId = dal.createOrder(req.session.locked);
+                                    orderId = this.dal.createOrder(req.session.locked);
                                     this.clearShoppingCartSession(req);
                                     redirectPage = '/secure/gateway?oid=' + orderId; //TODO:Confirm if these are right page links
                                     break;
@@ -210,7 +211,7 @@ class pageCart {
 
         }
         catch (err) {
-            utils.navigateToError(req, res, err, undefined);
+            this.util.navigateToError(req, res, err, undefined);
         }
     }
 
@@ -233,15 +234,15 @@ class pageCart {
 
             switch (req.body.operator) {
                 case "add":
-                    await utils.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, dal);
+                    await this.util.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, this.dal);
                     res.redirect("/cart");
                     break;
                 case "sub":
-                    utils.subtractProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1);
+                    this.util.subtractProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1);
                     res.redirect("/cart");
                     break;
                 case "rem":
-                    utils.subtractProductOrQuantityToCartItem(req, parseInt(req.body.productId), constants.maxQuantity + 1);
+                    this.util.subtractProductOrQuantityToCartItem(req, parseInt(req.body.productId), this.const.maxQuantity + 1);
                     res.redirect("/cart");
                     break;
                 default:
@@ -250,7 +251,7 @@ class pageCart {
             }
         }
         catch (err) {
-            utils.navigateToError(req, res, err, undefined);
+            this.util.navigateToError(req, res, err, undefined);
         }
     }
 
