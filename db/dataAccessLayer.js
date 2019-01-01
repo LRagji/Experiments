@@ -423,7 +423,7 @@ class DAL {
                     "offerprice": parseFloat(offerPrice),
                     "price": parseFloat(productPrice),
                     "image": image,
-                    "faq": faq.map((e) => parseInt(e)),
+                    "faq": faq, //Has to be int array always
                     "meta": {
                         "code": meta.code,
                         "package_detail": meta.package_detail,
@@ -470,7 +470,7 @@ class DAL {
                     "offerprice": parseFloat(offerPrice),
                     "price": parseFloat(productPrice),
                     "image": image,
-                    "faq": faq.map((e) => parseInt(e)),
+                    "faq": faq, //Has to be int array always
                     "meta": {
                         "code": meta.code,
                         "package_detail": meta.package_detail,

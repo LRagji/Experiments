@@ -244,7 +244,7 @@ class pageProducts {
                         "mwebsite": req.body.mWebsite
                     },
                     req.file !== undefined ? req.file.buffer : undefined,
-                    req.body.faq
+                    req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e))
                 );
             }
             else {
@@ -269,7 +269,7 @@ class pageProducts {
                         "mwebsite": req.body.mWebsite
                     },
                     req.file !== undefined ? req.file.buffer : undefined,
-                    req.body.faq
+                    req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e))
                 );
             }
             req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);
