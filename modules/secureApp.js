@@ -1,6 +1,3 @@
-let authenticationModule = require('./auth.js');
-let utils = require('./utilities');
-let constants = require('./constants');
 let modPageSuccess = require('../pages/secure/success');
 let pageSuccess = undefined;
 let modPageLogin = require('../pages/secure/login');
@@ -27,23 +24,20 @@ let modPageSettings = require('../pages/secure/appsettings');
 let pageSettings = undefined;
 
 class secureapp {
-    constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService) {
-        let _auth = new authenticationModule(_secureApp);
-        this.basePath = basePath;
-        this.securePagePath = "../pages/secure/";
-
-        pageSuccess = new modPageSuccess(_secureApp, basePath, _auth);
-        pageLogin = new modPageLogin(_secureApp, basePath, _auth);
-        pageProfile = new modPageProfile(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pagePassword = new modPagePassword(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pageProducts = new modPageProducts(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pageOrders = new modPageOrders(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pageBanner = new modPageBanner(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pageUser = new modPageUser(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pageHealthLinks = new modPageApi(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        secureApi = new modSecureApi(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pageFAQs = new modPageFAQs(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
-        pageSettings = new modPageSettings(_secureApp, basePath, _auth, dataAccessService, utilityService, constantsService);
+    constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService,textService,authenticationService) {
+      
+        pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService);
+        pageLogin = new modPageLogin(_secureApp, basePath, authenticationService);
+        pageProfile = new modPageProfile(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pagePassword = new modPagePassword(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageProducts = new modPageProducts(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageOrders = new modPageOrders(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageBanner = new modPageBanner(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageUser = new modPageUser(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageHealthLinks = new modPageApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        secureApi = new modSecureApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageFAQs = new modPageFAQs(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        pageSettings = new modPageSettings(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
     }
 }
 

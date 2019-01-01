@@ -18,12 +18,11 @@ let searchPage = undefined;
 
 class dynamicPages {
 
-    constructor(server) {
+    constructor(server, authService) {
         //All views
         server.set('view engine', 'ejs');
 
         //All Pages
-        securePages = new _secureApp(server, '/secure', dal, utils, constants);//This has to be the first one for pass the user login. Donot change the sequence.
         cart = new cartPage(server);
         product = new productPage(server, dal, utils, constants, textService);
         homePage = new modHomePage(server, dal, utils, constants, textService);
@@ -41,6 +40,8 @@ class dynamicPages {
         this.renderContactUs = this.renderContactUs.bind(this);
 
         this.loadRoutes(server);
+
+        securePages = new _secureApp(server, '/secure', dal, utils, constants, textService, authService);
     }
 
     loadRoutes(server) {

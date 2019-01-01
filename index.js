@@ -13,18 +13,20 @@ let webServer = null;
 let api = require('./modules/apis');
 let apiServer = null;
 var minifyHTML = require('express-minify-html');
+let authenticationModule = require('./modules/auth');
+let authenticationService = null;
 
-// Minify on the fly
-// app.use(minifyHTML({
-//     override: true,
-//     exception_url: false,
-//     htmlMinifier: {
-//         removeComments: true,
-//         collapseWhitespace: true,
-//         minifyJS: true,
-//         minifyCSS: true
-//     }
-// }));
+//Minify on the fly
+app.use(minifyHTML({
+    override: true,
+    exception_url: false,
+    htmlMinifier: {
+        removeComments: true,
+        collapseWhitespace: true,
+        minifyJS: true,
+        minifyCSS: true
+    }
+}));
 
 //Use Flash
 console.log("Piping flash service..");
@@ -38,9 +40,13 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 console.log("Piping session server..");
 app.use(appSession.build(dal.pool(), _cookiesecret, _timeout));
 
+//Authentication Pages
+console.log("Piping authentication service..");
+authenticationService = new authenticationModule(app);
+
 //Dynamic & Secured Pages
 console.log("Initializing dynamic pages..");
-webServer = new dynamicPages(app);
+webServer = new dynamicPages(app, authenticationService);
 
 //API Server
 console.log("Initializing API server..");
