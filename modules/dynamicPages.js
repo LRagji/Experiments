@@ -30,14 +30,7 @@ class dynamicPages {
         searchPage = new modSearchPage(server, dal, utils, constants, textService);
 
         this.renderErrorPage = this.renderErrorPage.bind(this);
-        this.renderHowToPlaceOrder = this.renderHowToPlaceOrder.bind(this);
-        this.renderWhyShopHere = this.renderWhyShopHere.bind(this);
-        this.renderRequestAProduct = this.renderRequestAProduct.bind(this);
-        this.renderShippingTerms = this.renderShippingTerms.bind(this);
-        this.renderPrivacyPolicy = this.renderPrivacyPolicy.bind(this);
-        this.renderTermsAndConditions = this.renderTermsAndConditions.bind(this);
-        this.renderAboutUs = this.renderAboutUs.bind(this);
-        this.renderContactUs = this.renderContactUs.bind(this);
+        this.renderStaticPage = this.renderStaticPage.bind(this);
 
         this.loadRoutes(server);
 
@@ -48,63 +41,23 @@ class dynamicPages {
         server.get('/error', this.renderErrorPage);
 
         //Static
-        server.get('/howtoorder', this.renderHowToPlaceOrder);
-        server.get('/whyshophere', this.renderWhyShopHere);
-        server.get('/requestaproduct', this.renderRequestAProduct);
-        server.get('/shippingterms', this.renderShippingTerms);
-        server.get('/privacypolicy', this.renderPrivacyPolicy);
-        server.get('/terms', this.renderTermsAndConditions);
-        server.get('/about', this.renderAboutUs);
-        server.get('/contact', this.renderContactUs);
+        server.get('/howtoorder', this.renderStaticPage('../pages/static/howtoplaceorder'));
+        server.get('/whyshophere', this.renderStaticPage('../pages/static/whyshophere'));
+        server.get('/requestaproduct', this.renderStaticPage('../pages/static/requestaproduct'));
+        server.get('/shippingterms', this.renderStaticPage('../pages/static/shippingterms'));
+        server.get('/privacypolicy', this.renderStaticPage('../pages/static/privacypolicy'));
+        server.get('/terms', this.renderStaticPage('../pages/static/termsandconditions'));
+        server.get('/about', this.renderStaticPage('../pages/static/about'));
+        server.get('/contact', this.renderStaticPage('../pages/static/contact'));
         return server;
     }
 
-    async renderHowToPlaceOrder(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/howtoplaceorder', await utils.constructPageData(req.user, pageData, dal));
-    }
-
-    async renderWhyShopHere(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/whyshophere', await utils.constructPageData(req.user, pageData, dal));
-    }
-
-    async renderRequestAProduct(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/requestaproduct', await utils.constructPageData(req.user, pageData, dal));
-    }
-
-    async renderShippingTerms(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/shippingterms', await utils.constructPageData(req.user, pageData, dal));
-    }
-
-    async renderPrivacyPolicy(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/privacypolicy', await utils.constructPageData(req.user, pageData, dal));
-    }
-
-    async renderTermsAndConditions(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/termsandconditions', await utils.constructPageData(req.user, pageData, dal));
-    }
-
-    async renderAboutUs(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/about', await utils.constructPageData(req.user, pageData, dal));
-    }
-
-    async renderContactUs(req, res) {
-        let pageData = {};
-        pageData[constants.cartItems] = utils.getCartItemsCount(req);
-        res.render('../pages/static/contact', await utils.constructPageData(req.user, pageData, dal));
+    renderStaticPage(pagePath) {
+        return async (req, res) => {
+            let pageData = {};
+            pageData[constants.cartItems] = utils.getCartItemsCount(req);
+            res.render(pagePath, await utils.constructPageData(req.user, pageData, dal));
+        };
     }
 
     async renderErrorPage(req, res) {
