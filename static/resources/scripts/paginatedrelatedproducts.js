@@ -1,9 +1,9 @@
 var container = $('#resultContainer');
 var spinner = $('#loadingSpinner');
 var loadingMessage = $('#loadingMessage');
-var apiURl = "./v1/search";
+var apiURl = "./v1/home/products";
 var alertPanel = $('#alertPane');
-var querySegment = "&s=";
+var querySegment = "";
 var shoppingBadge = $('#shoppingCart');
 var pageNo = 0;
 var size = 10;
@@ -93,7 +93,7 @@ function fillInfo(product) {
         </h3>
         </div>
         <div class="d-flex justify-content-center align-items-center">
-        <small>${product.meta.shippingdetail}</small>
+        <small>Ships in ${product.meta.shippingdetail} day(s)</small>
         </div>
         <div class="d-flex justify-content-center align-items-center">
         <button onClick=addProductToSession(${product.id},1) class="btn btn-success my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
@@ -102,5 +102,5 @@ function fillInfo(product) {
     </div>
 </div>`;
 }
-querySegment = "&s=" + encodeURIComponent($("#keyword").text());
+querySegment = "&c=" + encodeURIComponent($("#category").text().trim())+"&sc=" + encodeURIComponent($("#subcategory").text().trim());
 loadData(apiURl + "?page=" + pageNo + "&size=" + size + querySegment);

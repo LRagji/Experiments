@@ -31,6 +31,9 @@ class DAL {
         this.deleteFAQ = this.deleteFAQ.bind(this);
         this.getAllFAQ = this.getAllFAQ.bind(this);
         this.getFAQ = this.getFAQ.bind(this);
+        this.filterCategory = this.filterCategory.bind(this);
+        this.filterSubCategory = this.filterSubCategory.bind(this);
+        this.filterKeywords = this.filterKeywords.bind(this);
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -328,36 +331,73 @@ class DAL {
         });
     }
 
-    getAllProducts(pageNo, size) {
+    async getAllProducts(pageNo, size, keyword, category, subcategory) {
+
+        let startIndex = (pageNo * size);
+        let endIndex = (startIndex + size);
+        let fetchStart = 0, fetchLength = 0;
+
+        let paginateableProducts = Array.from(products);
+        if (category !== undefined && category !== "")
+            paginateableProducts = await this.filterCategory(paginateableProducts, category);
+        if (subcategory !== undefined && subcategory !== "")
+            paginateableProducts = await this.filterSubCategory(paginateableProducts, subcategory);
+        if (keyword !== undefined && keyword !== "")
+            paginateableProducts = await this.filterKeywords(paginateableProducts, keyword);
+
+
+        if (paginateableProducts.length < startIndex && paginateableProducts.length < endIndex) {
+            fetchStart = 0;
+            fetchLength = 0;
+        }
+
+        else if (paginateableProducts.length > startIndex && paginateableProducts.length < endIndex) {
+            fetchStart = startIndex;
+            fetchLength = (products.length - startIndex);
+        }
+
+        else if (paginateableProducts.length > startIndex && paginateableProducts.length > endIndex) {
+            fetchStart = startIndex;
+            fetchLength = size;
+        }
+
+        return paginateableProducts.splice(fetchStart, fetchLength);
+
+    }
+
+    filterCategory(products, cateogry) {
         return new Promise((acc, rej) => {
             try {
-                let startIndex = (pageNo * size);
-                let endIndex = (startIndex + size);
-                let fetchStart = 0, fetchLength = 0;
-
-                if (products.length < startIndex && products.length < endIndex) {
-                    fetchStart = 0;
-                    fetchLength = 0;
-                }
-
-                else if (products.length > startIndex && products.length < endIndex) {
-                    fetchStart = startIndex;
-                    fetchLength = (products.length - startIndex);
-                }
-
-                else if (products.length > startIndex && products.length > endIndex) {
-                    fetchStart = startIndex;
-                    fetchLength = size;
-                }
-
-                let productsClone = Array.from(products);
-                acc(productsClone.splice(fetchStart, fetchLength));
+                acc(products);
             }
-            catch (ex) {
-                rej(ex);
+            catch (err) {
+                rej(err);
             }
         });
     }
+
+    filterSubCategory(products, subCateogry) {
+        return new Promise((acc, rej) => {
+            try {
+                acc(products);
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
+    }
+
+    filterKeywords(products, keywords) {
+        return new Promise((acc, rej) => {
+            try {
+                acc(products);
+            }
+            catch (err) {
+                rej(err);
+            }
+        });
+    }
+
 
     getProducts(ids) {
         return new Promise((acc, rej) => {
@@ -369,10 +409,6 @@ class DAL {
             });
             acc(result);
         });
-    }
-
-    async searchProducts(searchTerm, pageNo, size) {
-        return await this.getAllProducts(pageNo, size)
     }
 
     createOrder(order) {

@@ -61,7 +61,7 @@ function fillProductInfo(product) {
         </h3>
         </div>
         <div class="d-flex justify-content-center align-items-center">
-        <small>${product.meta.shippingdetail}</small>
+        <small>Ships in ${product.meta.shippingdetail} day(s)</small>
         </div>
         <div class="d-flex justify-content-center align-items-center">
         <a href="/secure/products?tab=new&pid=${product.id}"><i class="fas fa-edit"></i>Edit</a>
