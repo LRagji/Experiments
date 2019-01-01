@@ -58,6 +58,7 @@ class pageProducts {
                 "description": req.body.desc,
                 "ingredients": req.body.ingredients,
                 "faq": req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
+                "keywords":req.body.keywords,
                 meta: {
                     "code": req.body.code,
                     "package_detail": req.body.packageDetail,
@@ -98,6 +99,12 @@ class pageProducts {
 
             if (this.util.validateLength(req.body.name, 50, 1) === false) {
                 req.flash(this.const.newProductError, "Invalid product name length [50,1].");
+                this.respondWithRightPage(req, IsNewProduct, productState, res);
+                return;
+            }
+
+            if (this.util.validateLength(req.body.keywords, 200, 0) === false) {
+                req.flash(this.const.newProductError, "Invalid search keywords length [200,0].");
                 this.respondWithRightPage(req, IsNewProduct, productState, res);
                 return;
             }
@@ -240,11 +247,12 @@ class pageProducts {
                         "shippingdetail": req.body.shippingDetails,
                         "category": req.body.cat,
                         "subCategory": req.body.subCat,
-                        "mname": req.body.mName,
-                        "mwebsite": req.body.mWebsite
+                        "manufactureName": req.body.mName,
+                        "manufactureWebsite": req.body.mWebsite
                     },
                     req.file !== undefined ? req.file.buffer : undefined,
-                    req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e))
+                    req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
+                    req.body.keywords
                 );
             }
             else {
@@ -265,11 +273,12 @@ class pageProducts {
                         "shippingdetail": req.body.shippingDetails,
                         "category": req.body.cat,
                         "subCategory": req.body.subCat,
-                        "mname": req.body.mName,
-                        "mwebsite": req.body.mWebsite
+                        "manufactureName": req.body.mName,
+                        "manufactureWebsite": req.body.mWebsite
                     },
                     req.file !== undefined ? req.file.buffer : undefined,
-                    req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e))
+                    req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
+                    req.body.keywords
                 );
             }
             req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);

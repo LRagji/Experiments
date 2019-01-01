@@ -54,7 +54,8 @@ class DAL {
                         "manufactureWebsite": "https://www.health-mall.in"
                     },
                     undefined,
-                    []
+                    [],
+                    "search Laukik Ragji Hello"
                 );
             }
         }
@@ -406,7 +407,7 @@ class DAL {
         });
     }
 
-    saveProduct(name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq) {
+    saveProduct(name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq, searchKeywords) {
         return new Promise((acc, rej) => {
             try {
                 if (imageBuffer !== undefined) {
@@ -417,6 +418,10 @@ class DAL {
                     faq = [];
                 }
 
+                if (searchKeywords === undefined) {
+                    searchKeywords = "";
+                }
+
                 let newProduct = {
                     id: products.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
                     "name": name,
@@ -424,6 +429,7 @@ class DAL {
                     "price": parseFloat(productPrice),
                     "image": image,
                     "faq": faq, //Has to be int array always
+                    "keywords": searchKeywords,
                     "meta": {
                         "code": meta.code,
                         "package_detail": meta.package_detail,
@@ -448,7 +454,7 @@ class DAL {
         })
     }
 
-    updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq) {
+    updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq, searchKeywords) {
         return new Promise((acc, rej) => {
             try {
 
@@ -464,6 +470,10 @@ class DAL {
                     fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
                 }
 
+                if (searchKeywords === undefined) {
+                    searchKeywords = "";
+                }
+
                 let product = {
                     id: id,
                     "name": name,
@@ -471,6 +481,7 @@ class DAL {
                     "price": parseFloat(productPrice),
                     "image": image,
                     "faq": faq, //Has to be int array always
+                    "keywords": searchKeywords,
                     "meta": {
                         "code": meta.code,
                         "package_detail": meta.package_detail,
@@ -479,8 +490,8 @@ class DAL {
                         "shippingdetail": meta.shippingdetail,
                         "category": meta.category,
                         "subCategory": meta.subCategory,
-                        "mname": meta.mname,
-                        "mwebsite": meta.mwebsite
+                        "mname": meta.manufactureName,
+                        "mwebsite": meta.manufactureWebsite
                     },
                     "description": desc,
                     "ingredients": ingredients

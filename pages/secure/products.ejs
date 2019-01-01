@@ -153,15 +153,22 @@
                                 <div class="col">
                                 <div class="card-columns">` %>
                         <% pageData.faqs.forEach(function(faq){ %>
-                       <%-`<div class="form-check">
+                        <%-`<div class="form-check">
                             <input class="form-check-input" ${pageData.productinfo!==undefined?(pageData.productinfo.faq.indexOf(faq.id)>=0?'checked':''):''} name="faq[]" type="checkbox" value=${faq.id} id="c${faq.id}">
                             <label class="form-check-label" for="c${faq.id}">
                              ${faq.Q}
                             </label>
                         </div>`%>
                         <% }); %>
-                           <%- `</div>
+                        <%- `</div>
                                 <hr>
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col">
+                                        <input type="text" class="form-control" placeholder="Search Keywords"
+                                        value="${pageData.productinfo!==undefined?pageData.productinfo.keywords:''}"
+                                        minlength="0" maxlength="200" name="keywords">
                                 </div>
                             </div>
                             <div class="row m-2">
