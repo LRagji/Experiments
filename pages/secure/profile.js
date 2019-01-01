@@ -73,6 +73,11 @@ class pageProfile {
                 url: "/secure/faqs",
                 name: "F.A.Q's"
             });
+            menuItems.push({
+                icon: "fas fa-cogs",
+                url: "/secure/settings",
+                name: "App Settings"
+            });
         }
         return menuItems;
     }
