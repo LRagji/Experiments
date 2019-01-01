@@ -196,7 +196,7 @@ class DAL {
         return new Promise((acc, rej) => {
             try {
                 let faqIdx = FAQ.findIndex((q) => q.id === id);
-                if (faqIdx < 0) throw new Error("FAQ " + name + " doesnot exists.");
+                if (faqIdx < 0) throw new Error("FAQ " + getFAQ + " doesnot exists.");
                 acc(Object.assign({}, FAQ[faqIdx]));
             }
             catch (ex) {

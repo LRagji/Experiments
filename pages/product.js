@@ -25,10 +25,17 @@ class pageProduct {
                 throw new Error("No Product found in database for product id:" + req.query.pid);
             }
             else {
+
+                let faqObject = [];
+                for (let i = 0; i < product.faq.length; i++) {
+                    faqObject.push(await this.dal.getFAQ(product.faq[i]));
+                }
+                product.faq = faqObject;
+
                 let pageData = {};
                 pageData[this.const.product] = product;
                 pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-                res.render('../pages/product', await this.util.constructPageData(req.user, pageData,this.dal));
+                res.render('../pages/product', await this.util.constructPageData(req.user, pageData, this.dal));
             }
         }
         catch (err) {

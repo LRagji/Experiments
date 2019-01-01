@@ -3,8 +3,8 @@ var spinner = $('#loadingSpinner');
 var loadingMessage = $('#loadingMessage');
 var apiURl = "./v1/search";
 var alertPanel = $('#alertPane');
-var shoppingBadge = $('#shoppingCart');
 var querySegment = "&s=";
+var shoppingBadge = $('#shoppingCart');
 var pageNo = 0;
 var size = 10;
 
