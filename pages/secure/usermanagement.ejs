@@ -30,7 +30,68 @@
     </div>
     <!-- Footer -->
     <% include ../footer %>
-    <script src="../../static/resources/scripts/paginatedusers.js"></script>
+    <script src="../../static/resources/scripts/paginatedtemplates.js"></script>
+    <script>
+        var shoppingBadge = $('#shoppingCart');
+
+        function userTemplate(user) {
+
+            return `<div class="card myshadow my-2">
+            <div class="card-body">
+                <h3>
+                    <small class="text-muted">${user.salutation}</small>
+                    ${user.first} ${user.last}
+                </h3>
+                <ul class="list-inline">
+                    <li class="list-inline-item"><i class="fas fa-mobile-alt"></i> ${user.mobile}</li>
+                    <li class="list-inline-item"><i class="far fa-envelope"></i> ${user.email}</li>
+                    <li class="list-inline-item text-uppercase"><i class="far fa-smile"></i> ${user.meta.type}</li>
+                </ul>
+                <div class="d-flex">
+                    <ul class="list-inline ml-auto mr-0">
+                        <li class="list-inline-item">
+                            <form action="/secure/users/activation" method="POST">
+                                <input type="hidden" name="userid" value="${user.id}" />
+                                <input type="hidden" name="status" value="${user.meta.status === 'active' ? 'Deactivate' : 'Activate'}" />
+                                <button type="submit" class="btn btn-secondary">${user.meta.status === 'active' ? 'Deactivate' : 'Activate'}</button>
+                            </form>
+                        </li>
+                        <li class="list-inline-item">
+                            <form action="/secure/users/promotion" method="POST">
+                                <input type="hidden" name="userid" value="${user.id}" />
+                                <input type="hidden" name="promotion" value="${user.meta.type === 'admin' ? 'normal' : 'admin'}" />
+                                <button type="submit" class="btn btn-secondary">${user.meta.type === 'admin' ? 'Demote to Normal' : 'Promote to Admin'}</button>
+                            </form>
+                        </li>
+                        <li class="list-inline-item">
+                            <form action="/secure/users/secret" method="POST">
+                                <input type="hidden" name="userid" value="${user.id}" />
+                                <input type="hidden" name="password" value="${user.id}" />
+                                <button type="submit" class="btn btn-secondary">Reset to default password</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>`;
+        }
+
+        function setStatus(pageNo, status) {
+            if (status === 3) {
+                $("#loadingSpinner").text("Failed to load page:" + pageNo + ", Please refresh the page and try again.");
+            }
+            if (status === 2) {
+                $("#loadingSpinner").text("Loading completed");
+                $("#loadingSpinner").hide();
+            }
+            if (status === 1 || status === 0) {
+                $("#loadingSpinner").text("Loading more users from page " + pageNo);
+            }
+        }
+
+        hookUpPagination("./v1/users", userTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10);
+
+    </script>
 </body>
 
 </html>

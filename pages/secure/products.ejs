@@ -242,7 +242,51 @@
             });
         });
     </script>
-    <script src="../static/resources/scripts/paginatedproducts1.js"></script>
+    <script src="../../static/resources/scripts/paginatedtemplates.js"></script>
+    <script>
+        var shoppingBadge = $('#shoppingCart');
+
+        function productTemplate(product) {
+            return `<div class="card m-2 myshadow myproductcard">
+            <a href="/product?pid=${product.id}" >
+            <center>
+                <img class="productThumbnail" src="../static/resources/images/products/${product.image}" style="max-width:150px;max-height:170px" alt="Product Image">
+            </center>
+            </a>
+            <div class="card-body bg-light">
+           <strong>${product.name}</strong>
+                <div class="d-flex justify-content-center align-items-center my-2">
+                <h3 class="text-success">
+                &#8377;${product.offerprice}
+                <small><small class="text-muted"><del>&#8377;${product.price}</del></small></small>
+                </h3>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                <small>Ships in ${product.meta.shippingdetail} day(s)</small>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                <a href="/secure/products?tab=new&pid=${product.id}"><i class="fas fa-edit"></i>Edit</a>
+                </div>
+            </div>
+        </div>`;
+        }
+
+        function setStatus(pageNo, status) {
+            if (status === 3) {
+                $("#loadingSpinner").text("Failed to load page" + pageNo + ", Please refresh the page and try again.");
+            }
+            if (status === 2) {
+                $("#loadingSpinner").text("Loading completed");
+                $("#loadingSpinner").hide();
+            }
+            if (status === 1 || status === 0) {
+                $("#loadingSpinner").text("Loading more products from page " + pageNo);
+            }
+        }
+
+        hookUpPagination("/v1/home/products", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10);
+
+    </script>
 
 </body>
 

@@ -37,7 +37,7 @@ class DAL {
 
         //TODO:Delete this mock data
         if (products.length === 0) {
-            for (let i = 0; i < 1; i++) {
+            for (let i = 0; i < 41; i++) {
                 this.saveProduct(
                     "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
                     (parseFloat(i) * 100.00 + 1000.00),
