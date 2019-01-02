@@ -1,8 +1,8 @@
-class pageHealthLinks {
-    constructor(server, dataAccessService, utilityService, constantsService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
+let page = require('../modules/page')
+class pageHealthLinks extends page {
+    constructor(server, dataAccessService, utilityService, constantsService,textService) {
+
+        super(dataAccessService, utilityService, constantsService, textService);
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderHealthLinks = this.renderHealthLinks.bind(this);
