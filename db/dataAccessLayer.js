@@ -413,7 +413,6 @@ class DAL {
 
     createOrder(order) {
         //TODO:Compare order amount with calculated product amount from all products.
-        console.log(order);
         if (order.hasOwnProperty("state")) delete order.state;
         order.date = Date.now();
         order.status = "Awaiting Payment";
@@ -486,7 +485,6 @@ class DAL {
                 };
                 products.push(newProduct);
                 acc(newProduct);
-                console.log(newProduct);
             }
             catch (err) {
                 rej(err);
@@ -538,7 +536,6 @@ class DAL {
                 };
                 products[idx] = Object.assign({}, product);
                 acc(product);
-                console.log(product);
             }
             catch (err) {
                 rej(err);
