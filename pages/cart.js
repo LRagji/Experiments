@@ -1,10 +1,8 @@
-class pageCart {
+let page = require('../modules/page')
+class pageCart extends page {
     constructor(server, dataAccessService, utilityService, constantsService, textService) {
 
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
-        this.textService = textService;
+        super(dataAccessService, utilityService, constantsService, textService);
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderCart = this.renderCart.bind(this);
