@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node_modules/nodemon/bin/nodemon.js index.js;",
     "winstart": "cls && node \node_modules\nodemon\bin\nodemon.js index.js;",
-    "winbundle": "cls && if exist dist rd /s /q dist && mkdir dist && bundle.bat"
+    "winbundle": "cls && if exist dist rd /s /q dist && mkdir dist && bundle.bat",
+    "detectDuplicateCode":"jsinspect ./ > ./extras/DuplicateCodeReport.txt"
   },
   "repository": {
     "type": "",
@@ -41,6 +42,7 @@
     "validator": "^10.10.0"
   },
   "devDependencies": {
+    "jsinspect": "^0.12.7",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.7"
   }
