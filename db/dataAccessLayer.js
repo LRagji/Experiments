@@ -5,6 +5,8 @@ let util = require('../modules/utilities');
 let fs = require('fs');
 let reqMemC = require('../modules/cache');
 let memC = new reqMemC();
+let settings = require('./appSettings').singleton();
+
 // TODO:Call the appropiate API
 class DAL {
     constructor() {
@@ -34,6 +36,7 @@ class DAL {
         this.filterCategory = this.filterCategory.bind(this);
         this.filterSubCategory = this.filterSubCategory.bind(this);
         this.filterKeywords = this.filterKeywords.bind(this);
+        this.appSettings = settings;
 
         //TODO:Delete this mock data
         if (products.length === 0) {

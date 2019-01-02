@@ -21,6 +21,7 @@ module.exports = {
     orders:"o",
     footerPageLinks:"fpl",
     searchKeyword:"sk",
+    taxSettingsKey:"tsk",
     footerLinksErr:"fle",
     footerLinksView:"flv",
     menu: "menu",
