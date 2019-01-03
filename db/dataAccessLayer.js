@@ -5,11 +5,16 @@ let util = require('../modules/utilities');
 let fs = require('fs');
 let reqMemC = require('../modules/cache');
 let memC = new reqMemC();
-let settings = require('./appSettings').singleton();
+let settings = require('./appSettings');
 
 // TODO:Call the appropiate API
 class DAL {
-    constructor() {
+    constructor(constantService) {
+
+        this.const = constantService;
+
+        this.appSettings = settings.singleton(constantService);
+
         //TODO: This binding list is not upto date
         this.getProductById = this.getProductById.bind(this);
         this.pool = this.pool.bind(this);
@@ -36,7 +41,7 @@ class DAL {
         this.filterCategory = this.filterCategory.bind(this);
         this.filterSubCategory = this.filterSubCategory.bind(this);
         this.filterKeywords = this.filterKeywords.bind(this);
-        this.appSettings = settings;
+
 
         //TODO:Delete this mock data
         if (products.length === 0) {
@@ -91,6 +96,7 @@ class DAL {
                     "userId": 1,
                     "date": 1545477745147,
                     "status": "Awaiting Payment",
+                    "tax": 20,
                     "products": [
                         { "productId": 14, "quantity": 1, "offerprice": 100 / i },
                         { "productId": 13, "quantity": 1, "offerprice": 10 * i },

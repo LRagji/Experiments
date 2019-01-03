@@ -1,8 +1,10 @@
 class appSettings {
 
-    constructor() {
+    constructor(constantService) {
+        this.const = constantService;
 
-        this.settings = { tax: 10 };
+        this.settings = {};
+        this.settings[this.const.taxSettingsKey] = 10;
 
         this.createSetting = this.createSetting.bind(this);
         this.readSetting = this.readSetting.bind(this);
@@ -11,9 +13,9 @@ class appSettings {
         this.readAllSettings = this.readAllSettings.bind(this);
     }
 
-    static singleton() {
+    static singleton(constantService) {
         if (this.instance === undefined) {
-            this.instance = new appSettings();
+            this.instance = new appSettings(constantService);
         }
         return this.instance;
     }

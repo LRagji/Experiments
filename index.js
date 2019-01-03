@@ -1,7 +1,8 @@
 let express = require('express');
 var app = new express();
+let constants = require('./modules/constants');
 let pgdal = require('./db/dataAccessLayer');
-let dal = new pgdal();
+let dal = new pgdal(constants);
 let _cookiesecret = "secret";
 let _timeout = (100 * 10 * 1000); //16.xx minutes;
 let sessionBuilder = require('./modules/sessionBuilder')
@@ -15,7 +16,6 @@ let apiServer = null;
 var minifyHTML = require('express-minify-html');
 let authenticationModule = require('./modules/auth');
 let authenticationService = null;
-let constants = require('./modules/constants');
 let util = require('./modules/utilities');
 
 

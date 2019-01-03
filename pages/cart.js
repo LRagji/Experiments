@@ -30,7 +30,7 @@ class pageCart extends page {
 
             if (req.session.products !== undefined) {
                 let productIds = req.session.products.map(ele => ele.productId);
-                let productInfo = await this.dal.getProducts(productIds)
+                let productInfo = await this.dal.getProducts(productIds);
 
                 productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
                 productIds.forEach(pid => {
@@ -53,6 +53,8 @@ class pageCart extends page {
                     pageData[this.const.shoppingInfo] = req.session.locked;
                 }
 
+                if (req.session.locked !== undefined) pageData[this.const.taxSettingsKey] = req.session.locked.tax;
+                
                 pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
                 res.render('../pages/cart', await this.util.constructPageData(req.user, pageData, this.dal));
             }
@@ -62,7 +64,7 @@ class pageCart extends page {
         }
     }
 
-    processCart(req, res) {
+    async processCart(req, res) {
         try {
             let redirectPage = "/cart";
             if (req.body.state !== undefined) {
@@ -80,7 +82,8 @@ class pageCart extends page {
                         req.session.locked = {
                             "userId": req.user.id,
                             "state": 1,
-                            "products": req.session.products
+                            "products": req.session.products,
+                            "tax": await this.dal.appSettings.readSetting(this.const.taxSettingsKey)
                         }
                         break;
 

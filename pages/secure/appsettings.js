@@ -17,7 +17,7 @@ class pageAppSettings {
     async renderAppSettings(req, res) {
         try {
             let pageData = {};
-            pageData[this.const.taxSettingsKey] = await this.dal.appSettings.readSetting("tax");
+            pageData[this.const.taxSettingsKey] = await this.dal.appSettings.readSetting(this.const.taxSettingsKey);
             pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
             res.render('../pages/secure/appsettings', await this.util.constructPageData(req.user, pageData, this.dal));
         }

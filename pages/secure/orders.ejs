@@ -24,7 +24,8 @@
                         <h4>ORDER #<%=order.id%></h4>
                     </button>
                     <div class="row">
-                        <div class="col-sm-auto px-1"><small class="text-muted">Invoice Total: <strong>&#8377;<%= order.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %></strong></small></div>
+                        <div class="col-sm-auto px-1"><small class="text-muted">Invoice Total: <strong>&#8377;<%=  (order.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0))+((order.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0)) *((order.tax)/100)) %></strong></small></div>
+                        <div class="col-sm-auto px-1"><small class="text-muted">Tax: <strong>&#8377;<%=  ((order.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0)) *((order.tax)/100)) %> @<%=order.tax %>%</strong></small></div>
                         <div class="col-sm-auto px-1"><small class="text-muted">Dated: <strong><%=new Date(order.date).toDateString()%></strong></small></div>
                         <div class="col-sm-auto px-1"><small class="text-muted">Status: <strong><%=order.status%></strong></small></div>
                         <div class="col-auto"></div>
