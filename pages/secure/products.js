@@ -26,7 +26,7 @@ class pageProducts {
 
             let existingProduct = undefined;
             if (req.query.pid != undefined) {
-                existingProduct = await this.dal.getProductById(req.query.pid);
+                existingProduct = await this.dal.products.getProductById(req.query.pid);
                 if (existingProduct === undefined) {
                     req.flash(this.const.newProductError, "No product exisits with Product ID:" + req.query.pid);
                 }
@@ -80,7 +80,7 @@ class pageProducts {
                     res.redirect("/secure/products?tab=new");
                 }
                 else {
-                    await this.dal.deleteProduct(req.body.id);
+                    await this.dal.products.deleteProduct(req.body.id);
                     req.flash(this.const.newProductSuccess, "Product deleted successfully");
                     res.redirect("/secure/products?tab=new");
                 }
@@ -232,7 +232,7 @@ class pageProducts {
             let freshProduct = undefined;
             if (IsNewProduct) {
                 //Create new Product
-                freshProduct = await this.dal.saveProduct(
+                freshProduct = await this.dal.products.saveProduct(
                     req.body.name,
                     req.body.price,
                     req.body.offerPrice,
@@ -257,7 +257,7 @@ class pageProducts {
             }
             else {
                 //Update exisitng Product
-                freshProduct = await this.dal.updateProduct(
+                freshProduct = await this.dal.products.updateProduct(
                     req.body.id,
                     req.body.name,
                     req.body.price,

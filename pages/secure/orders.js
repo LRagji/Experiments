@@ -20,7 +20,7 @@ class pageOrders {
             for (let idx = 0; idx < topOrders.length; idx++) {
                 let order = topOrders[idx];
 
-                let productInfo = await this.dal.getProducts(order.products.map(p => p.productId))
+                let productInfo = await this.dal.products.getProducts(order.products.map(p => p.productId))
 
                 order.products.forEach((prductKVP) => {
                     let pi = productInfo.find((p) => p.id === prductKVP.productId);
