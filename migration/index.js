@@ -13,7 +13,7 @@ String.prototype.interpolate = function (params) {
 async function fetchRecords(query, iterator) {
     try {
         let results = []
-        await sql.connect('mssql://hmlive:Health@123@103.50.162.128/oraneu1q_hmlive')
+        await sql.connect('')
         const result = await sql.query(query);
         for (let ctr = 0; ctr < result.recordset; ctr++) {
             results.push(await iterator(result.recordset[ctr]));
