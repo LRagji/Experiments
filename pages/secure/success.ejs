@@ -81,7 +81,7 @@
                         &#8377;<%=  (pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0))+((pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0)) *((pageData.od.tax)/100)) %>
                      
                     </h3>
-                    <small class="text-muted" >Tax:&#8377;<%= pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %></small>
+                    <small class="text-muted" >Tax:&#8377;<%= pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) *((pageData.od.tax)/100) %></small>
                 </div>
             </div>
             <hr class="bg-primary">

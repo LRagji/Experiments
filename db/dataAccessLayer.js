@@ -1,11 +1,12 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
-let orders = [], products = [], users = [], healthLinks = [], FAQ = [];
+let products = [], users = [], healthLinks = [], FAQ = [];
 let util = require('../modules/utilities');
 let fs = require('fs');
 let reqMemC = require('../modules/cache');
 let memC = new reqMemC();
 let settings = require('./appSettings');
+let orders = require('./orders').singleton();
 
 // TODO:Call the appropiate API
 class DAL {
@@ -14,13 +15,12 @@ class DAL {
         this.const = constantService;
 
         this.appSettings = settings.singleton(constantService);
+        this.orders = orders;
 
         //TODO: This binding list is not upto date
         this.getProductById = this.getProductById.bind(this);
         this.pool = this.pool.bind(this);
         this.getUserByEmail = this.getUserByEmail.bind(this);
-        this.createOrder = this.createOrder.bind(this);
-        this.getOrderById = this.getOrderById.bind(this);
         this.createUser = this.createUser.bind(this);
         this.updateUserPassword = this.updateUserPassword.bind(this);//TODO:This can be update user call instead.
         this.deleteProduct = this.deleteProduct;
@@ -88,58 +88,6 @@ class DAL {
                         }
                     }
                 );
-        }
-
-        if (orders.length === 0) {
-            for (let i = 0; i < 1; i++)
-                orders.push({
-                    "userId": 1,
-                    "date": 1545477745147,
-                    "status": "Awaiting Payment",
-                    "tax": 20,
-                    "products": [
-                        { "productId": 14, "quantity": 1, "offerprice": 100 / i },
-                        { "productId": 13, "quantity": 1, "offerprice": 10 * i },
-                        { "productId": i, "quantity": 1, "offerprice": 10 / i },
-                        { "productId": 12, "quantity": 1, "offerprice": 100 * i }
-                    ],
-                    "shippingDetails": {
-                        "billing": {
-                            "bSalutation": "Mr.",
-                            "bFirstName": "Laukik",
-                            "bLastName": "Ragji",
-                            "bAdd1": "Add1",
-                            "bAdd2": "Add2",
-                            "bAdd3": "Add3",
-                            "bCity": "Mumbai",
-                            "bPincode": "400093",
-                            "bState": "Jammu & Kashmir",
-                            "bMobile": "9819569622"
-                        },
-                        "shipping": {
-                            "sSalutation": "Mr.",
-                            "sFirstName": "Laukik",
-                            "sLastName": "Ragji",
-                            "sAdd1": "Add1",
-                            "sAdd2": "Add2",
-                            "sAdd3": "Add3",
-                            "sCity": "Mumbai",
-                            "sPincode": "400093",
-                            "sState": "Jammu & Kashmir",
-                            "sMobile": "9819569622"
-                        }
-                    },
-                    "payment": {
-                        "type": "cheque",
-                        "no": "335562",
-                        "date": "2018-12-22",
-                        "bank name": "Hello Bank",
-                        "bank branch": "Some Branch",
-                        "deposited bank": "Canara",
-                        "amount": "5000"
-                    },
-                    "id": i
-                });
         }
 
         if (healthLinks.length === 0) {
@@ -407,7 +355,6 @@ class DAL {
         });
     }
 
-
     getProducts(ids) {
         return new Promise((acc, rej) => {
 
@@ -417,28 +364,6 @@ class DAL {
                 if (x !== undefined) result.push(Object.assign({}, x));
             });
             acc(result);
-        });
-    }
-
-    createOrder(order) {
-        //TODO:Compare order amount with calculated product amount from all products.
-        if (order.hasOwnProperty("state")) delete order.state;
-        order.date = Date.now();
-        order.status = "Awaiting Payment";
-        order.id = orders.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1;
-        orders.push(order);
-        return order.id;
-    }
-
-    getOrderById(orderId) {
-        return new Promise((acc, rej) => {
-            try {
-                //TODO:Remove object Assign which is used to keep the array safe and clone the element
-                acc(Object.assign({}, orders.find((e) => e.id === orderId)));
-            }
-            catch (ex) {
-                rej(ex);
-            }
         });
     }
 
@@ -564,22 +489,6 @@ class DAL {
                 else {
                     rej(new Error("No product found for Id:" + productId));
                 }
-            }
-            catch (err) {
-                rej(err);
-            }
-        });
-    }
-
-    getTopOrdersForUser(userId, topSize) {
-        return new Promise((acc, rej) => {
-            try {
-                let userOrders = [];
-                orders.forEach((order) => {
-                    if (order.userId === userId && userOrders.length < topSize)
-                        userOrders.push(Object.assign({}, order));
-                });
-                acc(userOrders);
             }
             catch (err) {
                 rej(err);

@@ -16,7 +16,7 @@ class pageOrders {
 
     async renderOrders(req, res) {
         try {
-            let topOrders = await this.dal.getTopOrdersForUser(req.user.id, 10);
+            let topOrders = await this.dal.orders.getTopOrdersForUser(req.user.id, 10);
             for (let idx = 0; idx < topOrders.length; idx++) {
                 let order = topOrders[idx];
 

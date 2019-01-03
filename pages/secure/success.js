@@ -18,10 +18,13 @@ class pageSuccess {
         try {
             if (req.query.oid !== undefined) {
                 let orderId = parseInt(req.query.oid);
-                let order = await this.dal.getOrderById(orderId);
+                let order = await this.dal.orders.getOrderById(orderId);
 
                 if (order === undefined) throw new Error("Cannot find the order mentioned.")
-                if (order.userId !== req.user.id) res.redirect('/cart');
+                if (order.userId !== req.user.id) {
+                    res.redirect('/cart');
+                    return;
+                }
 
                 let productInfo = await this.dal.getProducts(order.products.map(p => p.productId))
 
