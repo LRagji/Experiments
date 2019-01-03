@@ -24,10 +24,9 @@ async function fetchRecords(query, iterator) {
     }
 };
 
-async function insertIntoPg(queryTemplate, valueObject, next) {
+async function insertIntoPg(queryTemplate, valueObject) {
     try {
-        let result = await pgPool.query(queryTemplate.interpolate(valueObject));
-        return await next(result);
+        return await pgPool.query(queryTemplate.interpolate(valueObject));
     }
     catch (err) {
         console.error(err);
@@ -57,9 +56,15 @@ async function saveImageOnFileSystem(valueObject, filePath) {
 
 async function migrateProducts() {
     let query = "select top 1 * from product";
-    let insertQuery = `Insert into products name,productPrice,offerPrice,image,desc,ingredients,meta,faq,searchKeywords values()`;
-    //await saveImageOnFileSystem({ image_bg: "3993_bg.jpg", image: 'test.jpg' }, 'static/resources/images/products/');
-    
+    let insertQuery = `Insert into products name,productPrice,offerPrice,image,desc,ingredients,meta,faq,searchKeywords values(
+
+    )`;
+
+    await fetchRecords(query, (mssqlRecord) => {
+        await insertIntoPg(insertQuery, mssqlRecord);
+        await saveImageOnFileSystem(mssqlRecord, 'static/resources/images/products/')
+    });
+
 }
 
 migrateProducts();
