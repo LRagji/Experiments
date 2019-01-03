@@ -8,7 +8,7 @@
     "start": "node_modules/nodemon/bin/nodemon.js index.js;",
     "winstart": "cls && node \node_modules\nodemon\bin\nodemon.js index.js;",
     "winbundle": "cls && if exist dist rd /s /q dist && mkdir dist && bundle.bat",
-    "detectDuplicateCode":"jsinspect ./ > ./extras/DuplicateCodeReport.txt"
+    "detectDuplicateCode": "jsinspect ./ > ./extras/DuplicateCodeReport.txt"
   },
   "repository": {
     "type": "",
@@ -44,6 +44,10 @@
   "devDependencies": {
     "jsinspect": "^0.12.7",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.7"
+    "mssql": "^4.3.0",
+    "nodemon": "^1.18.7",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "request-promise-native": "^1.0.5"
   }
 }
