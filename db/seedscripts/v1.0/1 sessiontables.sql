@@ -6,13 +6,6 @@ CREATE TABLE "session" (
 WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
-create table manufacturer (
-"id" serial primary key,
-"name" varchar(250) not null,
-"image" text[],
-"website" varchar(250)
-);
-
 create table products (
 "id" serial Primary key,
 "name" varchar(250) not null,
@@ -25,6 +18,8 @@ create table products (
 "description" text,
 "ingredients" text
 );
+
+SELECT * INTO products_archive FROM products;
 
 create table users(
 	"id" serial Primary Key,

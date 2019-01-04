@@ -1,10 +1,8 @@
-let products = [];
 let fs = require('fs');
 
 class Products {
 
     constructor(pgPool) {
-
         this.pgPool = pgPool;
         this.deleteProduct = this.deleteProduct;
         this.readProductById = this.readProductById.bind(this);
@@ -14,32 +12,6 @@ class Products {
         this.readAllProducts = this.readAllProducts.bind(this);
         this._fromProperties = this._fromProperties.bind(this);
         this._parseProductId = this._parseProductId.bind(this);
-
-
-        if (products.length === 0) {
-            for (let i = 0; i < 1; i++) {
-                this.createProduct(
-                    "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
-                    (parseFloat(i) * 100.00 + 1000.00),
-                    (parseFloat(i) * 100.00),
-                    "default.jpg",
-                    '<ul><li>Protection from heart attack and stroke.</li><li>Lowers triglycerides, LDL and increases HDL.</li><li>Helps maintain healthy joints.</li><li>Key component of the brain and eye.</li><li>Important in the growth and development of the foetal brain during pregnancy.</li><li>Improves skin and eye health.</li><li>Helps in psoriasis and eczema.</li><li>Provide lubrication to the skin, arteries, veins and intestinal tract.</li><li>Helps in reducing depression.</li><li>Helps in Attention Deficit/Hyperactivity Disorder (ADHD)</li><li>Helps maintain normal blood sugar levels.</li><li>Lowers blood pressure.</li><li>Helps in Reducing breast, colon and prostate cancer.</li></ul>',
-                    '<table border="1" cellpadding="0" cellspacing="0" style="width:84.36%;" width="84%"><tbody><tr><td colspan="3" style="width:100.0%;"><p><strong>Supplement Facts:</strong></p></td></tr><tr><td colspan="3" style="width:100.0%;"><p><strong>Serving Size:</strong>&nbsp;1 Capsule</p></td></tr><tr><td>&nbsp;</td><td style="width:21.72%;"><p align="center"><strong>Amount Per Serving</strong></p></td><td style="width:20.22%;"><p align="center"><strong>% DV</strong></p></td></tr><tr><td><p>MegaNatural-BP<br>Grape Seed Extract<br>Vitus Vinifera Seed Standardized to 90% Polyphenols</p></td><td style="width:21.72%;"><p align="center">300 mg</p></td><td style="width:20.22%;"><p align="center">*</p></td></tr><tr><td colspan="3" style="width:100.0%;"><p>*Daily Value (DV) not established.</p></td></tr></tbody></table>',
-                    "C" + i.toString(),
-                    "180 Softgels",
-                    "1 Softgels",
-                    "This bottle will last 180 days.",
-                    i + 1,
-                    "Category" + i.toString(),
-                    "Sub Category" + i.toString(),
-                    "NOW FOODS",
-                    "https://www.health-mall.in",
-                    [],
-                    "search Laukik Ragji Hello",
-                    undefined
-                );
-            }
-        }
     }
 
     static singleton(pgPool) {
@@ -81,7 +53,6 @@ class Products {
         if (response.rows.length !== 1) throw new Error("Failed to persist product");
         newProduct.id = response.rows[0].id;
 
-        products.push(newProduct);
         return newProduct;
     }
 
@@ -120,29 +91,28 @@ class Products {
         if (response.rows.length !== 1) throw new Error("Product updation failed, or product doesnt exits with id:" + updatedProduct.id);
         if (updatedProduct.id !== response.rows[0].id) throw new Error("Incorrect product updated expected id:" + updatedProduct.id + " but updated id:" + response.rows[0].id);
 
-        let idx = products.findIndex((v) => v.id === updatedProduct.id);
-        products[idx] = updatedProduct;
         return updatedProduct;
 
     }
 
-    deleteProduct(productId) {
-        return new Promise((acc, rej) => {
-            try {
-                productId = parseInt(productId);
-                let idx = products.findIndex((v) => v.id === productId);
-                if (idx > -1) {
-                    products.splice(idx, 1);
-                    acc();
-                }
-                else {
-                    rej(new Error("No product found for Id:" + productId));
-                }
-            }
-            catch (err) {
-                rej(err);
-            }
-        });
+    async deleteProduct(productId) {
+        productId = this._parseProductId(productId);
+        let insertQuery = "INSERT INTO products_archive SELECT * FROM products where id=$1";
+        let deleteQuery = "Delete FROM products where id=$1";
+        let client = await this.pgPool.connect()
+        try {
+            await client.query('BEGIN')
+            let results = await client.query(insertQuery, [productId]);
+            if (results.rowCount !== 1) throw new Error("Failed to move product to archive productid:" + productId);
+            results = await client.query(deleteQuery, [productId]);
+            if (results.rowCount !== 1) throw new Error("Failed to delete product from active records productid:" + productId);
+            await client.query('COMMIT')
+        } catch (e) {
+            await client.query('ROLLBACK')
+            throw e
+        } finally {
+            client.release()
+        }
     }
 
     async readProductById(productId) {
