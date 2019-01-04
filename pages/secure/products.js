@@ -232,7 +232,7 @@ class pageProducts {
             let freshProduct = undefined;
             if (IsNewProduct) {
                 //Create new Product
-                freshProduct = await this.dal.products.saveProduct(
+                freshProduct = await this.dal.products.createProduct(
                     req.body.name,
                     req.body.price,
                     req.body.offerPrice,

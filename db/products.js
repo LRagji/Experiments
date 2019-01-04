@@ -12,7 +12,7 @@ class Products {
         this.filterSubCategory = this.filterSubCategory.bind(this);
         this.filterKeywords = this.filterKeywords.bind(this);
         this.getProducts = this.getProducts.bind(this);
-        this.saveProduct = this.saveProduct.bind(this);
+        this.createProduct = this.createProduct.bind(this);
         this.updateProduct = this.updateProduct.bind(this);
         this.getAllProducts = this.getAllProducts.bind(this);
         this._fromProperties = this._fromProperties.bind(this);
@@ -20,7 +20,7 @@ class Products {
 
         if (products.length === 0) {
             for (let i = 0; i < 1; i++) {
-                this.saveProduct(
+                this.createProduct(
                     "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
                     (parseFloat(i) * 100.00 + 1000.00),
                     (parseFloat(i) * 100.00),
@@ -51,7 +51,7 @@ class Products {
         return this.instance;
     }
 
-    async saveProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer) {
+    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer) {
 
         let newProduct = this._fromProperties(-1,
             name,
