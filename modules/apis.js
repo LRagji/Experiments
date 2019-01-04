@@ -25,7 +25,7 @@ class apiServer {
             let category = req.query.c !== undefined ? req.query.c.trim() : "";
             let subcategory = req.query.sc !== undefined ? req.query.sc.trim() : "";
 
-            let products = await this.dal.products.getAllProducts(page, size, keyword, category, subcategory);
+            let products = await this.dal.products.readAllProducts(page, size, keyword, category, subcategory);
             if (products.length === size)
                 res.status(206).send(products);
             else

@@ -8,13 +8,10 @@ class Products {
         this.pgPool = pgPool;
         this.deleteProduct = this.deleteProduct;
         this.readProductById = this.readProductById.bind(this);
-        this.filterCategory = this.filterCategory.bind(this);
-        this.filterSubCategory = this.filterSubCategory.bind(this);
-        this.filterKeywords = this.filterKeywords.bind(this);
         this.readProducts = this.readProducts.bind(this);
         this.createProduct = this.createProduct.bind(this);
         this.updateProduct = this.updateProduct.bind(this);
-        this.getAllProducts = this.getAllProducts.bind(this);
+        this.readAllProducts = this.readAllProducts.bind(this);
         this._fromProperties = this._fromProperties.bind(this);
         this._parseProductId = this._parseProductId.bind(this);
 
@@ -181,20 +178,32 @@ class Products {
         return fetchedProduct;
     }
 
-    async getAllProducts(pageNo, size, keyword, category, subcategory) {
+    async readAllProducts(pageNo, size, keyword, category, subcategory) {
+
+        pageNo = parseInt(pageNo);
+        size = parseInt(size);
+        if (isNaN(pageNo)) throw new Error("Invalid parameter pageNo");
+        if (isNaN(size)) throw new Error("Invalid parameter size");
 
         let startIndex = (pageNo * size);
+        let argumentArray = [size, startIndex];
 
-        let paginateableProducts = Array.from(products);
-        if (category !== undefined && category !== "")
-            paginateableProducts = await this.filterCategory(paginateableProducts, category);
-        if (subcategory !== undefined && subcategory !== "")
-            paginateableProducts = await this.filterSubCategory(paginateableProducts, subcategory);
-        if (keyword !== undefined && keyword !== "")
-            paginateableProducts = await this.filterKeywords(paginateableProducts, keyword);
+        let whereClause = "";
+        if (category !== undefined && category !== "") {
+            whereClause = " lower(meta->>'category')=$" + (argumentArray.length + 1);
+            argumentArray.push(category.toLowerCase());
+        }
+        if (subcategory !== undefined && subcategory !== "") {
+            whereClause += (whereClause === "" ? "" : " and ") + " lower(meta->>'subCategory')=$" + (argumentArray.length + 1);
+            argumentArray.push(subcategory.toLowerCase());
+        }
+        if (keyword !== undefined && keyword !== "") {
+            whereClause += (whereClause === "" ? "" : " and ") + "lower(keywords) like $" + (argumentArray.length + 1);
+            argumentArray.push("%" + keyword.toLowerCase() + "%");
+        }
 
-        let selectQuery = `select * from products order by id limit $1 offset $2`;
-        let response = await this.pgPool.query(selectQuery, [size, startIndex]);
+        let selectQuery = 'select * from products ' + (whereClause !== "" ? ('where ' + whereClause) : '') + ' order by id limit $1 offset $2';
+        let response = await this.pgPool.query(selectQuery, argumentArray);
 
         let fetchedProducts = [];
         response.rows.forEach(row => {
@@ -220,39 +229,6 @@ class Products {
         });
 
         return fetchedProducts;
-    }
-
-    filterCategory(products, cateogry) {
-        return new Promise((acc, rej) => {
-            try {
-                acc(products);
-            }
-            catch (err) {
-                rej(err);
-            }
-        });
-    }
-
-    filterSubCategory(products, subCateogry) {
-        return new Promise((acc, rej) => {
-            try {
-                acc(products);
-            }
-            catch (err) {
-                rej(err);
-            }
-        });
-    }
-
-    filterKeywords(products, keywords) {
-        return new Promise((acc, rej) => {
-            try {
-                acc(products);
-            }
-            catch (err) {
-                rej(err);
-            }
-        });
     }
 
     async readProducts(productIds) {
