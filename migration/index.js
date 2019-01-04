@@ -1,8 +1,8 @@
 const sql = require('mssql')
 var rp = require('request-promise-native');
-const fs = require('fs');
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
+const products = require('../db/products').singleton(pgPool);
 
 String.prototype.interpolate = function (params) {
     const names = Object.keys(params);
@@ -13,7 +13,7 @@ String.prototype.interpolate = function (params) {
 async function fetchRecords(query, iterator) {
     try {
         let results = []
-        await sql.connect('')
+        await sql.connect('mssql://hmlive:Health@123@103.50.162.128/oraneu1q_hmlive')
         const result = await sql.query(query);
         for (let ctr = 0; ctr < result.recordset; ctr++) {
             results.push(await iterator(result.recordset[ctr]));
@@ -24,16 +24,7 @@ async function fetchRecords(query, iterator) {
     }
 };
 
-async function insertIntoPg(queryTemplate, valueObject) {
-    try {
-        return await pgPool.query(queryTemplate.interpolate(valueObject));
-    }
-    catch (err) {
-        console.error(err);
-    }
-}
-
-async function saveImageOnFileSystem(valueObject, filePath) {
+async function featchImageFromSite(imageName) {
     try {
         if (valueObject.image_bg.endsWith('.jpg')) {
             filePath += valueObject.image;
@@ -41,12 +32,11 @@ async function saveImageOnFileSystem(valueObject, filePath) {
                 uri: 'https://www.health-mall.in/img_products/' + valueObject.image_bg,
                 encoding: null
             };
-            let image = await rp(options);
-            fs.writeFileSync(filePath, image);
-            return;
+            return await rp(options);
         }
         else {
             //transform to jpg and save
+            console.log("Skipped " + imageName + " is not jpeg.")
         }
     }
     catch (err) {
@@ -56,13 +46,14 @@ async function saveImageOnFileSystem(valueObject, filePath) {
 
 async function migrateProducts() {
     let query = "select top 1 * from product";
-    let insertQuery = `Insert into products name,productPrice,offerPrice,image,desc,ingredients,meta,faq,searchKeywords values(
-
-    )`;
-
     await fetchRecords(query, (mssqlRecord) => {
-        await insertIntoPg(insertQuery, mssqlRecord);
-        await saveImageOnFileSystem(mssqlRecord, 'static/resources/images/products/')
+        let imageBuff = await featchImageFromSite()
+        if (imageBuff !== undefined) {
+            products.createProduct(
+                mssqlRecord.product_name,
+                
+                imageBuff);
+        }
     });
 
 }
