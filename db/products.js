@@ -43,7 +43,7 @@ class Products {
             }
         }
     }
-    
+
     static singleton(pgPool) {
         if (this.instance === undefined) {
             this.instance = new Products(pgPool);
@@ -87,55 +87,45 @@ class Products {
         return newProduct;
     }
 
-    updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq, searchKeywords) {
-        return new Promise((acc, rej) => {
-            try {
+    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer) {
 
-                if (faq === undefined) {
-                    faq = [];
-                }
+        let updatedProduct = this._fromProperties(
+            id,
+            name,
+            productPrice,
+            offerPrice,
+            image,
+            desc,
+            ingredients,
+            code,
+            package_detail,
+            serving_size,
+            serving_per_container,
+            shippingdetail,
+            category,
+            subCategory,
+            manufactureName,
+            manufactureWebsite,
+            faq,
+            searchKeywords);
 
-                id = parseInt(id);
-                let idx = products.findIndex((v) => v.id === id);
-                if (idx < 0) rej("Product doesnot exits with Id:" + id);
+        if (imageBuffer !== undefined) {
+            fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
+        }
 
-                if (imageBuffer !== undefined) {
-                    fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
-                }
+        let updateStatement = `UPDATE products
+                 	SET name=$1, offerprice=$2, price=$3, "imageName"=$4, faq=$5, keywords=$6, meta=$7, description=$8, ingredients=$9
+                    WHERE id=$10 returning id`;
 
-                if (searchKeywords === undefined) {
-                    searchKeywords = "";
-                }
+        let response = await this.pgPool.query(updateStatement, [updatedProduct.name, updatedProduct.offerprice, updatedProduct.price, updatedProduct.image, updatedProduct.faq, updatedProduct.keywords, updatedProduct.meta, updatedProduct.description, updatedProduct.ingredients, updatedProduct.id]);
 
-                let product = {
-                    id: id,
-                    "name": name,
-                    "offerprice": parseFloat(offerPrice),
-                    "price": parseFloat(productPrice),
-                    "image": image,
-                    "faq": faq, //Has to be int array always
-                    "keywords": searchKeywords,
-                    "meta": {
-                        "code": meta.code,
-                        "package_detail": meta.package_detail,
-                        "serving_size": meta.serving_size,
-                        "serving_per_container": meta.serving_per_container,
-                        "shippingdetail": meta.shippingdetail,
-                        "category": meta.category,
-                        "subCategory": meta.subCategory,
-                        "mname": meta.manufactureName,
-                        "mwebsite": meta.manufactureWebsite
-                    },
-                    "description": desc,
-                    "ingredients": ingredients
-                };
-                products[idx] = Object.assign({}, product);
-                acc(product);
-            }
-            catch (err) {
-                rej(err);
-            }
-        });
+        if (response.rows.length !== 1) throw new Error("Product updation failed, or product doesnt exits with id:" + updatedProduct.id);
+        if (updatedProduct.id !== response.rows[0].id) throw new Error("Incorrect product updated expected id:" + updatedProduct.id + " but updated id:" + response.rows[0].id);
+
+        let idx = products.findIndex((v) => v.id === updatedProduct.id);
+        products[idx] = updatedProduct;
+        return updatedProduct;
+
     }
 
     deleteProduct(productId) {
@@ -250,6 +240,9 @@ class Products {
     }
 
     _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords) {
+
+        id = parseInt(id);
+
         if (image === undefined) {
             image = "default.jpg";
         }
