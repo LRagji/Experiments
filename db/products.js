@@ -68,7 +68,7 @@ class Products {
 
                 let insertStatement = `INSERT INTO products (
                     name,offerPrice,price,imageName,faq,keywords,meta,description,ingredients
-                ) VALUES (
+                    ) VALUES ($1
                     
                 ) RETURNING ID`;
 
