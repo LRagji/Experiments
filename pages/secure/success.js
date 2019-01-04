@@ -26,7 +26,7 @@ class pageSuccess {
                     return;
                 }
 
-                let productInfo = await this.dal.products.getProducts(order.products.map(p => p.productId))
+                let productInfo = await this.dal.products.readProducts(order.products.map(p => p.productId))
 
                 order.products.forEach((prductKVP) => {
                     let pi = productInfo.find((p) => p.id === prductKVP.productId);

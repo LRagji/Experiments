@@ -51,7 +51,7 @@ module.exports = {
 
         if (productQuantity > constants.maxQuantity) throw new Error("Quantity cannot exceed " + constants.maxQuantity + " per product.");
 
-        let requestedProduct = await dataAccessLayer.products.getProductById(productId);
+        let requestedProduct = await dataAccessLayer.products.readProductById(productId);
         if (requestedProduct === undefined) throw new Error("Product doesnot exists :" + productId);
 
         let existingProduct = req.session.products.find((element) => { return element.productId === productId });

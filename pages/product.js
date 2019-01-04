@@ -19,7 +19,7 @@ class pageProduct {
 
     async renderProductPage(req, res) {
         try {
-            let product = await this.dal.products.getProductById(req.query.pid)
+            let product = await this.dal.products.readProductById(req.query.pid)
 
             if (product === undefined) {
                 throw new Error("No Product found in database for product id:" + req.query.pid);

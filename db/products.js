@@ -7,15 +7,16 @@ class Products {
 
         this.pgPool = pgPool;
         this.deleteProduct = this.deleteProduct;
-        this.getProductById = this.getProductById.bind(this);
+        this.readProductById = this.readProductById.bind(this);
         this.filterCategory = this.filterCategory.bind(this);
         this.filterSubCategory = this.filterSubCategory.bind(this);
         this.filterKeywords = this.filterKeywords.bind(this);
-        this.getProducts = this.getProducts.bind(this);
+        this.readProducts = this.readProducts.bind(this);
         this.createProduct = this.createProduct.bind(this);
         this.updateProduct = this.updateProduct.bind(this);
         this.getAllProducts = this.getAllProducts.bind(this);
         this._fromProperties = this._fromProperties.bind(this);
+        this._parseProductId = this._parseProductId.bind(this);
 
 
         if (products.length === 0) {
@@ -147,17 +148,37 @@ class Products {
         });
     }
 
-    getProductById(productId) {
-        // TODO:Call the appropiate API
-        return new Promise((acc, rej) => {
-            let validatedProductid = parseInt(productId);
-            if (isNaN(validatedProductid)) rej(Error("Invalid Product Id:" + productId));
-            let product = products.find((p) => p.id === validatedProductid);
-            if (product == undefined)
-                acc(undefined);
-            else
-                acc(Object.assign({}, product));
-        });
+    async readProductById(productId) {
+        productId = this._parseProductId(productId);
+
+        let selectQuery = `select * from products where id=$1`;
+        let response = await this.pgPool.query(selectQuery, [productId]);
+
+        let fetchedProduct = undefined;
+        if (response.rows.length === 1) {
+            let row = response.rows[0];
+            fetchedProduct = this._fromProperties(
+                row.id,
+                row.name,
+                row.price,
+                row.offerprice,
+                row.imageName,
+                row.description,
+                row.ingredients,
+                row.meta.code,
+                row.meta.package_detail,
+                row.meta.serving_size,
+                row.meta.serving_per_container,
+                row.meta.shippingdetail,
+                row.meta.category,
+                row.meta.subCategory,
+                row.meta.mname,
+                row.meta.mwebsite,
+                row.faq,
+                row.keywords);
+        }
+
+        return fetchedProduct;
     }
 
     async getAllProducts(pageNo, size, keyword, category, subcategory) {
@@ -227,21 +248,48 @@ class Products {
         });
     }
 
-    getProducts(ids) {
-        return new Promise((acc, rej) => {
+    async readProducts(productIds) {
 
-            let result = [];
-            ids.forEach(id => {
-                let x = products.find((p) => p.id === id);
-                if (x !== undefined) result.push(Object.assign({}, x));
-            });
-            acc(result);
+        productIds = productIds.map((id) => this._parseProductId(id));
+
+        let selectQuery = `select * from products where id = ANY($1)`;
+        let response = await this.pgPool.query(selectQuery, [productIds]);
+
+        let fetchedProducts = [];
+        response.rows.forEach(row => {
+            fetchedProducts.push(this._fromProperties(
+                row.id,
+                row.name,
+                row.price,
+                row.offerprice,
+                row.imageName,
+                row.description,
+                row.ingredients,
+                row.meta.code,
+                row.meta.package_detail,
+                row.meta.serving_size,
+                row.meta.serving_per_container,
+                row.meta.shippingdetail,
+                row.meta.category,
+                row.meta.subCategory,
+                row.meta.mname,
+                row.meta.mwebsite,
+                row.faq,
+                row.keywords));
         });
+
+        return fetchedProducts;
+    }
+
+    _parseProductId(productId) {
+        productId = parseInt(productId);
+        if (isNaN(productId)) throw new Error("Invalid Product Id");
+        return productId;
     }
 
     _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords) {
 
-        id = parseInt(id);
+        id = this._parseProductId(id);
 
         if (image === undefined) {
             image = "default.jpg";

@@ -26,7 +26,7 @@ class pageProducts {
 
             let existingProduct = undefined;
             if (req.query.pid != undefined) {
-                existingProduct = await this.dal.products.getProductById(req.query.pid);
+                existingProduct = await this.dal.products.readProductById(req.query.pid);
                 if (existingProduct === undefined) {
                     req.flash(this.const.newProductError, "No product exisits with Product ID:" + req.query.pid);
                 }

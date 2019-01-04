@@ -30,7 +30,7 @@ class pageCart extends page {
 
             if (req.session.products !== undefined) {
                 let productIds = req.session.products.map(ele => ele.productId);
-                let productInfo = await this.dal.products.getProducts(productIds);
+                let productInfo = await this.dal.products.readProducts(productIds);
 
                 productInfo.map(p => p.quantity = req.session.products.find(ele => ele.productId === p.id).quantity);
                 productIds.forEach(pid => {
