@@ -2,8 +2,9 @@ let products = [];
 
 class Products {
 
-    constructor() {
+    constructor(pgPool) {
 
+        this.pgPool = pgPool;
         this.deleteProduct = this.deleteProduct;
         this.getProductById = this.getProductById.bind(this);
         this.filterCategory = this.filterCategory.bind(this);
@@ -17,7 +18,7 @@ class Products {
 
 
         if (products.length === 0) {
-            for (let i = 0; i < 41; i++) {
+            for (let i = 0; i < 1; i++) {
                 this.saveProduct(
                     "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
                     (parseFloat(i) * 100.00 + 1000.00),
@@ -44,63 +45,54 @@ class Products {
         }
     }
 
-    static singleton() {
+    static singleton(pgPool) {
         if (this.instance === undefined) {
-            this.instance = new Products();
+            this.instance = new Products(pgPool);
         }
         return this.instance;
     }
 
-    saveProduct(name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq, searchKeywords) {
-        return new Promise((acc, rej) => {
-            try {
-                if (imageBuffer !== undefined) {
-                    fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
-                }
+    async saveProduct(name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq, searchKeywords) {
 
-                if (faq === undefined) {
-                    faq = [];
-                }
+        if (imageBuffer !== undefined) {
+            fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
+        }
 
-                if (searchKeywords === undefined) {
-                    searchKeywords = "";
-                }
+        if (faq === undefined) {
+            faq = [];
+        }
 
-                let insertStatement = `INSERT INTO products (
-                    name,offerPrice,price,imageName,faq,keywords,meta,description,ingredients
-                    ) VALUES ($1
-                    
-                ) RETURNING ID`;
+        if (searchKeywords === undefined) {
+            searchKeywords = "";
+        }
 
-                let newProduct = {
-                    id: products.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
-                    "name": name,
-                    "offerprice": parseFloat(offerPrice),
-                    "price": parseFloat(productPrice),
-                    "image": image,
-                    "faq": faq, //Has to be int array always
-                    "keywords": searchKeywords,
-                    "meta": {
-                        "code": meta.code,
-                        "package_detail": meta.package_detail,
-                        "serving_size": meta.serving_size,
-                        "serving_per_container": meta.serving_per_container,
-                        "shippingdetail": meta.shippingdetail,
-                        "category": meta.category,
-                        "subCategory": meta.subCategory,
-                        "mname": meta.manufactureName,
-                        "mwebsite": meta.manufactureWebsite
-                    },
-                    "description": desc,
-                    "ingredients": ingredients
-                };
-                products.push(newProduct);
-                acc(newProduct);
-            }
-            catch (err) {
-                rej(err);
-            }
-        })
+        let insertStatement = `INSERT INTO products (name,price,offerPrice,"imageName",faq,keywords,meta,description,ingredients) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`;
+
+        let response = await this.pgPool.query(insertStatement, [name, productPrice, offerPrice, image, faq, searchKeywords, meta, desc, ingredients]);
+
+        if (response.rows.length !== 1) throw new Error("Failed to persist product");
+
+        let newProduct = this._fromProperties(response.rows[0].id,
+            response.rows[0].name,
+            response.rows[0].price,
+            response.rows[0].offerprice,
+            response.rows[0].imageName,
+            response.rows[0].description,
+            response.rows[0].ingredients,
+            response.rows[0].meta.code,
+            response.rows[0].meta.package_detail,
+            response.rows[0].meta.serving_size,
+            response.rows[0].meta.serving_per_container,
+            response.rows[0].meta.shippingdetail,
+            response.rows[0].meta.category,
+            response.rows[0].meta.subCategory,
+            response.rows[0].meta.manufactureName,
+            response.rows[0].meta.manufactureWebsite,
+            response.rows[0].faq,
+            response.rows[0].keywords);
+
+        products.push(newProduct);
+        return newProduct;
     }
 
     updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq, searchKeywords) {

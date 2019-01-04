@@ -15,16 +15,15 @@ create table manufacturer (
 
 create table products (
 "id" serial Primary key,
-"mid" integer REFERENCES manufacturer(id) not null,
 "name" varchar(250) not null,
+"offerprice" float not null,
 "price" float not null,
-"discount" float  not null,
-"image" text[] not null,
-"description" varchar(2000),
-"ingredients" varchar(2000),
-"keywords" text[], 
+"imageName" varchar(50) not null,
+"faq" integer[] not null,
+"keywords"varchar(250),
 "meta" jsonb,
-"sys_meta" jsonb
+"description" text,
+"ingredients" text
 );
 
 create table users(

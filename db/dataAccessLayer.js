@@ -7,7 +7,7 @@ let reqMemC = require('../modules/cache');
 let memC = new reqMemC();
 let settings = require('./appSettings');
 let orders = require('./orders').singleton();
-let products = require('./products').singleton();
+let products = require('./products').singleton(pgPool);
 
 // TODO:Call the appropiate API
 class DAL {
