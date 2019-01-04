@@ -184,8 +184,6 @@ class Products {
     async getAllProducts(pageNo, size, keyword, category, subcategory) {
 
         let startIndex = (pageNo * size);
-        let endIndex = (startIndex + size);
-        let fetchStart = 0, fetchLength = 0;
 
         let paginateableProducts = Array.from(products);
         if (category !== undefined && category !== "")
@@ -195,24 +193,33 @@ class Products {
         if (keyword !== undefined && keyword !== "")
             paginateableProducts = await this.filterKeywords(paginateableProducts, keyword);
 
+        let selectQuery = `select * from products order by id limit $1 offset $2`;
+        let response = await this.pgPool.query(selectQuery, [size, startIndex]);
 
-        if (paginateableProducts.length < startIndex && paginateableProducts.length < endIndex) {
-            fetchStart = 0;
-            fetchLength = 0;
-        }
+        let fetchedProducts = [];
+        response.rows.forEach(row => {
+            fetchedProducts.push(this._fromProperties(
+                row.id,
+                row.name,
+                row.price,
+                row.offerprice,
+                row.imageName,
+                row.description,
+                row.ingredients,
+                row.meta.code,
+                row.meta.package_detail,
+                row.meta.serving_size,
+                row.meta.serving_per_container,
+                row.meta.shippingdetail,
+                row.meta.category,
+                row.meta.subCategory,
+                row.meta.mname,
+                row.meta.mwebsite,
+                row.faq,
+                row.keywords));
+        });
 
-        else if (paginateableProducts.length > startIndex && paginateableProducts.length < endIndex) {
-            fetchStart = startIndex;
-            fetchLength = (products.length - startIndex);
-        }
-
-        else if (paginateableProducts.length > startIndex && paginateableProducts.length > endIndex) {
-            fetchStart = startIndex;
-            fetchLength = size;
-        }
-
-        return paginateableProducts.splice(fetchStart, fetchLength);
-
+        return fetchedProducts;
     }
 
     filterCategory(products, cateogry) {
