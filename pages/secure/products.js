@@ -58,7 +58,7 @@ class pageProducts {
                 "description": req.body.desc,
                 "ingredients": req.body.ingredients,
                 "faq": req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
-                "keywords":req.body.keywords,
+                "keywords": req.body.keywords,
                 meta: {
                     "code": req.body.code,
                     "package_detail": req.body.packageDetail,
@@ -239,20 +239,18 @@ class pageProducts {
                     req.body.imageName,
                     req.body.desc,
                     req.body.ingredients,
-                    {
-                        "code": req.body.code,
-                        "package_detail": req.body.packageDetail,
-                        "serving_size": req.body.servingSize,
-                        "serving_per_container": req.body.servingPerContainer,
-                        "shippingdetail": req.body.shippingDetails,
-                        "category": req.body.cat,
-                        "subCategory": req.body.subCat,
-                        "manufactureName": req.body.mName,
-                        "manufactureWebsite": req.body.mWebsite
-                    },
-                    req.file !== undefined ? req.file.buffer : undefined,
+                    req.body.code,
+                    req.body.packageDetail,
+                    req.body.servingSize,
+                    req.body.servingPerContainer,
+                    req.body.shippingDetails,
+                    req.body.cat,
+                    req.body.subCat,
+                    req.body.mName,
+                    req.body.mWebsite,
                     req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
-                    req.body.keywords
+                    req.body.keywords,
+                    req.file !== undefined ? req.file.buffer : undefined
                 );
             }
             else {

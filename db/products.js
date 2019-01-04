@@ -1,4 +1,5 @@
 let products = [];
+let fs = require('fs');
 
 class Products {
 
@@ -26,25 +27,23 @@ class Products {
                     "default.jpg",
                     '<ul><li>Protection from heart attack and stroke.</li><li>Lowers triglycerides, LDL and increases HDL.</li><li>Helps maintain healthy joints.</li><li>Key component of the brain and eye.</li><li>Important in the growth and development of the foetal brain during pregnancy.</li><li>Improves skin and eye health.</li><li>Helps in psoriasis and eczema.</li><li>Provide lubrication to the skin, arteries, veins and intestinal tract.</li><li>Helps in reducing depression.</li><li>Helps in Attention Deficit/Hyperactivity Disorder (ADHD)</li><li>Helps maintain normal blood sugar levels.</li><li>Lowers blood pressure.</li><li>Helps in Reducing breast, colon and prostate cancer.</li></ul>',
                     '<table border="1" cellpadding="0" cellspacing="0" style="width:84.36%;" width="84%"><tbody><tr><td colspan="3" style="width:100.0%;"><p><strong>Supplement Facts:</strong></p></td></tr><tr><td colspan="3" style="width:100.0%;"><p><strong>Serving Size:</strong>&nbsp;1 Capsule</p></td></tr><tr><td>&nbsp;</td><td style="width:21.72%;"><p align="center"><strong>Amount Per Serving</strong></p></td><td style="width:20.22%;"><p align="center"><strong>% DV</strong></p></td></tr><tr><td><p>MegaNatural-BP<br>Grape Seed Extract<br>Vitus Vinifera Seed Standardized to 90% Polyphenols</p></td><td style="width:21.72%;"><p align="center">300 mg</p></td><td style="width:20.22%;"><p align="center">*</p></td></tr><tr><td colspan="3" style="width:100.0%;"><p>*Daily Value (DV) not established.</p></td></tr></tbody></table>',
-                    {
-                        "code": "C" + i.toString(),
-                        "package_detail": "180 Softgels",
-                        "serving_size": "1 Softgels",
-                        "serving_per_container": "This bottle will last 180 days.",
-                        "shippingdetail": i + 1,
-                        "category": "Category" + i.toString(),
-                        "subCategory": "Sub Category" + i.toString(),
-                        "manufactureName": "NOW FOODS",
-                        "manufactureWebsite": "https://www.health-mall.in"
-                    },
-                    undefined,
+                    "C" + i.toString(),
+                    "180 Softgels",
+                    "1 Softgels",
+                    "This bottle will last 180 days.",
+                    i + 1,
+                    "Category" + i.toString(),
+                    "Sub Category" + i.toString(),
+                    "NOW FOODS",
+                    "https://www.health-mall.in",
                     [],
-                    "search Laukik Ragji Hello"
+                    "search Laukik Ragji Hello",
+                    undefined
                 );
             }
         }
     }
-
+    
     static singleton(pgPool) {
         if (this.instance === undefined) {
             this.instance = new Products(pgPool);
@@ -52,44 +51,37 @@ class Products {
         return this.instance;
     }
 
-    async saveProduct(name, productPrice, offerPrice, image, desc, ingredients, meta, imageBuffer, faq, searchKeywords) {
+    async saveProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer) {
+
+        let newProduct = this._fromProperties(-1,
+            name,
+            productPrice,
+            offerPrice,
+            image,
+            desc,
+            ingredients,
+            code,
+            package_detail,
+            serving_size,
+            serving_per_container,
+            shippingdetail,
+            category,
+            subCategory,
+            manufactureName,
+            manufactureWebsite,
+            faq,
+            searchKeywords);
 
         if (imageBuffer !== undefined) {
             fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
         }
 
-        if (faq === undefined) {
-            faq = [];
-        }
+        let insertStatement = `INSERT INTO products (name,price,offerPrice,"imageName",faq,keywords,meta,description,ingredients) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING ID`;
 
-        if (searchKeywords === undefined) {
-            searchKeywords = "";
-        }
-
-        let insertStatement = `INSERT INTO products (name,price,offerPrice,"imageName",faq,keywords,meta,description,ingredients) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *`;
-
-        let response = await this.pgPool.query(insertStatement, [name, productPrice, offerPrice, image, faq, searchKeywords, meta, desc, ingredients]);
+        let response = await this.pgPool.query(insertStatement, [newProduct.name, newProduct.price, newProduct.offerprice, newProduct.image, newProduct.faq, newProduct.keywords, newProduct.meta, newProduct.description, newProduct.ingredients]);
 
         if (response.rows.length !== 1) throw new Error("Failed to persist product");
-
-        let newProduct = this._fromProperties(response.rows[0].id,
-            response.rows[0].name,
-            response.rows[0].price,
-            response.rows[0].offerprice,
-            response.rows[0].imageName,
-            response.rows[0].description,
-            response.rows[0].ingredients,
-            response.rows[0].meta.code,
-            response.rows[0].meta.package_detail,
-            response.rows[0].meta.serving_size,
-            response.rows[0].meta.serving_per_container,
-            response.rows[0].meta.shippingdetail,
-            response.rows[0].meta.category,
-            response.rows[0].meta.subCategory,
-            response.rows[0].meta.manufactureName,
-            response.rows[0].meta.manufactureWebsite,
-            response.rows[0].faq,
-            response.rows[0].keywords);
+        newProduct.id = response.rows[0].id;
 
         products.push(newProduct);
         return newProduct;
@@ -258,6 +250,23 @@ class Products {
     }
 
     _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords) {
+        if (image === undefined) {
+            image = "default.jpg";
+        }
+
+        if (image === "") {
+            image = "default.jpg";
+        }
+
+        if (faq === undefined) {
+            faq = [];
+        } else {
+            faq = faq.map((e) => parseInt(e));
+        }
+
+        if (searchKeywords === undefined) {
+            searchKeywords = "";
+        }
         return {
             id: id,
             "name": name,
