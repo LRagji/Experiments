@@ -11,8 +11,9 @@ class Products {
         this.filterKeywords = this.filterKeywords.bind(this);
         this.getProducts = this.getProducts.bind(this);
         this.saveProduct = this.saveProduct.bind(this);
-        this.updateProduct=this.updateProduct.bind(this);
-        this.getAllProducts=this.getAllProducts.bind(this);
+        this.updateProduct = this.updateProduct.bind(this);
+        this.getAllProducts = this.getAllProducts.bind(this);
+        this._fromProperties = this._fromProperties.bind(this);
 
 
         if (products.length === 0) {
@@ -64,6 +65,12 @@ class Products {
                 if (searchKeywords === undefined) {
                     searchKeywords = "";
                 }
+
+                let insertStatement = `INSERT INTO products (
+                    name,offerPrice,price,imageName,faq,keywords,meta,description,ingredients
+                ) VALUES (
+                    
+                ) RETURNING ID`;
 
                 let newProduct = {
                     id: products.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
@@ -256,6 +263,32 @@ class Products {
             });
             acc(result);
         });
+    }
+
+    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords) {
+        return {
+            id: id,
+            "name": name,
+            "offerprice": parseFloat(offerPrice),
+            "price": parseFloat(productPrice),
+            "image": image,
+            "faq": faq, //Has to be int array always
+            "keywords": searchKeywords,
+            "meta": {
+                "code": code,
+                "package_detail": package_detail,
+                "serving_size": serving_size,
+                "serving_per_container": serving_per_container,
+                "shippingdetail": shippingdetail,
+                "category": category,
+                "subCategory": subCategory,
+                "mname": manufactureName,
+                "mwebsite": manufactureWebsite
+            },
+            "description": desc,
+            "ingredients": ingredients
+
+        }
     }
 }
 
