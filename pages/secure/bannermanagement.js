@@ -18,7 +18,7 @@ class pageBannerManangement extends adminPage {
     loadRoutes(server, basePath) {
         server.get(basePath + '/banner', this.safeRender(this.renderBannerManagement));
         var banners = upload.fields([{ name: 'banner1', maxCount: 1 }, { name: 'banner2', maxCount: 1 }, { name: 'banner3', maxCount: 1 }])
-        server.post(basePath + '/banner', banners, this.safeRedirect(this.processBanners));
+        server.post(basePath + '/banner', this.safeRedirect(this.processBanners, banners));
     }
 
     async renderBannerManagement(req, renderView) {

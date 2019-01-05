@@ -1,29 +1,22 @@
-class pageAppSettings {
-    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
+let adminPage = require('../../modules/adminPage')
+class pageAppSettings extends adminPage {
+    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService, textService) {
+        super(auth, dataAccessService, utilityService, constantsService, textService)
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderAppSettings = this.renderAppSettings.bind(this);
 
-        this.loadRoutes(server, basePath, auth);
+        this.loadRoutes(server, basePath);
     }
 
-    loadRoutes(server, basePath, auth) {
-        server.get(basePath + '/settings', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.renderAppSettings);
+    loadRoutes(server, basePath) {
+        server.get(basePath + '/settings', this.safeRender(this.renderAppSettings));
     }
 
-    async renderAppSettings(req, res) {
-        try {
-            let pageData = {};
-            pageData[this.const.taxSettingsKey] = await this.dal.appSettings.readSetting(this.const.taxSettingsKey);
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/appsettings', await this.util.constructPageData(req.user, pageData, this.dal));
-        }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+    async renderAppSettings(req, renderView) {
+        let pageData = {};
+        pageData[this.const.taxSettingsKey] = await this.dal.appSettings.readSetting(this.const.taxSettingsKey);
+        renderView('../pages/secure/appsettings', pageData);
     }
 }
 module.exports = pageAppSettings;

@@ -10,10 +10,10 @@ class pageUserManangement extends adminPage {
         this.defaultUserSecret = this.defaultUserSecret.bind(this);
         this.validateIsSelfUser = this.validateIsSelfUser.bind(this);
 
-        this.loadRoutes(server, basePath, auth);
+        this.loadRoutes(server, basePath);
     }
 
-    loadRoutes(server, basePath, auth) {
+    loadRoutes(server, basePath) {
         server.get(basePath + '/users', this.safeRender(this.renderUserManagement));
         server.post(basePath + '/users/activation', this.safeRedirect(this.processUserActivation, this.validateIsSelfUser));
         server.post(basePath + '/users/promotion', this.safeRedirect(this.processUserPromotion, this.validateIsSelfUser));
