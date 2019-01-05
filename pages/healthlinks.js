@@ -1,6 +1,6 @@
 let page = require('../modules/page')
 class pageHealthLinks extends page {
-    constructor(server, dataAccessService, utilityService, constantsService,textService) {
+    constructor(server, dataAccessService, utilityService, constantsService, textService) {
 
         super(dataAccessService, utilityService, constantsService, textService);
 
@@ -11,22 +11,16 @@ class pageHealthLinks extends page {
     }
 
     loadRoutes(server) {
-        server.get('/healthLinks', this.renderHealthLinks);
+        server.get('/healthLinks', this.safeRender(this.renderHealthLinks));
     }
 
-    async renderHealthLinks(req, res) {
-        try {
-            if (this.util.validateLength(req.query.id, 50, 1) === false) {
-                throw new Error("Invalid Input parameter name length.")
-            }
-            let pageData = {};
-            pageData[this.const.footerLinksView] = await this.dal.getHealthLinkContentFor(req.query.id);
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/healthlinks', await this.util.constructPageData(req.user, pageData, this.dal));
+    async renderHealthLinks(req, renderView) {
+        if (this.util.validateLength(req.query.id, 50, 1) === false) {
+            throw new Error("Invalid Input parameter name length.")
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+        let pageData = {};
+        pageData[this.const.footerLinksView] = await this.dal.getHealthLinkContentFor(req.query.id);
+        renderView('../pages/healthlinks', pageData);
     }
 
 }

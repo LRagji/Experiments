@@ -12,10 +12,10 @@ class pageError extends page {
     }
 
     loadRoutes(server) {
-        server.get('/error', this.renderErrorPage);
+        server.get('/error', this.safeRender(this.renderErrorPage));
     }
 
-    async renderErrorPage(req, res) {
+    async renderErrorPage(req, renderView) {
         let exception = req.flash(this.const.error);
         if (exception.length <= 0) {
             //This is the case when user directly request for a error page
@@ -31,8 +31,7 @@ class pageError extends page {
         }
         let pageData = {};
         pageData[this.const.error] = exception;
-        pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-        res.render('../pages/error', await this.util.constructPageData(req.user, pageData, this.dal));
+        renderView('../pages/error', pageData);
     }
 }
-module.exports=pageError
+module.exports = pageError

@@ -5,8 +5,6 @@ let cartPage = require('../pages/cart');
 let cart = undefined;
 let productPage = require('../pages/product');
 let product = undefined;
-let modHomePage = require('../pages/index');
-let homePage = undefined;
 let modHealthLinksPage = require('../pages/healthlinks');
 let healthLinksPage = undefined;
 let modSearchPage = require('../pages/search');
@@ -15,11 +13,13 @@ let modErrorPage = require('../pages/error');
 let errorPage = undefined;
 let modHealthLibraryPage = require('../pages/healthlibrary');
 let healthLibraryPage = undefined;
+let page = require('./page');
 
-class dynamicPages {
+class dynamicPages extends page {
 
     constructor(server, authService, dataAccessService, utilityService, constantsService) {
 
+        super(dataAccessService, utilityService, constantsService, textService)
         this.dal = dataAccessService;
         this.util = utilityService;
         this.const = constantsService;
@@ -27,16 +27,13 @@ class dynamicPages {
         //All views
         server.set('view engine', 'ejs');
 
-        //All Pages
+        //TODO: Move all of these page inits to index.js
         cart = new cartPage(server, this.dal, this.util, this.const, textService);
         product = new productPage(server, this.dal, this.util, this.const, textService);
-        homePage = new modHomePage(server, this.dal, this.util, this.const, textService);
         healthLinksPage = new modHealthLinksPage(server, this.dal, this.util, this.const, textService);
         searchPage = new modSearchPage(server, this.dal, this.util, this.const, textService);
         errorPage = new modErrorPage(server, this.dal, this.util, this.const, textService);
         healthLibraryPage = new modHealthLibraryPage(server, this.dal, this.util, this.const, textService);
-
-        this.renderStaticPage = this.renderStaticPage.bind(this);
 
         this.loadRoutes(server);
 
@@ -44,25 +41,17 @@ class dynamicPages {
     }
 
     loadRoutes(server) {
-        //Static
-        server.get('/howtoorder', this.renderStaticPage('../pages/static/howtoplaceorder'));
-        server.get('/whyshophere', this.renderStaticPage('../pages/static/whyshophere'));
-        server.get('/requestaproduct', this.renderStaticPage('../pages/static/requestaproduct'));
-        server.get('/shippingterms', this.renderStaticPage('../pages/static/shippingterms'));
-        server.get('/privacypolicy', this.renderStaticPage('../pages/static/privacypolicy'));
-        server.get('/terms', this.renderStaticPage('../pages/static/termsandconditions'));
-        server.get('/about', this.renderStaticPage('../pages/static/about'));
-        server.get('/contact', this.renderStaticPage('../pages/static/contact'));
+        //Dynamically Static pages
+        server.get('/howtoorder', this.safeRenderView('../pages/static/howtoplaceorder'));
+        server.get('/whyshophere', this.safeRenderView('../pages/static/whyshophere'));
+        server.get('/requestaproduct', this.safeRenderView('../pages/static/requestaproduct'));
+        server.get('/shippingterms', this.safeRenderView('../pages/static/shippingterms'));
+        server.get('/privacypolicy', this.safeRenderView('../pages/static/privacypolicy'));
+        server.get('/terms', this.safeRenderView('../pages/static/termsandconditions'));
+        server.get('/about', this.safeRenderView('../pages/static/about'));
+        server.get('/contact', this.safeRenderView('../pages/static/contact'));
+        server.get('/', this.safeRenderView('../pages/index'));
         return server;
-    }
-
-    //TODO:Need to kill this method with page class static method to render this 
-    renderStaticPage(pagePath) {
-        return async (req, res) => {
-            let pageData = {};
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render(pagePath, await this.util.constructPageData(req.user, pageData, this.dal));
-        };
     }
 }
 
