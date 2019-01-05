@@ -15,21 +15,24 @@ class adminOnlyPage extends page {
         return this.safeRender((req, renderView) => renderView(viewPath));
     }
 
-    safeRender(renderCallback) {
+    safeRender(renderCallback, middleWare) {
         let middleWares = super.safeRender(renderCallback);
         middleWares.splice(1, 0, this.onlyAdmin);
+        if (middleWare !== undefined) middleWares.splice(2, 0, middleWare);
         return middleWares;
     }
 
-    safeRedirect(renderCallback) {
+    safeRedirect(renderCallback, middleWare) {
         let middleWares = super.safeRedirect(renderCallback);
         middleWares.splice(1, 0, this.onlyAdmin);
+        if (middleWare !== undefined) middleWares.splice(2, 0, middleWare);
         return middleWares;
     }
 
-    safeResponse(renderCallback) {
+    safeResponse(renderCallback, middleWare) {
         let middleWares = super.safeResponse(renderCallback);
         middleWares.splice(1, 0, this.onlyAdmin);
+        if (middleWare !== undefined) middleWares.splice(2, 0, middleWare);
         return middleWares;
     }
 

@@ -1,8 +1,7 @@
-class pageUserManangement {
-    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
+let adminPage = require('../../modules/adminPage')
+class pageUserManangement extends adminPage {
+    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService, textService) {
+        super(auth, dataAccessService, utilityService, constantsService, textService)
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderUserManagement = this.renderUserManagement.bind(this);
@@ -15,83 +14,62 @@ class pageUserManangement {
     }
 
     loadRoutes(server, basePath, auth) {
-        server.get(basePath + '/users', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.renderUserManagement);
-        server.post(basePath + '/users/activation', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.validateIsSelfUser, this.processUserActivation);
-        server.post(basePath + '/users/promotion', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.validateIsSelfUser, this.processUserPromotion);
-        server.post(basePath + '/users/secret', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.validateIsSelfUser, this.defaultUserSecret);
+        server.get(basePath + '/users', this.safeRender(this.renderUserManagement));
+        server.post(basePath + '/users/activation', this.safeRedirect(this.processUserActivation, this.validateIsSelfUser));
+        server.post(basePath + '/users/promotion', this.safeRedirect(this.processUserPromotion, this.validateIsSelfUser));
+        server.post(basePath + '/users/secret', this.safeRedirect(this.defaultUserSecret, this.validateIsSelfUser));
     }
 
-    async renderUserManagement(req, res) {
-        try {
-            let pageData = {};
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            pageData[this.const.userManagementError] = req.flash(this.const.userManagementError);
-            res.render('../pages/secure/usermanagement', await this.util.constructPageData(req.user, pageData, this.dal));
-        }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+    async renderUserManagement(req, renderView) {
+        let pageData = {};
+        pageData[this.const.userManagementError] = req.flash(this.const.userManagementError);
+        renderView('../pages/secure/usermanagement', pageData);
     }
 
-    async processUserActivation(req, res) {
-        try {
-            let userId = parseInt(req.body.userid);
-            let status = "";
-            if (req.body.status === "Deactivate")
-                status = "inactive";
-            else if (req.body.status === "Activate")
-                status = "active";
-            else {
-                req.flash(this.const.userManagementError, "Invalid property status" + req.body.status);
-                res.redirect("/secure/users");
-                return;
-            }
-
-            await this.dal.updateUserActivationState(userId, status);
-            res.redirect("/secure/users");
+    async processUserActivation(req, renderRedirect) {
+        let userId = parseInt(req.body.userid);
+        let status = "";
+        if (req.body.status === "Deactivate")
+            status = "inactive";
+        else if (req.body.status === "Activate")
+            status = "active";
+        else {
+            req.flash(this.const.userManagementError, "Invalid property status" + req.body.status);
+            renderRedirect("/secure/users");
             return;
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+
+        await this.dal.updateUserActivationState(userId, status);
+        renderRedirect("/secure/users");
+        return;
     }
 
-    async processUserPromotion(req, res) {
-        try {
-            let userId = parseInt(req.body.userid);
+    async processUserPromotion(req, renderRedirect) {
+        let userId = parseInt(req.body.userid);
 
-            if (req.body.promotion !== "normal" && req.body.promotion !== "admin") {
-                req.flash(this.const.userManagementError, "Invalid property promotion" + req.body.promotion);
-                res.redirect("/secure/users");
-                return;
-            }
-
-            await this.dal.updateUserAccountType(userId, req.body.promotion);
-            res.redirect("/secure/users");
+        if (req.body.promotion !== "normal" && req.body.promotion !== "admin") {
+            req.flash(this.const.userManagementError, "Invalid property promotion" + req.body.promotion);
+            renderRedirect("/secure/users");
             return;
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+
+        await this.dal.updateUserAccountType(userId, req.body.promotion);
+        renderRedirect("/secure/users");
+        return;
     }
 
-    async defaultUserSecret(req, res) {
-        try {
-            let userId = parseInt(req.body.userid);
+    async defaultUserSecret(req, renderRedirect) {
+        let userId = parseInt(req.body.userid);
 
-            if (parseInt(req.body.password) !== userId) {
-                req.flash(this.const.userManagementError, "Invalid request");
-                res.redirect("/secure/users");
-                return;
-            }
-
-            await this.dal.resetUserAccountPassword(userId);
-            res.redirect("/secure/users");
+        if (parseInt(req.body.password) !== userId) {
+            req.flash(this.const.userManagementError, "Invalid request");
+            renderRedirect("/secure/users");
             return;
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+
+        await this.dal.resetUserAccountPassword(userId);
+        renderRedirect("/secure/users");
+        return;
     }
 
     validateIsSelfUser(req, res, next) {
