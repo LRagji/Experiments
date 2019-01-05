@@ -11,10 +11,10 @@ class pageHealthLibrary extends page {
     }
 
     loadRoutes(server) {
-        server.get('/healthlibrary', this.safeRender(this.renderHealthLibrary, '../pages/healthlibrary'));
+        server.get('/healthlibrary', this.safeRender(this.renderHealthLibrary));
     }
 
-    async renderHealthLibrary(req, res) {
+    async renderHealthLibrary(req, renderView) {
         let pageData = {};
         let category = {};
         let links = await this.dal.getAllHealthLinks();
@@ -26,7 +26,7 @@ class pageHealthLibrary extends page {
             category[key].push(link);
         });
         pageData[this.const.healthLibraryIndex] = category;
-        return pageData;
+        renderView('../pages/healthlibrary', pageData);
     }
 
 }

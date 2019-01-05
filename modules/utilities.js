@@ -13,6 +13,7 @@ module.exports = {
         res.redirect('/error');
     },
 
+    //TODO:Need to kill this method with page class inheritance
     async constructPageData(user, data, dataAccessLayer) {
         return {
             user: user,

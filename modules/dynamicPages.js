@@ -56,6 +56,7 @@ class dynamicPages {
         return server;
     }
 
+    //TODO:Need to kill this method with page class static method to render this 
     renderStaticPage(pagePath) {
         return async (req, res) => {
             let pageData = {};
