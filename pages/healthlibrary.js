@@ -11,19 +11,13 @@ class pageHealthLibrary extends page {
     }
 
     loadRoutes(server) {
-        server.get('/healthlibrary', this.renderHealthLibrary);
+        server.get('/healthlibrary', this.safeRender(this.renderHealthLibrary,'../pages/healthlibrary'));
     }
 
     async renderHealthLibrary(req, res) {
-        try {
-            let pageData = {};
-            pageData[this.const.healthLibraryIndex] = await this.dal.getHealthLinksIndex();
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/healthlibrary', await this.util.constructPageData(req.user, pageData, this.dal));
-        }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+        let pageData = {};
+        pageData[this.const.healthLibraryIndex] = await this.dal.getHealthLinksIndex();
+        return pageData;
     }
 
 }
