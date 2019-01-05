@@ -16,7 +16,7 @@ class pageHealthLibrary extends page {
 
     async renderHealthLibrary(req, res) {
         let pageData = {};
-        pageData[this.const.healthLibraryIndex] = await this.dal.getHealthLinksIndex();
+        pageData[this.const.healthLibraryIndex] = await this.dal.getAllHealthLinks();
         return pageData;
     }
 

@@ -3,8 +3,6 @@ let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: proces
 let users = [], healthLinks = [], FAQ = [];
 let util = require('../modules/utilities');
 let fs = require('fs');
-let reqMemC = require('../modules/cache');
-let memC = new reqMemC();
 let settings = require('./appSettings');
 let orders = require('./orders').singleton();
 let products = require('./products').singleton(pgPool);
@@ -153,18 +151,6 @@ class DAL {
 
 
     //START Health Links
-    async getHealthLinksIndex() {
-
-        if (!memC.hasData()) {
-            console.log("Cache miss for Health Links");
-            let allIndexes = await this.getAllHealthLinks();
-            allIndexes.forEach(kvp => {
-                memC.insert(kvp.name, kvp.url);
-            });
-        }
-
-        return memC.fetchAllKeyValuePairs((k, v) => { return { "name": k, "link": v } });
-    }
 
     async getAllHealthLinks() {
         return new Promise((acc, rej) => {
@@ -188,8 +174,6 @@ class DAL {
                 };
                 healthLinks.push(healthLinkObj);
 
-                memC.insert(healthLinkObj.name, healthLinkObj.url);
-
                 acc();
 
             } catch (err) {
@@ -205,8 +189,6 @@ class DAL {
                 if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
 
                 healthLinks.splice(dbHealthLinkIdx, 1);
-
-                memC.delete(name);
 
                 acc();
 
