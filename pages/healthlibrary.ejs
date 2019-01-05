@@ -13,17 +13,21 @@
 
     <!-- Site Content -->
     <div class="container mt-5">
-        <div class="card myshadow">
-            <div class="card-header">
-                <h4>Health Library</h4>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    <% pageData.hli.forEach(function(link){ %>
-                    <%-  ` <li><a href="${link.url}">${link.name}</a></li>` -%>
-                    <% }); %>
-                </ul>
-            </div>
+        <h1>Health Library:</h1>
+        <div class="d-flex justify-content-center justify-content-md-around flex-wrap">
+            <% Object.keys(pageData.hli).forEach(function(key){ %>
+            <%- `
+                <div class="card myshadow m-2">
+                        <div class="card-header text-center">
+                            <span class="display-1 text-uppercase text-muted" ><b> ${key}</b></span>
+                        </div>
+                <div class="card-body">
+                        <ul class="ml-0 pl-3" >`+   
+                                pageData.hli[key].map((link)=>`<li><a href="${link.url}">${link.name}</a></li>`).join('') 
+                    + `</ul>
+                </div>
+            </div>`-%>
+            <% }); %>
         </div>
     </div>
     <!-- Footer -->
