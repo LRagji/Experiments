@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ./head %>
+
+    <title>Health Mall-Health Library</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ./header %>
+
+    <!-- Site Content -->
+    <div class="container mt-5">
+        <div class="card myshadow">
+            <div class="card-header">
+                <h4>Health Library</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <% footerLinks.forEach(function(link){ %>
+                    <%-  ` <li><a href="${link.link}">${link.name}</a></li>` -%>
+                    <% }); %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ./footer %>
+</body>
+
+</html>

@@ -4,6 +4,7 @@ const products = require('../db/products').singleton(pgPool);
 
 async function InsertMockProducts(numberOfProducts) {
     for (let i = 0; i < numberOfProducts; i++) {
+        process.stdout.write("\rCreating product #" + i);
         await products.createProduct(
             "Doctor's Best, Best Vitamin C, 1000 mg, 120 Veg " + i,
             (parseFloat(i) * 100.00 + 1000.00),
@@ -25,6 +26,22 @@ async function InsertMockProducts(numberOfProducts) {
             undefined
         );
     }
+    process.stdout.write("\r\n");
 }
 
-InsertMockProducts(50);
+async function main() {
+    console.log("Execution Started");
+    for (let ctr = 0; ctr < process.argv.length; ctr++) {
+        let kvp = process.argv[ctr].toLowerCase();
+        if (kvp.startsWith("products:")) {
+            let value = kvp.replace("products:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " products.")
+                await InsertMockProducts(parseInt(value));
+            }
+        }
+    };
+    console.log("Execution Completed");
+}
+
+main();

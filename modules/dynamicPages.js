@@ -13,6 +13,8 @@ let modSearchPage = require('../pages/search');
 let searchPage = undefined;
 let modErrorPage = require('../pages/error');
 let errorPage = undefined;
+let modHealthLibraryPage = require('../pages/healthlibrary');
+let healthLibraryPage = undefined;
 
 class dynamicPages {
 
@@ -32,6 +34,7 @@ class dynamicPages {
         healthLinksPage = new modHealthLinksPage(server, this.dal, this.util, this.const, textService);
         searchPage = new modSearchPage(server, this.dal, this.util, this.const, textService);
         errorPage = new modErrorPage(server, this.dal, this.util, this.const, textService);
+        healthLibraryPage = new modHealthLibraryPage(server, this.dal, this.util, this.const, textService);
 
         this.renderStaticPage = this.renderStaticPage.bind(this);
 

@@ -12,3 +12,6 @@
 17)Refactor dynamic pages such that each page has its own .js file.
 18)API response should update the session timming.
 19)Taxation, GST number in orders.
+20)Health Lib
+21)FAQ
+22)HSN Number for GST calculations

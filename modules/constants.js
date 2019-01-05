@@ -22,6 +22,7 @@ module.exports = {
     orders: "o",
     footerPageLinks: "fpl",
     searchKeyword: "sk",
+    healthLibraryIndex:"hli",
     taxSettingsKey: "tsk",
     footerLinksErr: "fle",
     footerLinksView: "flv",
