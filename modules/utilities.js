@@ -205,6 +205,7 @@ module.exports = {
         return user.meta.type === "admin";
     },
 
+    //TODO:Kill this method by replacing it with adminOnlyPage
     onlyAdmin(req, res, next) {
         if (require('../modules/utilities').isAdmin(req.user) === false) {
             console.warn("Security Alert: User(" + req.user.id + ") tried to access non privileged " + req.originalUrl + " resource.");

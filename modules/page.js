@@ -8,7 +8,7 @@ class page {
         this.safeRender = this.safeRender.bind(this);
         this.safeRedirect = this.safeRedirect.bind(this);
         this.safeResponse = this.safeResponse.bind(this);
-        this.safeRenderView=this.safeRenderView.bind(this);
+        this.safeRenderView = this.safeRenderView.bind(this);
     }
 
     safeRenderView(viewPath) {
