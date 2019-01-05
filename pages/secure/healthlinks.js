@@ -1,8 +1,7 @@
-class pageLinks {
-    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
+let adminPage = require('../../modules/adminPage')
+class pageLinks extends adminPage {
+    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService, textService) {
+        super(auth, dataAccessService, utilityService, constantsService, textService)
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderLinks = this.renderLinks.bind(this);
@@ -14,80 +13,63 @@ class pageLinks {
     }
 
     loadRoutes(server, basePath, auth) {
-        server.get(basePath + '/healthlinks', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.renderLinks);
-        server.post(basePath + '/healthlinks/edit', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.handleEdit);
-        server.post(basePath + '/healthlinks/delete', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.handleDelete);
-        server.post(basePath + '/healthlinks/new', auth.authenticatedInterceptor(basePath + '/login'), this.util.onlyAdmin, this.handleCreate);
+        server.get(basePath + '/healthlinks', this.safeRender(this.renderLinks));
+        server.post(basePath + '/healthlinks/edit', this.safeRedirect(this.handleEdit));
+        server.post(basePath + '/healthlinks/delete', this.safeRedirect(this.handleDelete));
+        server.post(basePath + '/healthlinks/new', this.safeRedirect(this.handleCreate));
     }
 
-    async renderLinks(req, res) {
-        try {
-            let pageData = {};
-            pageData[this.const.footerPageLinks] = await this.dal.getAllHealthLinks();
-            pageData[this.const.footerLinksErr] = req.flash(this.const.footerLinksErr);
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/healthlinks', await this.util.constructPageData(req.user, pageData, this.dal));
-        }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+    async renderLinks(req, renderView) {
+        let pageData = {};
+        pageData[this.const.footerPageLinks] = await this.dal.getAllHealthLinks();
+        pageData[this.const.footerLinksErr] = req.flash(this.const.footerLinksErr);
+
+        renderView('../pages/secure/healthlinks', pageData);
     }
 
-    async handleDelete(req, res) {
-        try {
-            if (this.util.validateLength(req.body.name, 50, 1) === false) {
-                req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
-                res.redirect("/secure/healthlinks");
-                return;
-            }
+    async handleDelete(req, renderRedirect) {
 
-            await this.dal.deleteHealthLink(req.body.name);
-            res.redirect("/secure/healthlinks");
+        if (this.util.validateLength(req.body.name, 50, 1) === false) {
+            req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
+            renderRedirect("/secure/healthlinks");
             return;
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+
+        await this.dal.deleteHealthLink(req.body.name);
+        renderRedirect("/secure/healthlinks");
+        return;
     }
 
-    async handleEdit(req, res) {
-        try {
-            if (this.util.validateLength(req.body.name, 50, 1) === false) {
-                req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
-                res.redirect("/secure/healthlinks");
-                return;
-            }
+    async handleEdit(req, renderRedirect) {
 
-            if (this.util.validateLength(req.body.contents, 105788, 1) === false) {
-                req.flash(this.const.footerLinksErr, "Invalid Input parameter content length.");
-                res.redirect("/secure/healthlinks");
-                return;
-            }
-
-            await this.dal.updateHealthLink(req.body.name, req.body.contents);
-            res.redirect("/secure/healthlinks");
+        if (this.util.validateLength(req.body.name, 50, 1) === false) {
+            req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
+            renderRedirect("/secure/healthlinks");
             return;
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
+
+        if (this.util.validateLength(req.body.contents, 105788, 1) === false) {
+            req.flash(this.const.footerLinksErr, "Invalid Input parameter content length.");
+            renderRedirect("/secure/healthlinks");
+            return;
         }
+
+        await this.dal.updateHealthLink(req.body.name, req.body.contents);
+        renderRedirect("/secure/healthlinks");
+        return;
     }
 
-    async handleCreate(req, res) {
-        try {
-            if (this.util.validateLength(req.body.name, 50, 1) === false) {
-                req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
-                res.redirect("/secure/healthlinks");
-                return;
-            }
+    async handleCreate(req, renderRedirect) {
 
-            await this.dal.insertHealthLink(req.body.name, "Comming Soon");
-            res.redirect("/secure/healthlinks");
+        if (this.util.validateLength(req.body.name, 50, 1) === false) {
+            req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
+            renderRedirect("/secure/healthlinks");
             return;
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+
+        await this.dal.insertHealthLink(req.body.name, "Comming Soon");
+        renderRedirect("/secure/healthlinks");
+        return;
     }
 }
 module.exports = pageLinks;
