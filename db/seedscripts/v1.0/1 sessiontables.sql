@@ -21,18 +21,18 @@ create table products (
 
 SELECT * INTO products_archive FROM products;
 
-create table users(
-	"id" serial Primary Key,
-	"first" varchar(100) not null,
-	"last" varchar(100),
-	"mobile" varchar(100) not null,
-	"email" varchar(100) not null,
-	"password" varchar(100) not null,
-	"meta" jsonb
-);
+-- create table users(
+-- 	"id" serial Primary Key,
+-- 	"first" varchar(100) not null,
+-- 	"last" varchar(100),
+-- 	"mobile" varchar(100) not null,
+-- 	"email" varchar(100) not null,
+-- 	"password" varchar(100) not null,
+-- 	"meta" jsonb
+-- );
 
-Insert Into users (first,last,mobile,email,password,meta)values
-(
-	'Laukik','R','123456789','Laukik.Ragji@gmail.com','81d7df2cd5d931a654f48a43a8442d5d','{"type":"admin"}'
-);
+-- Insert Into users (first,last,mobile,email,password,meta)values
+-- (
+-- 	'Laukik','R','123456789','Laukik.Ragji@gmail.com','81d7df2cd5d931a654f48a43a8442d5d','{"type":"admin"}'
+-- );
 
