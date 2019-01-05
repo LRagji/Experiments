@@ -14,21 +14,26 @@
     <% include ./header %>
 
     <!-- Site Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h1>
-                    <%-pageData.flv.name -%>
-                </h1>
+    <div class="container mt-5">
+        <div class="card myshadow">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <h2>
+                            <%-pageData.flv.name -%>
+                        </h2>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <%-pageData.flv.contents -%>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <%-pageData.flv.contents -%>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
     <!-- Footer -->
     <% include ./footer %>
 </body>
