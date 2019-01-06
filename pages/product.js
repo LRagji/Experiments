@@ -1,11 +1,8 @@
-
-class pageProduct {
+let page = require('../modules/page')
+class pageProduct extends page {
 
     constructor(server, dataAccessService, utilityService, constantsService, textService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
-        this.textService = textService;
+        super(dataAccessService, utilityService, constantsService, textService);
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderProductPage = this.renderProductPage.bind(this);
@@ -14,32 +11,26 @@ class pageProduct {
     }
 
     loadRoutes(server) {
-        server.get('/product', this.renderProductPage);
+        server.get('/product', this.safeRender(this.renderProductPage));
     }
 
-    async renderProductPage(req, res) {
-        try {
-            let product = await this.dal.products.readProductById(req.query.pid)
+    async renderProductPage(req, renderView) {
+        let product = await this.dal.products.readProductById(req.query.pid)
 
-            if (product === undefined) {
-                throw new Error("No Product found in database for product id:" + req.query.pid);
-            }
-            else {
-
-                let faqObject = [];
-                for (let i = 0; i < product.faq.length; i++) {
-                    faqObject.push(await this.dal.getFAQ(product.faq[i]));
-                }
-                product.faq = faqObject;
-
-                let pageData = {};
-                pageData[this.const.product] = product;
-                pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-                res.render('../pages/product', await this.util.constructPageData(req.user, pageData, this.dal));
-            }
+        if (product === undefined) {
+            throw new Error("No Product found in database for product id:" + req.query.pid);
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err, this.textService["Unknown Product"]);
+        else {
+
+            let faqObject = [];
+            for (let i = 0; i < product.faq.length; i++) {
+                faqObject.push(await this.dal.getFAQ(product.faq[i]));
+            }
+            product.faq = faqObject;
+
+            let pageData = {};
+            pageData[this.const.product] = product;
+            renderView('../pages/product', pageData);
         }
     }
 }

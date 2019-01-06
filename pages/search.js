@@ -1,8 +1,7 @@
-class pageSearch {
-    constructor(server, dataAccessService, utilityService, constantsService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
+let page = require('../modules/page')
+class pageSearch extends page {
+    constructor(server, dataAccessService, utilityService, constantsService, textService) {
+        super(dataAccessService, utilityService, constantsService, textService);
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderSearch = this.renderSearch.bind(this);
@@ -12,35 +11,25 @@ class pageSearch {
     }
 
     loadRoutes(server) {
-        server.get('/search', this.renderSearch);
-        server.post('/search', this.renderSearchResults);
+        server.get('/search', this.safeRender(this.renderSearch));
+        server.post('/search', this.safeRender(this.renderSearchResults));
     }
 
-    async renderSearch(req, res) {
-        try {
-            let pageData = {};
-            pageData[this.const.searchKeyword] = "";
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/search', await this.util.constructPageData(req.user, pageData, this.dal));
-        }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+    async renderSearch(req, renderView) {
+        let pageData = {};
+        pageData[this.const.searchKeyword] = "";
+        renderView('../pages/search', pageData);
     }
 
-    async renderSearchResults(req, res) {
-        try {
-            if (this.util.validateLength(req.body.keyword, 50, 1) === false) {
-                throw new Error("Invalid search parameter name length.")
-            }
-            let pageData = {};
-            pageData[this.const.searchKeyword] = req.body.keyword;
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/search', await this.util.constructPageData(req.user, pageData, this.dal));
+    async renderSearchResults(req, renderView) {
+
+        if (this.util.validateLength(req.body.keyword, 50, 1) === false) {
+            throw new Error("Invalid search parameter name length.")
         }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+        let pageData = {};
+        pageData[this.const.searchKeyword] = req.body.keyword;
+        pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
+        renderView('../pages/search', pageData);
     }
 
 }
