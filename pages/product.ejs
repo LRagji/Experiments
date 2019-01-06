@@ -201,14 +201,14 @@
 
         function setStatus(pageNo, status) {
             if (status === 3) {
-                $("#loadingSpinner").text("Failed to load page" + pageNo + ", Please refresh the page and try again.");
+                $("#loadingMessage").text("Failed to load page" + pageNo + ", Please refresh the page and try again.");
             }
             if (status === 2) {
-                $("#loadingSpinner").text("Loading completed");
+                $("#loadingMessage").text("Loading completed");
                 $("#loadingSpinner").hide();
             }
             if (status === 1 || status === 0) {
-                $("#loadingSpinner").text("Loading more products from page " + pageNo);
+                $("#loadingMessage").text("Loading more products from page " + pageNo);
             }
         }
 
