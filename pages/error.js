@@ -25,7 +25,7 @@ class pageError extends page {
             exception.forEach(err => {
                 console.error('>>>>>>>>>>>>>>>>>Page Error>>>>>>>>>>>>>>>>>>>>>');
                 console.error(err);
-                console.error('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+                console.error('<<<<<<<<<<<<<<<<<Page Error<<<<<<<<<<<<<<<<<<<<<');
             });
 
         }

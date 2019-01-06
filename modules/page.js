@@ -41,7 +41,7 @@ class page {
             catch (err) {
                 console.error('>>>>>>>>>>>>>>>>>API Error>>>>>>>>>>>>>>>>>>>>>');
                 console.error(err);
-                console.error('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+                console.error('<<<<<<<<<<<<<<<<<API Error<<<<<<<<<<<<<<<<<<<<<');
                 res.status(500).send(err);
             }
         };

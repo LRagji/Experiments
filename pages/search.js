@@ -28,7 +28,6 @@ class pageSearch extends page {
         }
         let pageData = {};
         pageData[this.const.searchKeyword] = req.body.keyword;
-        pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
         renderView('../pages/search', pageData);
     }
 

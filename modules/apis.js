@@ -29,16 +29,9 @@ class apiServer extends page {
     }
 
     async addProductToSession(req, renderResponse) {
-        try {
-            await this.util.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, this.dal);
+        await this.util.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, this.dal);
 
-            renderResponse(201, { "TotalProducts": this.util.getCartItemsCount(req) });
-        }
-        catch (err) {
-            console.error(err);
-            //TODO: Catch only specific type of err here leave rest for the handler
-            renderResponse(413, { "TotalProducts": this.util.getCartItemsCount(req) });
-        }
+        renderResponse(201, { "TotalProducts": this.util.getCartItemsCount(req) });
     }
 }
 
