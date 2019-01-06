@@ -8,8 +8,6 @@ class securePage extends page {
         this.loginPageUrl = "/secure/login";
 
         this.safeRender = this.safeRender.bind(this);
-        this.safeRedirect = this.safeRedirect.bind(this);
-        this.safeResponse = this.safeResponse.bind(this);
         this.safeRenderView = this.safeRenderView.bind(this);
     }
 
@@ -21,12 +19,9 @@ class securePage extends page {
         return [this.auth.authenticatedInterceptor(this.loginPageUrl), super.safeRender(renderCallback)]
     }
 
-    safeRedirect(renderCallback) {
-        return [this.auth.authenticatedInterceptor(this.loginPageUrl), super.safeRedirect(renderCallback)]
-    }
-
-    safeResponse(renderCallback) {
-        return [this.auth.authenticatedInterceptor(this.loginPageUrl), super.safeResponse(renderCallback)]
+    safeApi(apiCallback) {
+          //TODO:Should we navigate to login page or throw 403 status?
+        return [this.auth.authenticatedInterceptor(this.loginPageUrl), super.safeApi(apiCallback)]
     }
 }
 

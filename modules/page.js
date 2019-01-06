@@ -6,8 +6,6 @@ class page {
         this.textService = textService;
 
         this.safeRender = this.safeRender.bind(this);
-        this.safeRedirect = this.safeRedirect.bind(this);
-        this.safeResponse = this.safeResponse.bind(this);
         this.safeRenderView = this.safeRenderView.bind(this);
     }
 
@@ -22,7 +20,10 @@ class page {
                     if (data === undefined) data = {};
                     data[this.const.cartItems] = this.util.getCartItemsCount(req);
                     res.render(viewPath, { user: req.user, pageData: data });
-                })
+                },
+                    (pageUrl) => {
+                        res.redirect(pageUrl);
+                    })
             }
             catch (err) {
                 this.util.navigateToError(req, res, err);
@@ -30,26 +31,18 @@ class page {
         };
     }
 
-    safeRedirect(renderCallback) {
+    safeApi(apiCallback) {
         return async (req, res) => {
             try {
-                await renderCallback(req, (pageUrl) => {
-                    res.redirect(pageUrl);
+                await apiCallback(req, (statusCode, data) => {
+                    res.status(statusCode).send(data);
                 })
             }
             catch (err) {
-                this.util.navigateToError(req, res, err);
-            }
-        };
-    }
-
-    safeResponse(renderCallback) {
-        return async (req, res) => {
-            try {
-                await renderCallback(req, res)
-            }
-            catch (err) {
-                this.util.navigateToError(req, res, err);
+                console.error('>>>>>>>>>>>>>>>>>API Error>>>>>>>>>>>>>>>>>>>>>');
+                console.error(err);
+                console.error('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+                res.status(500).send(err);
             }
         };
     }

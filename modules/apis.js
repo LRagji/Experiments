@@ -1,8 +1,7 @@
-class apiServer {
-    constructor(server, dataAccessService, utilityService, constantsService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
+let page = require('../modules/page')
+class apiServer extends page {
+    constructor(server, dataAccessService, utilityService, constantsService, textService) {
+        super(dataAccessService, utilityService, constantsService, textService);
 
         this.getHomePageProducts = this.getHomePageProducts.bind(this);
         this.addProductToSession = this.addProductToSession.bind(this);
@@ -11,41 +10,34 @@ class apiServer {
     }
 
     loadRoutes(server) {
-        server.get('/v1/home/products', this.getHomePageProducts);
-        server.post('/v1/cart/products', this.addProductToSession);
-
-        return server;
+        server.get('/v1/home/products', this.safeApi(this.getHomePageProducts));
+        server.post('/v1/cart/products', this.safeApi(this.addProductToSession));
     }
 
-    async getHomePageProducts(req, res) {
-        try {
-            let page = parseInt(req.query.page);
-            let size = parseInt(req.query.size);
-            let keyword = req.query.s !== undefined ? req.query.s.trim() : "";
-            let category = req.query.c !== undefined ? req.query.c.trim() : "";
-            let subcategory = req.query.sc !== undefined ? req.query.sc.trim() : "";
+    async getHomePageProducts(req, renderResponse) {
+        let page = parseInt(req.query.page);
+        let size = parseInt(req.query.size);
+        let keyword = req.query.s !== undefined ? req.query.s.trim() : "";
+        let category = req.query.c !== undefined ? req.query.c.trim() : "";
+        let subcategory = req.query.sc !== undefined ? req.query.sc.trim() : "";
 
-            let products = await this.dal.products.readAllProducts(page, size, keyword, category, subcategory);
-            if (products.length === size)
-                res.status(206).send(products);
-            else
-                res.status(200).send(products);
-        }
-        catch (err) {
-            console.error(err);
-            res.status(500).send([]);
-        }
+        let products = await this.dal.products.readAllProducts(page, size, keyword, category, subcategory);
+        if (products.length === size)
+            renderResponse(206, products);
+        else
+            renderResponse(200, products);
     }
 
-    async addProductToSession(req, res) {
+    async addProductToSession(req, renderResponse) {
         try {
             await this.util.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, this.dal);
 
-            res.status(201).send({ "TotalProducts": this.util.getCartItemsCount(req) });
+            renderResponse(201, { "TotalProducts": this.util.getCartItemsCount(req) });
         }
         catch (err) {
             console.error(err);
-            res.status(413).send({ "TotalProducts": this.util.getCartItemsCount(req) });
+            //TODO: Catch only specific type of err here leave rest for the handler
+            renderResponse(413, { "TotalProducts": this.util.getCartItemsCount(req) });
         }
     }
 }

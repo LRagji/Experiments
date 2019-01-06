@@ -27,7 +27,7 @@ class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
 
         //TODO: Move all of these page inits to index.js
-        secureApi = new modSecureApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService);
+        secureApi = new modSecureApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
 
         pageOrders = new modPageOrders(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);

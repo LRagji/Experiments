@@ -13,14 +13,6 @@ module.exports = {
         res.redirect('/error');
     },
 
-    //TODO:Need to kill this method with page class inheritance
-    async constructPageData(user, data, dataAccessLayer) {
-        return {
-            user: user,
-            pageData: data
-        }
-    },
-
     getCartItemsCount(req) {
         if (req.session.products === undefined) {
             req.session.products = [];
@@ -204,17 +196,4 @@ module.exports = {
     isAdmin(user) {
         return user.meta.type === "admin";
     },
-
-    //TODO:Kill this method by replacing it with adminOnlyPage
-    onlyAdmin(req, res, next) {
-        if (require('../modules/utilities').isAdmin(req.user) === false) {
-            console.warn("Security Alert: User(" + req.user.id + ") tried to access non privileged " + req.originalUrl + " resource.");
-            res.redirect("/secure/profile");
-            return;
-        }
-        else {
-            next();
-        }
-    }
-
 }

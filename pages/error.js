@@ -23,7 +23,7 @@ class pageError extends page {
         }
         else {
             exception.forEach(err => {
-                console.error('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+                console.error('>>>>>>>>>>>>>>>>>Page Error>>>>>>>>>>>>>>>>>>>>>');
                 console.error(err);
                 console.error('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
             });

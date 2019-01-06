@@ -18,7 +18,7 @@ class pageBannerManangement extends adminPage {
     loadRoutes(server, basePath) {
         server.get(basePath + '/banner', this.safeRender(this.renderBannerManagement));
         var banners = upload.fields([{ name: 'banner1', maxCount: 1 }, { name: 'banner2', maxCount: 1 }, { name: 'banner3', maxCount: 1 }])
-        server.post(basePath + '/banner', this.safeRedirect(this.processBanners, banners));
+        server.post(basePath + '/banner', this.safeRender(this.processBanners, banners));
     }
 
     async renderBannerManagement(req, renderView) {
@@ -29,7 +29,7 @@ class pageBannerManangement extends adminPage {
         renderView('../pages/secure/bannermanagement', pageData);
     }
 
-    async processBanners(req, renderRedirect) {
+    async processBanners(req, renderView, renderRedirect) {
 
         if (req.files['banner1'] === undefined && req.files['banner2'] === undefined && req.files['banner3'] === undefined) {
             req.flash(this.const.bannerUploadError, "No banner images found to change.");

@@ -13,13 +13,13 @@ class pageLogin extends page {
     }
 
     loadRoutes(server, basePath, auth) {
-        server.get(basePath + '/login', this.safeResponse(this.renderLoginPage));
-        server.post(basePath + '/login', auth.authenticateLogIn(basePath + "/login"), this.safeRedirect(this.redirectToPreviousPage));
-        server.get(basePath + '/logout', auth.authenticatedInterceptor(basePath + '/login'), this.safeRedirect(this.renderLogout));
-        server.post(basePath + '/login/register', this.safeRedirect(this.registerUser));
+        server.get(basePath + '/login', this.safeRender(this.renderLoginPage));
+        server.post(basePath + '/login', auth.authenticateLogIn(this.loginPageUrl), this.safeRender(this.redirectToPreviousPage));
+        server.get(basePath + '/logout', auth.authenticatedInterceptor(this.loginPageUrl), this.safeRender(this.renderLogout));
+        server.post(basePath + '/login/register', this.safeRender(this.registerUser));
     }
 
-    redirectToPreviousPage(req, renderRedirect) {
+    redirectToPreviousPage(req, renderView, renderRedirect) {
         if (req.session.returnTo === undefined)
             renderRedirect("/");
         else {
@@ -28,26 +28,25 @@ class pageLogin extends page {
         }
     }
 
-    async renderLoginPage(req, res) {
+    async renderLoginPage(req, renderView, renderRedirect) {
         if (req.user !== undefined) {
-            res.redirect("/secure/profile");
+            renderRedirect("/secure/profile");
         }
         else {
             let pageData = {};
             pageData[this.const.loginError] = req.flash("error");
             pageData[this.const.registerError] = req.flash("registerError");
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/login', await this.util.constructPageData(req.user, pageData, this.dal));
+            renderView('../pages/secure/login', pageData);
         }
     }
 
-    renderLogout(req, renderRedirect) {
+    renderLogout(req, renderView, renderRedirect) {
         req.logout();
         req.session.destroy();
         renderRedirect('/secure/login');
     }
 
-    async registerUser(req, renderRedirect) {
+    async registerUser(req, renderView, renderRedirect) {
 
         if (this.util.validateIsInOptions(req.body.registerSalutation, this.const.salutations) === false) {
             req.flash("registerError", "Invalid Salutation.");

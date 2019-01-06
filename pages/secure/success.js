@@ -10,17 +10,17 @@ class pageSuccess extends securePage {
     }
 
     loadRoutes(server, basePath, auth) {
-        server.get(basePath + '/success', this.safeResponse(this.renderSuccess));
+        server.get(basePath + '/success', this.safeRender(this.renderSuccess));
     }
 
-    async renderSuccess(req, res) {
+    async renderSuccess(req, renderView, renderRedirect) {
         if (req.query.oid !== undefined) {
             let orderId = parseInt(req.query.oid);
             let order = await this.dal.orders.getOrderById(orderId);
 
             if (order === undefined) throw new Error("Cannot find the order mentioned.")
             if (order.userId !== req.user.id) {
-                res.redirect('/cart');
+                renderRedirect('/cart');
                 return;
             }
 
@@ -47,11 +47,10 @@ class pageSuccess extends securePage {
 
             let pageData = {};
             pageData[this.const.orderdetails] = order;
-            pageData[this.const.cartItems] = this.util.getCartItemsCount(req);
-            res.render('../pages/secure/success', await this.util.constructPageData(req.user, pageData, this.dal));
+            renderView('../pages/secure/success', pageData);
         }
         else {
-            res.redirect('/cart');
+            renderRedirect('/cart');
         }
     }
 }

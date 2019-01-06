@@ -15,9 +15,9 @@ class pageUserManangement extends adminPage {
 
     loadRoutes(server, basePath) {
         server.get(basePath + '/users', this.safeRender(this.renderUserManagement));
-        server.post(basePath + '/users/activation', this.safeRedirect(this.processUserActivation, this.validateIsSelfUser));
-        server.post(basePath + '/users/promotion', this.safeRedirect(this.processUserPromotion, this.validateIsSelfUser));
-        server.post(basePath + '/users/secret', this.safeRedirect(this.defaultUserSecret, this.validateIsSelfUser));
+        server.post(basePath + '/users/activation', this.safeRender(this.processUserActivation, this.validateIsSelfUser));
+        server.post(basePath + '/users/promotion', this.safeRender(this.processUserPromotion, this.validateIsSelfUser));
+        server.post(basePath + '/users/secret', this.safeRender(this.defaultUserSecret, this.validateIsSelfUser));
     }
 
     async renderUserManagement(req, renderView) {
@@ -26,7 +26,7 @@ class pageUserManangement extends adminPage {
         renderView('../pages/secure/usermanagement', pageData);
     }
 
-    async processUserActivation(req, renderRedirect) {
+    async processUserActivation(req, renderView, renderRedirect) {
         let userId = parseInt(req.body.userid);
         let status = "";
         if (req.body.status === "Deactivate")
@@ -44,7 +44,7 @@ class pageUserManangement extends adminPage {
         return;
     }
 
-    async processUserPromotion(req, renderRedirect) {
+    async processUserPromotion(req, renderView, renderRedirect) {
         let userId = parseInt(req.body.userid);
 
         if (req.body.promotion !== "normal" && req.body.promotion !== "admin") {
@@ -58,7 +58,7 @@ class pageUserManangement extends adminPage {
         return;
     }
 
-    async defaultUserSecret(req, renderRedirect) {
+    async defaultUserSecret(req, renderView, renderRedirect) {
         let userId = parseInt(req.body.userid);
 
         if (parseInt(req.body.password) !== userId) {

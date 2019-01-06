@@ -17,7 +17,7 @@ class pageProducts extends adminPage {
 
     loadRoutes(server, basePath) {
         server.get(basePath + '/products', this.safeRender(this.renderProducts));
-        server.post(basePath + '/products', this.safeRedirect(this.saveProduct, upload.single('image')));
+        server.post(basePath + '/products', this.safeRender(this.saveProduct, upload.single('image')));
     }
 
     async renderProducts(req, renderView) {
@@ -37,7 +37,7 @@ class pageProducts extends adminPage {
         renderView('../pages/secure/products', pageData);
     }
 
-    async saveProduct(req, renderRedirect) {
+    async saveProduct(req, renderView, renderRedirect) {
         let productState = {
             "name": req.body.name,
             "offerprice": req.body.offerPrice,

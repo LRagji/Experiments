@@ -53,7 +53,8 @@ webServer = new dynamicPages(app, authenticationService,dal, util, constants);
 
 //API Server
 console.log("Initializing API server..");
-apiServer = new api(app,dal, util, constants);
+//TODO: apiServer = new api(app,dal, util, constants,textService);
+apiServer = new api(app,dal, util, constants,undefined);
 
 //Static Content
 console.log("Hosting static items..");

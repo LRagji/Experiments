@@ -16,8 +16,8 @@ class pageCart extends page {
 
     loadRoutes(server) {
         server.get('/cart', this.safeRender(this.renderCart));
-        server.post('/cart', this.safeRedirect(this.processCart));
-        server.post('/cart/items', this.safeRedirect(this.manipulateProductsInCart))
+        server.post('/cart', this.safeRender(this.processCart));
+        server.post('/cart/items', this.safeRender(this.manipulateProductsInCart))
     }
 
     async renderCart(req, renderView) {
@@ -62,7 +62,7 @@ class pageCart extends page {
         renderView('../pages/cart', pageData);
     }
 
-    async processCart(req, renderRedirect) {
+    async processCart(req, renderView, renderRedirect) {
 
         let redirectPage = "/cart";
         if (req.body.state !== undefined) {
@@ -223,7 +223,7 @@ class pageCart extends page {
         shippingDetails.shipping[ship + propertyName] = copyBillingInfo ? body[bill + propertyName] : body[ship + propertyName];
     }
 
-    async manipulateProductsInCart(req, renderRedirect) {
+    async manipulateProductsInCart(req, renderView, renderRedirect) {
 
         switch (req.body.operator) {
             case "add":

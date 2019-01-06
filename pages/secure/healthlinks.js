@@ -14,9 +14,9 @@ class pageLinks extends adminPage {
 
     loadRoutes(server, basePath, auth) {
         server.get(basePath + '/healthlinks', this.safeRender(this.renderLinks));
-        server.post(basePath + '/healthlinks/edit', this.safeRedirect(this.handleEdit));
-        server.post(basePath + '/healthlinks/delete', this.safeRedirect(this.handleDelete));
-        server.post(basePath + '/healthlinks/new', this.safeRedirect(this.handleCreate));
+        server.post(basePath + '/healthlinks/edit', this.safeRender(this.handleEdit));
+        server.post(basePath + '/healthlinks/delete', this.safeRender(this.handleDelete));
+        server.post(basePath + '/healthlinks/new', this.safeRender(this.handleCreate));
     }
 
     async renderLinks(req, renderView) {
@@ -27,7 +27,7 @@ class pageLinks extends adminPage {
         renderView('../pages/secure/healthlinks', pageData);
     }
 
-    async handleDelete(req, renderRedirect) {
+    async handleDelete(req, renderView, renderRedirect) {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
             req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
@@ -40,7 +40,7 @@ class pageLinks extends adminPage {
         return;
     }
 
-    async handleEdit(req, renderRedirect) {
+    async handleEdit(req, renderView, renderRedirect) {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
             req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
@@ -59,7 +59,7 @@ class pageLinks extends adminPage {
         return;
     }
 
-    async handleCreate(req, renderRedirect) {
+    async handleCreate(req, renderView, renderRedirect) {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
             req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");

@@ -5,8 +5,6 @@ class adminOnlyPage extends page {
         super(auth, dataAccessService, utilityService, constantsService, textService)
 
         this.safeRender = this.safeRender.bind(this);
-        this.safeRedirect = this.safeRedirect.bind(this);
-        this.safeResponse = this.safeResponse.bind(this);
         this.safeRenderView = this.safeRenderView.bind(this);
         this.onlyAdmin = this.onlyAdmin.bind(this);
     }
@@ -22,15 +20,8 @@ class adminOnlyPage extends page {
         return middleWares;
     }
 
-    safeRedirect(renderCallback, middleWare) {
-        let middleWares = super.safeRedirect(renderCallback);
-        middleWares.splice(1, 0, this.onlyAdmin);
-        if (middleWare !== undefined) middleWares.splice(2, 0, middleWare);
-        return middleWares;
-    }
-
-    safeResponse(renderCallback, middleWare) {
-        let middleWares = super.safeResponse(renderCallback);
+    safeApi(apiCallback, middleWare) {
+        let middleWares = super.safeApi(apiCallback);
         middleWares.splice(1, 0, this.onlyAdmin);
         if (middleWare !== undefined) middleWares.splice(2, 0, middleWare);
         return middleWares;

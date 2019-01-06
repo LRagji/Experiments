@@ -14,9 +14,9 @@ class pageFAQS extends adminPage {
 
     loadRoutes(server, basePath) {
         server.get(basePath + '/faqs', this.safeRender(this.renderFAQS));
-        server.post(basePath + '/faqs/edit', this.safeRedirect(this.handleEdit));
-        server.post(basePath + '/faqs/delete', this.safeRedirect(this.handleDelete));
-        server.post(basePath + '/faqs/new', this.safeRedirect(this.handleCreate));
+        server.post(basePath + '/faqs/edit', this.safeRender(this.handleEdit));
+        server.post(basePath + '/faqs/delete', this.safeRender(this.handleDelete));
+        server.post(basePath + '/faqs/new', this.safeRender(this.handleCreate));
     }
 
     async renderFAQS(req, renderView) {
@@ -26,7 +26,7 @@ class pageFAQS extends adminPage {
         renderView('../pages/secure/faqs', pageData);
     }
 
-    async handleDelete(req, renderRedirect) {
+    async handleDelete(req, renderView, renderRedirect) {
         if (this.util.validateIsWholeNumberBetween(req.body.id, 5000, 1) === false) {
             req.flash(this.const.FAQSError, "Invalid Input parameter Id.");
             renderRedirect("/secure/faqs");
@@ -38,7 +38,7 @@ class pageFAQS extends adminPage {
         return;
     }
 
-    async handleEdit(req, renderRedirect) {
+    async handleEdit(req, renderView, renderRedirect) {
         if (this.util.validateIsWholeNumberBetween(req.body.id, 5000, 1) === false) {
             req.flash(this.const.FAQSError, "Invalid Input parameter Id.");
             renderRedirect("/secure/faqs");
@@ -63,7 +63,7 @@ class pageFAQS extends adminPage {
 
     }
 
-    async handleCreate(req, renderRedirect) {
+    async handleCreate(req, renderView, renderRedirect) {
 
         if (this.util.validateLength(req.body.Q, 200, 1) === false) {
             req.flash(this.const.FAQSError, "Invalid Input parameter Question length.");

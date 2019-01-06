@@ -12,7 +12,7 @@ class pagePassword extends securePage {
 
     loadRoutes(server, basePath) {
         server.get(basePath + '/password', this.safeRender(this.renderPassword));
-        server.post(basePath + '/password', this.safeRedirect(this.changePassword));
+        server.post(basePath + '/password', this.safeRender(this.changePassword));
     }
 
     async renderPassword(req, renderView) {
@@ -21,7 +21,7 @@ class pagePassword extends securePage {
         renderView('../pages/secure/password', pageData);
     }
 
-    async changePassword(req, renderRedirect) {
+    async changePassword(req, renderView, renderRedirect) {
         if (this.util.validateLength(req.body.existingPassword, 50, 1) === false) {
             req.flash(this.const.changePassError, "Invalid existing password length [50,1]");
             renderRedirect("./password");
