@@ -17,6 +17,7 @@ var minifyHTML = require('express-minify-html');
 let authenticationModule = require('./modules/auth');
 let authenticationService = null;
 let util = require('./modules/utilities');
+let textService = require('./messages');
 
 
 //Minify on the fly
@@ -49,12 +50,11 @@ authenticationService = new authenticationModule(app, dal, util, constants);
 
 //Dynamic & Secured Pages
 console.log("Initializing dynamic pages..");
-webServer = new dynamicPages(app, authenticationService,dal, util, constants);
+webServer = new dynamicPages(app, authenticationService, dal, util, constants, textService);
 
 //API Server
 console.log("Initializing API server..");
-//TODO: apiServer = new api(app,dal, util, constants,textService);
-apiServer = new api(app,dal, util, constants,undefined);
+apiServer = new api(app, dal, util, constants, textService);
 
 //Static Content
 console.log("Hosting static items..");
