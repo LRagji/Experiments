@@ -1,8 +1,7 @@
-class pageLogin {
-    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService) {
-        this.dal = dataAccessService;
-        this.util = utilityService;
-        this.const = constantsService;
+let page = require('../../modules/page')//This is intentionally derived from page and not secure page as this page is gateway to secure world.
+class pageLogin extends page {
+    constructor(server, basePath, auth, dataAccessService, utilityService, constantsService, textService) {
+        super(dataAccessService, utilityService, constantsService, textService);
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.redirectToPreviousPage = this.redirectToPreviousPage.bind(this);
@@ -14,17 +13,17 @@ class pageLogin {
     }
 
     loadRoutes(server, basePath, auth) {
-        server.get(basePath + '/login', this.renderLoginPage);
-        server.post(basePath + '/login', auth.authenticateLogIn(basePath + "/login"), this.redirectToPreviousPage);
-        server.get(basePath + '/logout', auth.authenticatedInterceptor(basePath + '/login'), this.renderLogout);
-        server.post(basePath + '/login/register', this.registerUser);
+        server.get(basePath + '/login', this.safeResponse(this.renderLoginPage));
+        server.post(basePath + '/login', auth.authenticateLogIn(basePath + "/login"), this.safeRedirect(this.redirectToPreviousPage));
+        server.get(basePath + '/logout', auth.authenticatedInterceptor(basePath + '/login'), this.safeRedirect(this.renderLogout));
+        server.post(basePath + '/login/register', this.safeRedirect(this.registerUser));
     }
 
-    redirectToPreviousPage(req, res) {
+    redirectToPreviousPage(req, renderRedirect) {
         if (req.session.returnTo === undefined)
-            res.redirect("/");
+            renderRedirect("/");
         else {
-            res.redirect(req.session.returnTo);
+            renderRedirect(req.session.returnTo);
             delete req.session.returnTo;
         }
     }
@@ -42,62 +41,57 @@ class pageLogin {
         }
     }
 
-    renderLogout(req, res) {
+    renderLogout(req, renderRedirect) {
         req.logout();
         req.session.destroy();
-        res.redirect('/secure/login');
+        renderRedirect('/secure/login');
     }
 
-    async registerUser(req, res) {
-        try {
-            if (this.util.validateIsInOptions(req.body.registerSalutation, this.const.salutations) === false) {
-                req.flash("registerError", "Invalid Salutation.");
-                res.redirect("/secure/login?tab=register");
-                return;
-            }
-            if (this.util.validateLength(req.body.registerFirstName, 50, 1) === false) {
-                req.flash("registerError", "Invalid First name [1-50].");
-                res.redirect("/secure/login?tab=register");
-                return;
-            }
-            if (this.util.validateLength(req.body.registerLastName, 50, 1) === false) {
-                req.flash("registerError", "Invalid Last name [1-50].");
-                res.redirect("/secure/login?tab=register");
-                return;
-            }
-            if (this.util.validateMobilePhone(req.body.registerPhone) === false) {
-                req.flash("registerError", "Invalid Phone.");
-                res.redirect("/secure/login?tab=register");
-                return;
-            }
-            if (this.util.validateEmail(req.body.registerEmail) === false) {
-                req.flash("registerError", "Invalid Email.");
-                res.redirect("/secure/login?tab=register");
-                return;
-            }
-            if (this.util.validateLength(req.body.registerPass, 50, 1) === false) {
-                req.flash("registerError", "Invalid Password [50,1].");
-                res.redirect("/secure/login?tab=register");
-                return;
-            }
-            if (await this.dal.getUserByEmail(req.body.registerEmail) !== undefined) {
-                req.flash("registerError", "User with email address already exists.");
-                res.redirect("/secure/login?tab=register");
-                return;
-            }
+    async registerUser(req, renderRedirect) {
 
-            let newUser = await this.dal.createUser(req.body.registerSalutation,
-                req.body.registerFirstName,
-                req.body.registerLastName,
-                req.body.registerPhone,
-                req.body.registerEmail,
-                req.body.registerPass);
-            res.redirect("/secure/login");
+        if (this.util.validateIsInOptions(req.body.registerSalutation, this.const.salutations) === false) {
+            req.flash("registerError", "Invalid Salutation.");
+            renderRedirect("/secure/login?tab=register");
+            return;
+        }
+        if (this.util.validateLength(req.body.registerFirstName, 50, 1) === false) {
+            req.flash("registerError", "Invalid First name [1-50].");
+            renderRedirect("/secure/login?tab=register");
+            return;
+        }
+        if (this.util.validateLength(req.body.registerLastName, 50, 1) === false) {
+            req.flash("registerError", "Invalid Last name [1-50].");
+            renderRedirect("/secure/login?tab=register");
+            return;
+        }
+        if (this.util.validateMobilePhone(req.body.registerPhone) === false) {
+            req.flash("registerError", "Invalid Phone.");
+            renderRedirect("/secure/login?tab=register");
+            return;
+        }
+        if (this.util.validateEmail(req.body.registerEmail) === false) {
+            req.flash("registerError", "Invalid Email.");
+            renderRedirect("/secure/login?tab=register");
+            return;
+        }
+        if (this.util.validateLength(req.body.registerPass, 50, 1) === false) {
+            req.flash("registerError", "Invalid Password [50,1].");
+            renderRedirect("/secure/login?tab=register");
+            return;
+        }
+        if (await this.dal.getUserByEmail(req.body.registerEmail) !== undefined) {
+            req.flash("registerError", "User with email address already exists.");
+            renderRedirect("/secure/login?tab=register");
+            return;
+        }
 
-        }
-        catch (err) {
-            this.util.navigateToError(req, res, err);
-        }
+        await this.dal.createUser(req.body.registerSalutation,
+            req.body.registerFirstName,
+            req.body.registerLastName,
+            req.body.registerPhone,
+            req.body.registerEmail,
+            req.body.registerPass);
+        renderRedirect("/secure/login");
     }
 }
 module.exports = pageLogin;

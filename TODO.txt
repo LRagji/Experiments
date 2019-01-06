@@ -15,3 +15,4 @@
 20)Health Lib
 21)FAQ
 22)HSN Number for GST calculations
+23)Refactor render methods in page to have redirect and view in one method Page asking for the change is login and success
