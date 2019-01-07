@@ -102,6 +102,16 @@ module.exports = {
         }
     },
 
+    validateIsNumeric(strInput) {
+        try {
+            return validator.isNumeric(strInput, { no_symbols: true });
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
     validateLength(strInput, maxLength, minLength) {
         try {
             return this.validateIsNotUndefiendNullEmpty(strInput) && typeof (strInput) === "string" && strInput.length >= minLength && strInput.length <= maxLength;
@@ -159,6 +169,16 @@ module.exports = {
             let inputMax = parseFloat(max);
             let inputMin = parseFloat(min);
             return inputFloat >= inputMin && inputFloat <= inputMax;
+        }
+        catch (err) {
+            console.error(err);
+            return false;
+        }
+    },
+
+    validateExactLength(strInput, length) {
+        try {
+            return strInput !== undefined && strInput.length === length;
         }
         catch (err) {
             console.error(err);

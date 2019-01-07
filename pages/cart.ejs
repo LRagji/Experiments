@@ -227,11 +227,24 @@
                                 </div>
                             </div>
                             <!-- Mobile -->
-                            <div class="row m-1">
+                            <div class="row">
                                 <div class="col">
+                                <div class="form-group">
+                                        <label>Mobile Number</label>
                                     <input type="tel" name="bMobile" class="form-control" placeholder="Mobile" pattern="[0-9]{10}"
                                     value="${setBillingInputValue(pageData.si,'bMobile')}"    
                                     title="Input a valid mobile number." required>
+                                </div>
+                                </div>
+                            </div>
+                              <div class="row">
+                                <div class="col">
+                                 <div class="form-group">
+                                        <label>GSTIN <small class="text-muted" >(if any)</small></label>
+                                    <input type="text" class="form-control" placeholder="GSTIN" minlength="0"
+                                    value="${setBillingInputValue(pageData.si,'bGstin')}"
+                                        maxlength="15" name="bGstin">
+                                 </div>
                                 </div>
                             </div>
 
