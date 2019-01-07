@@ -34,7 +34,8 @@ class Orders {
                             "bCity": "Mumbai",
                             "bPincode": "400093",
                             "bState": "Jammu & Kashmir",
-                            "bMobile": "9819569622"
+                            "bMobile": "9819569622",
+                            "bGstin":"123456789012345"
                         },
                         "shipping": {
                             "sSalutation": "Mr.",
@@ -46,7 +47,8 @@ class Orders {
                             "sCity": "Mumbai",
                             "sPincode": "400093",
                             "sState": "Jammu & Kashmir",
-                            "sMobile": "9819569622"
+                            "sMobile": "9819569622",
+                            "sGstin":"123456789012345"
                         }
                     },
                     "payment": {
