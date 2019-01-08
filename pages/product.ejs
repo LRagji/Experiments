@@ -49,8 +49,13 @@
                                     <%= pageData.product.meta.serving_per_container %></b></li>
                             <li>Ships in: <b>
                                     <%= pageData.product.meta.shippingdetail %> day(s)</b></li>
-                            <li>Visit<a target="blank" href="<%= pageData.product.meta.mwebsite %>">
-                                    <%= pageData.product.meta.mname %></a></li>
+                            <li><form action="/search" method="POST">
+                             <input type="hidden" name="mname" value="<%= pageData.product.meta.mname %>" />
+                            <button type="Submit" class="btn btn-link pl-0"><%= pageData.product.meta.mname %></button>
+                            </form>
+                            </li>
+                             <li><a target="blank" href="<%= pageData.product.meta.mwebsite %>">
+                                    Website</a></li>
                         </ul>
                         <div class="d-flex">
                             <button onClick="addProductToSession(<%=pageData.product.id %>,1)" class="btn btn-primary"
