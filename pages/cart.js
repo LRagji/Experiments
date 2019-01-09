@@ -105,6 +105,7 @@ class pageCart extends page {
                     this.fillShippingDetails(req.body, copyBillingInfo, "Pincode", shippingDetails, (value) => this.util.validateIsPostcode(value));
                     this.fillShippingDetails(req.body, copyBillingInfo, "State", shippingDetails, (value) => this.util.validateIsInOptions(value, this.const.states));
                     this.fillShippingDetails(req.body, copyBillingInfo, "Mobile", shippingDetails, (value) => this.util.validateMobilePhone(value));
+                    this.fillShippingDetails(req.body, true, "Gstin", shippingDetails, (value) => value === "" ? true : this.util.validateExactLength(value, 15));
 
                     req.session.locked.shippingDetails = shippingDetails;
                     req.session.locked.state = 2;

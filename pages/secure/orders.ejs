@@ -52,6 +52,8 @@
                                             <%=order.shippingDetails.billing.bCity+': '+order.shippingDetails.billing.bPincode%></small></li>
                                     <li class="list-inline-item"><small>
                                             <%=order.shippingDetails.billing.bState%></small></li>
+                                    <li class="list-inline-item">GSTIN:<small>
+                                            <%=order.shippingDetails.billing.bGstin%></small></li>
                                 </ul>
                             </div>
                             <div class="col-md">
@@ -71,6 +73,8 @@
                                             <%=order.shippingDetails.shipping.sCity+': '+order.shippingDetails.shipping.sPincode%></small></li>
                                     <li class="list-inline-item"><small>
                                             <%=order.shippingDetails.shipping.sState%></small></li>
+                                    <li class="list-inline-item">GSTIN:<small>
+                                            <%=order.shippingDetails.shipping.sGstin%></small></li>
                                 </ul>
                             </div>
                         </div>

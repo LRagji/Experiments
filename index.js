@@ -17,7 +17,7 @@ var minifyHTML = require('express-minify-html');
 let authenticationModule = require('./modules/auth');
 let authenticationService = null;
 let util = require('./modules/utilities');
-let textService = require('./messages');
+let textService = require('./modules/messages');
 
 
 //Minify on the fly
