@@ -2,9 +2,9 @@ let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
 let users = [], healthLinks = [], FAQ = [];
 let util = require('../modules/utilities');
-let fs = require('fs');
 let settings = require('./appSettings');
 let orders = require('./orders').singleton();
+let banners = require('./banners').singleton();
 let products = require('./products').singleton(pgPool);
 
 // TODO:Call the appropiate API
@@ -16,6 +16,7 @@ class DAL {
         this.appSettings = settings.singleton(constantService);
         this.orders = orders;
         this.products = products;
+        this.banners = banners;
 
         //TODO: This binding list is not upto date
         this.pool = this.pool.bind(this);
@@ -36,9 +37,9 @@ class DAL {
         this.deleteFAQ = this.deleteFAQ.bind(this);
         this.getAllFAQ = this.getAllFAQ.bind(this);
         this.getFAQ = this.getFAQ.bind(this);
-       
+
         //TODO:Delete this mock data
-        
+
         if (users.length === 0) {
             for (let i = 0; i < 50; i++) //7389 Total users
                 users.push(
@@ -236,26 +237,6 @@ class DAL {
             }
             else {
                 rej(new Error("Cannot find user with id:" + userId));
-            }
-        });
-    }
-
-    saveBanners(banner1Buff, banner2Buff, banner3Buff) {
-        return new Promise((acc, rej) => {
-            try {
-                if (banner1Buff !== undefined) {
-                    fs.writeFileSync('static/resources/images/banners/banner1.jpg', banner1Buff);
-                }
-                if (banner2Buff !== undefined) {
-                    fs.writeFileSync('static/resources/images/banners/banner2.jpg', banner2Buff);
-                }
-                if (banner3Buff !== undefined) {
-                    fs.writeFileSync('static/resources/images/banners/banner3.jpg', banner3Buff);
-                }
-                acc();
-            }
-            catch (err) {
-                rej(err);
             }
         });
     }
