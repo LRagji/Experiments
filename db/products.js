@@ -204,7 +204,6 @@ class Products {
         });
 
         let selectQuery = 'select * from products ' + (whereClause !== "" ? ('where ' + whereClause) : '') + (orderClause !== "" ? ('order by ' + orderClause) : ' order by id ') + ' limit $1 offset $2';
-        console.log(selectQuery);
         let response = await this.pgPool.query(selectQuery, argumentArray);
 
         let fetchedProducts = [];

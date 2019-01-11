@@ -31,7 +31,7 @@ class apiServer extends page {
     }
 
     async searchProducts(req, renderResponse) {
-        console.log(req.body);
+        
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
         let filter = this.util.cloneFilterForNetworkTransport(req.body);
