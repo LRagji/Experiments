@@ -16,14 +16,13 @@
         <div class="row">
             <div class="col">
                 <Strong>
-                    Searching for: "<span id="keyword">
-                        <%-pageData.sk-%></span>"
+                    <%-pageData.st-%>
                 </strong>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <div id="resultContainer" class="card-columns" >
+                <div id="resultContainer" class="card-columns">
 
                 </div>
 
@@ -96,7 +95,7 @@
             }
         }
 
-        hookUpPagination("/v1/home/products?&s=" + encodeURIComponent($("#keyword").text().trim()), productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10);
+        hookUpPagination("/v1/products/search", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10,  <%-pageData.sf-%>);
 
     </script>
 </body>

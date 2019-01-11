@@ -17,7 +17,8 @@ class pageSearch extends page {
 
     async renderSearch(req, renderView) {
         let pageData = {};
-        pageData[this.const.searchKeyword] = "";
+        pageData[this.const.searchTittle] = "Showing All Products";
+        pageData[this.const.searchFilter] = JSON.stringify({});
         renderView('../pages/search', pageData);
     }
 
@@ -27,7 +28,8 @@ class pageSearch extends page {
             throw new Error("Invalid search parameter name length.")
         }
         let pageData = {};
-        pageData[this.const.searchKeyword] = req.body.keyword;
+        pageData[this.const.searchTittle] = "Searching for \"" + req.body.keyword + "\"";
+        pageData[this.const.searchFilter] = JSON.stringify({ "wwhi": "fff" });
         renderView('../pages/search', pageData);
     }
 
