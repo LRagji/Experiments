@@ -216,4 +216,34 @@ module.exports = {
     isAdmin(user) {
         return user.meta.type === "admin";
     },
+
+    cloneFilterForNetworkTransport(filter) {
+        let returnFilter = undefined;
+        if (Object.keys(filter.like === undefined ? {} : filter.like).length > 0) {
+            if (returnFilter === undefined) returnFilter = {};
+            returnFilter.like = filter.like;
+        }
+        if (Object.keys(filter.equal === undefined ? {} : filter.equal).length > 0) {
+            if (returnFilter === undefined) returnFilter = {};
+            returnFilter.equal = filter.equal;
+        }
+        if (Object.keys(filter.ascending === undefined ? {} : filter.ascending).length > 0) {
+            if (returnFilter === undefined) returnFilter = {};
+            returnFilter.ascending = filter.ascending;
+        }
+        if (Object.keys(filter.descending === undefined ? {} : filter.descending).length > 0) {
+            if (returnFilter === undefined) returnFilter = {};
+            returnFilter.descending = filter.descending;
+        }
+        if (Object.keys(filter.greaterThan === undefined ? {} : filter.greaterThan).length > 0) {
+            if (returnFilter === undefined) returnFilter = {};
+            returnFilter.greaterThan = filter.greaterThan;
+        }
+        if (Object.keys(filter.lessThan === undefined ? {} : filter.lessThan).length > 0) {
+            if (returnFilter === undefined) returnFilter = {};
+            returnFilter.lessThan = filter.lessThan;
+        }
+
+        return returnFilter;
+    }
 }

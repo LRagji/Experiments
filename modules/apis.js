@@ -31,8 +31,14 @@ class apiServer extends page {
     }
 
     async searchProducts(req, renderResponse) {
+        console.log(req.body);
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
+        let filter = this.util.cloneFilterForNetworkTransport(req.body);
+        if (filter === undefined) {
+            throw new Error("Invalid filter parameter.")
+        }
+       
         let keyword = req.query.s !== undefined ? req.query.s.trim() : "";
         let category = req.query.c !== undefined ? req.query.c.trim() : "";
         let subcategory = req.query.sc !== undefined ? req.query.sc.trim() : "";
