@@ -23,7 +23,7 @@ class apiServer extends page {
         let category = req.query.c !== undefined ? req.query.c.trim() : "";
         let subcategory = req.query.sc !== undefined ? req.query.sc.trim() : "";
 
-        let products = await this.dal.products.readAllProducts(page, size, keyword, category, subcategory);
+        let products = await this.dal.products.readAllProducts(page, size, {});
         if (products.length === size)
             renderResponse(206, products);
         else
@@ -38,12 +38,8 @@ class apiServer extends page {
         if (filter === undefined) {
             throw new Error("Invalid filter parameter.")
         }
-       
-        let keyword = req.query.s !== undefined ? req.query.s.trim() : "";
-        let category = req.query.c !== undefined ? req.query.c.trim() : "";
-        let subcategory = req.query.sc !== undefined ? req.query.sc.trim() : "";
 
-        let products = await this.dal.products.readAllProducts(page, size, keyword, category, subcategory);
+        let products = await this.dal.products.readAllProducts(page, size, filter);
         if (products.length === size)
             renderResponse(206, products);
         else

@@ -148,7 +148,7 @@ class Products {
         return fetchedProduct;
     }
 
-    async readAllProducts(pageNo, size, keyword, category, subcategory) {
+    async readAllProducts(pageNo, size, filter) {
 
         pageNo = parseInt(pageNo);
         size = parseInt(size);
@@ -158,21 +158,53 @@ class Products {
         let startIndex = (pageNo * size);
         let argumentArray = [size, startIndex];
 
-        let whereClause = "";
-        if (category !== undefined && category !== "") {
-            whereClause = " lower(meta->>'category')=$" + (argumentArray.length + 1);
-            argumentArray.push(category.toLowerCase());
-        }
-        if (subcategory !== undefined && subcategory !== "") {
-            whereClause += (whereClause === "" ? "" : " and ") + " lower(meta->>'subCategory')=$" + (argumentArray.length + 1);
-            argumentArray.push(subcategory.toLowerCase());
-        }
-        if (keyword !== undefined && keyword !== "") {
-            whereClause += (whereClause === "" ? "" : " and ") + "lower(keywords) like $" + (argumentArray.length + 1);
-            argumentArray.push("%" + keyword.toLowerCase() + "%");
-        }
+        let whereClause = "", orderClause = "";
+        
+        let propertyMap = {
+            "mname": "meta->>'mname'"
+        };
 
-        let selectQuery = 'select * from products ' + (whereClause !== "" ? ('where ' + whereClause) : '') + ' order by id limit $1 offset $2';
+        let operatorMap = {
+            "like": "like",
+            "equal": "=",
+            "greaterThan": ">",
+            "lessThan": "<",
+            "ascending": "asc",
+            "descending": "desc"
+        };
+
+        Object.keys(filter).forEach((operator) => {
+
+            switch (operator) {
+                case 'equal':
+                case 'greaterThan':
+                case 'lessThan':
+                    Object.keys(filter[operator]).forEach((operand) => {
+                        whereClause += (whereClause === "" ? "" : " and ") + propertyMap[operand] + " " + operatorMap[operator] + " $" + (argumentArray.length + 1);
+                        argumentArray.push(filter[operator][operand]);
+                    });
+                    break;
+                case 'like':
+                    Object.keys(filter[operator]).forEach((operand) => {
+                        whereClause += (whereClause === "" ? "" : " and ") + " lower(" + propertyMap[operand] + ") " + operatorMap[operator] + " $" + (argumentArray.length + 1);
+                        argumentArray.push("%" + filter[operator][operand].toLowerCase() + "%");
+                    });
+                    break;
+                case 'ascending':
+                case 'descending':
+                    Object.keys(filter[operator]).forEach((operand) => {
+                        orderClause += (orderClause === "" ? "" : " , ") + propertyMap[operand] + " " + operatorMap[operator];
+                    });
+                    break;
+                default:
+                    console.warn("New Operator found: " + operator)
+                    break;
+            }
+
+        });
+
+        let selectQuery = 'select * from products ' + (whereClause !== "" ? ('where ' + whereClause) : '') + (orderClause !== "" ? ('order by ' + orderClause) : ' order by id ') + ' limit $1 offset $2';
+        console.log(selectQuery);
         let response = await this.pgPool.query(selectQuery, argumentArray);
 
         let fetchedProducts = [];
