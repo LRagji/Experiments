@@ -18,6 +18,7 @@ class pageHome extends page {
 
         let pageData = {};
         pageData[this.const.bestSellers] = await this.dal.products.readAllProducts(0, 20, { equal: { bestSeller: true } });
+        pageData[this.const.newArrivals] = await this.dal.products.readAllProducts(0, 20, { equal: { newArrivals: true } });
         renderView('../pages/index', pageData);
     }
 }

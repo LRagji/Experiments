@@ -140,7 +140,8 @@ class Products {
         let propertyMap = {
             "mname": "meta->>'mname'",
             "keyword": "keywords",
-            "bestSeller":"meta->>'bestSelling'"
+            "bestSeller":"meta->>'bestSelling'",
+            "newArrivals":"meta->>'newArrivals'"
         };
 
         let operatorMap = {

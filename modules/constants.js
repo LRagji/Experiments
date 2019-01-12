@@ -24,6 +24,7 @@ module.exports = {
     searchFilter: "sf",
     searchTittle: "st",
     bestSellers:"bestSellers",
+    newArrivals:"newArrivals",
     healthLibraryIndex:"hli",
     taxSettingsKey: "tsk",
     footerLinksErr: "fle",
