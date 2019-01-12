@@ -24,8 +24,8 @@ async function InsertMockProducts(numberOfProducts) {
             [],
             "search Laukik Ragji Hello",
             undefined,
-            false,
-            false
+            true,
+            true
         );
     }
     process.stdout.write("\r\n");
