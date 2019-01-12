@@ -141,7 +141,7 @@ class Products {
             "mname": "meta->>'mname'",
             "keyword": "keywords",
             "bestSeller":"meta->>'bestSelling'",
-            "newArrivals":"meta->>'newArrivals'"
+            "newArrivals":"meta->>'newArrival'"
         };
 
         let operatorMap = {
