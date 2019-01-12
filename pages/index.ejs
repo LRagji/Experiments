@@ -60,13 +60,35 @@
         <div class="row">
             <div class="col">
                 <div class="card myshadow">
-                    <div class="card-header"><h4>Best Sellers</h4></div>
+                    <div class="card-header">
+                        <h4>Best Sellers</h4>
+                    </div>
                     <div class="card-body">
                         <div class="owl-carousel owl-theme">
-                                <% pageData.bestSellers.forEach(function(product){ %>
-                                  `Hello ${product.name}`
-                                  <% }); %>
-                        </div>  
+                            <% pageData.bestSellers.forEach(function(product){ %>
+                            <%- `<div class="card m-2 myproductcard">
+                                    <a href="/product?pid=${product.id}" >
+                                        <img class="productThumbnail mx-auto" src="../static/resources/images/products/${product.image}" style="max-width:100px;max-height:120px" alt="Product Image">
+                                    </a>
+                                    <div class="card-body">
+                                   <strong>${product.name}</strong>
+                                        <div class="d-flex justify-content-center align-items-center my-2">
+                                        <h3 class="text-success">
+                                        &#8377;${product.offerprice}
+                                        <small><small class="text-muted"><del>&#8377;${product.price}</del></small></small>
+                                        </h3>
+                                        </div>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                        <small>Ships in ${product.meta.shippingdetail} day(s)</small>
+                                        </div>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                        <button onClick=addProductToSession(${product.id},1) class="btn btn-success my-2 mr-0" type="submit"><i class="fas fa-cart-plus"></i>
+                                                Add to cart</button>
+                                        </div>
+                                    </div>
+                                </div>` %>
+                            <% }); %>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,7 +158,7 @@
             $(".owl-carousel").owlCarousel(
                 {
                     margin: 10,
-                    loop: true,
+                    loop: false,
                     autoWidth: true,
                     items: 4,
                     nav: true
