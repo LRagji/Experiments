@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="../static/resources/styles/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/resources/styles/owl.theme.default.min.css">
     <% include ./head %>
 
     <title>Health Mall</title>
@@ -14,11 +16,11 @@
     <!-- Site Content -->
     <div class="container-fluid" id="mainContainer">
         <!-- Carousel -->
-        <div id="carouselExampleIndicators" class="myshadow carousel slide" data-ride="carousel">
+        <div id="banners" class="myshadow carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#banners" data-slide-to="0" class="active"></li>
+                <li data-target="#banners" data-slide-to="1"></li>
+                <li data-target="#banners" data-slide-to="2"></li>
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -31,66 +33,16 @@
                     <img class="d-block w-100" src="./static/resources/images/banners/banner3.jpg" alt="Third Banner">
                 </div>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <a class="carousel-control-prev" href="#banners" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
             </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <a class="carousel-control-next" href="#banners" role="button" data-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
         </div>
         <div class="row mt-3">
-            <div class="col-2 d-none">
-                <!-- Categories -->
-                <div class="card myshadow mt-2 w-100">
-                    <div class="card-header">CATEGORIES</div>
-                    <div class="card-body">
-                        <ul>
-                            <a href="#">
-                                <li>Category A</li>
-                            </a>
-                            <a href="#">
-                                <li>Category B</li>
-                            </a>
-                            <a href="#">
-                                <li>Category C</li>
-                            </a>
-                            <a href="#">
-                                <li>Category D</li>
-                            </a>
-                            <a href="#">
-                                <li>Category E</li>
-                            </a>
-                            <a href="#">
-                                <li>Category F</li>
-                            </a>
-                            <a href="#">
-                                <li>Category G</li>
-                            </a>
-                            <a href="#">
-                                <li>Category H</li>
-                            </a>
-                            <a href="#">
-                                <li>Category I</li>
-                            </a>
-                            <a href="#">
-                                <li>Category J</li>
-                            </a>
-                            <a href="#">
-                                <li>Category K</li>
-                            </a>
-                            <a href="#">
-                                <li>Category L</li>
-                            </a>
-                            <a href="#">
-                                <li>Category M</li>
-                            </a>
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
             <div class="col">
                 <!-- RESULTS -->
                 <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap"></div>
@@ -104,10 +56,26 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card myshadow">
+                    <div class="card-header"><h4>Best Sellers</h4></div>
+                    <div class="card-body">
+                        <div class="owl-carousel owl-theme">
+                                <% pageData.bestSellers.forEach(function(product){ %>
+                                  `Hello ${product.name}`
+                                  <% }); %>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
     <% include ./footer %>
+    <script src="../static/resources/scripts/owl.carousel.min.js"></script>
     <script src="../../static/resources/scripts/paginatedtemplates.js"></script>
     <script>
         var shoppingBadge = $('#shoppingCart');
@@ -163,8 +131,18 @@
             });
         }
 
-        hookUpPagination("/v1/home/products", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10);
-
+        //hookUpPagination("/v1/home/products", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10);
+        $(document).ready(function () {
+            $(".owl-carousel").owlCarousel(
+                {
+                    margin: 10,
+                    loop: true,
+                    autoWidth: true,
+                    items: 4,
+                    nav: true
+                }
+            );
+        });
     </script>
 </body>
 

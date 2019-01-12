@@ -23,6 +23,7 @@ module.exports = {
     footerPageLinks: "fpl",
     searchFilter: "sf",
     searchTittle: "st",
+    bestSellers:"bestSellers",
     healthLibraryIndex:"hli",
     taxSettingsKey: "tsk",
     footerLinksErr: "fle",

@@ -12,6 +12,8 @@ let modErrorPage = require('../pages/error');
 let errorPage = undefined;
 let modHealthLibraryPage = require('../pages/healthlibrary');
 let healthLibraryPage = undefined;
+let modHomePage = require('../pages/index');
+let homePage = undefined;
 let page = require('./page');
 
 class dynamicPages extends page {
@@ -33,6 +35,7 @@ class dynamicPages extends page {
         searchPage = new modSearchPage(server, this.dal, this.util, this.const, this.textService);
         errorPage = new modErrorPage(server, this.dal, this.util, this.const, this.textService);
         healthLibraryPage = new modHealthLibraryPage(server, this.dal, this.util, this.const, this.textService);
+        homePage = new modHomePage(server, this.dal, this.util, this.const, this.textService);
 
         this.loadRoutes(server);
 
@@ -49,7 +52,7 @@ class dynamicPages extends page {
         server.get('/terms', this.safeRenderView('../pages/static/termsandconditions'));
         server.get('/about', this.safeRenderView('../pages/static/about'));
         server.get('/contact', this.safeRenderView('../pages/static/contact'));
-        server.get('/', this.safeRenderView('../pages/index'));
+       
         return server;
     }
 }
