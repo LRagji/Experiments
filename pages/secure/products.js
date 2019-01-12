@@ -56,7 +56,9 @@ class pageProducts extends adminPage {
                 "category": req.body.cat,
                 "subCategory": req.body.subCat,
                 "mname": req.body.mName,
-                "mwebsite": req.body.mWebsite
+                "mwebsite": req.body.mWebsite,
+                "newArrival": req.body.newArrival !== undefined,
+                "bestSelling": req.body.bestSelling !== undefined
             }
         }
 
@@ -238,7 +240,9 @@ class pageProducts extends adminPage {
                 req.body.mWebsite,
                 req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
                 req.body.keywords,
-                req.file !== undefined ? req.file.buffer : undefined
+                req.file !== undefined ? req.file.buffer : undefined,
+                req.body.newArrival !== undefined,
+                req.body.bestSelling !== undefined
             );
         }
         else {
@@ -262,7 +266,9 @@ class pageProducts extends adminPage {
                 req.body.mWebsite,
                 req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
                 req.body.keywords,
-                req.file !== undefined ? req.file.buffer : undefined
+                req.file !== undefined ? req.file.buffer : undefined,
+                req.body.newArrival !== undefined,
+                req.body.bestSelling !== undefined
             );
         }
         req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);

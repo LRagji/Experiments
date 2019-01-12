@@ -23,7 +23,9 @@ async function InsertMockProducts(numberOfProducts) {
             "https://www.health-mall.in",
             [],
             "search Laukik Ragji Hello",
-            undefined
+            undefined,
+            false,
+            false
         );
     }
     process.stdout.write("\r\n");

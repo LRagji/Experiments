@@ -12,6 +12,7 @@ class Products {
         this.readAllProducts = this.readAllProducts.bind(this);
         this._fromProperties = this._fromProperties.bind(this);
         this._parseProductId = this._parseProductId.bind(this);
+        this._rowToProduct = this._rowToProduct.bind(this);
     }
 
     static singleton(pgPool) {
@@ -21,7 +22,7 @@ class Products {
         return this.instance;
     }
 
-    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer) {
+    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling) {
 
         let newProduct = this._fromProperties(-1,
             name,
@@ -40,7 +41,9 @@ class Products {
             manufactureName,
             manufactureWebsite,
             faq,
-            searchKeywords);
+            searchKeywords,
+            newArrival,
+            bestSelling);
 
         if (imageBuffer !== undefined) {
             fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
@@ -56,7 +59,7 @@ class Products {
         return newProduct;
     }
 
-    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer) {
+    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling) {
 
         let updatedProduct = this._fromProperties(
             id,
@@ -76,7 +79,9 @@ class Products {
             manufactureName,
             manufactureWebsite,
             faq,
-            searchKeywords);
+            searchKeywords,
+            newArrival,
+            bestSelling);
 
         if (imageBuffer !== undefined) {
             fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
@@ -116,36 +121,8 @@ class Products {
     }
 
     async readProductById(productId) {
-        productId = this._parseProductId(productId);
-
-        let selectQuery = `select * from products where id=$1`;
-        let response = await this.pgPool.query(selectQuery, [productId]);
-
-        let fetchedProduct = undefined;
-        if (response.rows.length === 1) {
-            let row = response.rows[0];
-            fetchedProduct = this._fromProperties(
-                row.id,
-                row.name,
-                row.price,
-                row.offerprice,
-                row.imageName,
-                row.description,
-                row.ingredients,
-                row.meta.code,
-                row.meta.package_detail,
-                row.meta.serving_size,
-                row.meta.serving_per_container,
-                row.meta.shippingdetail,
-                row.meta.category,
-                row.meta.subCategory,
-                row.meta.mname,
-                row.meta.mwebsite,
-                row.faq,
-                row.keywords);
-        }
-
-        return fetchedProduct;
+        let results = await this.readProducts([productId]);
+        return results.length > 0 ? results[0] : undefined
     }
 
     async readAllProducts(pageNo, size, filter) {
@@ -159,9 +136,10 @@ class Products {
         let argumentArray = [size, startIndex];
 
         let whereClause = "", orderClause = "";
-        
+
         let propertyMap = {
-            "mname": "meta->>'mname'"
+            "mname": "meta->>'mname'",
+            "keyword": "keywords"
         };
 
         let operatorMap = {
@@ -207,27 +185,7 @@ class Products {
         let response = await this.pgPool.query(selectQuery, argumentArray);
 
         let fetchedProducts = [];
-        response.rows.forEach(row => {
-            fetchedProducts.push(this._fromProperties(
-                row.id,
-                row.name,
-                row.price,
-                row.offerprice,
-                row.imageName,
-                row.description,
-                row.ingredients,
-                row.meta.code,
-                row.meta.package_detail,
-                row.meta.serving_size,
-                row.meta.serving_per_container,
-                row.meta.shippingdetail,
-                row.meta.category,
-                row.meta.subCategory,
-                row.meta.mname,
-                row.meta.mwebsite,
-                row.faq,
-                row.keywords));
-        });
+        response.rows.forEach(row => fetchedProducts.push(this._rowToProduct(row)));
 
         return fetchedProducts;
     }
@@ -240,38 +198,41 @@ class Products {
         let response = await this.pgPool.query(selectQuery, [productIds]);
 
         let fetchedProducts = [];
-        response.rows.forEach(row => {
-            fetchedProducts.push(this._fromProperties(
-                row.id,
-                row.name,
-                row.price,
-                row.offerprice,
-                row.imageName,
-                row.description,
-                row.ingredients,
-                row.meta.code,
-                row.meta.package_detail,
-                row.meta.serving_size,
-                row.meta.serving_per_container,
-                row.meta.shippingdetail,
-                row.meta.category,
-                row.meta.subCategory,
-                row.meta.mname,
-                row.meta.mwebsite,
-                row.faq,
-                row.keywords));
-        });
+        response.rows.forEach(row => fetchedProducts.push(this._rowToProduct(row)));
 
         return fetchedProducts;
     }
 
+    _rowToProduct(row) {
+        return this._fromProperties(
+            row.id,
+            row.name,
+            row.price,
+            row.offerprice,
+            row.imageName,
+            row.description,
+            row.ingredients,
+            row.meta.code,
+            row.meta.package_detail,
+            row.meta.serving_size,
+            row.meta.serving_per_container,
+            row.meta.shippingdetail,
+            row.meta.category,
+            row.meta.subCategory,
+            row.meta.mname,
+            row.meta.mwebsite,
+            row.faq,
+            row.keywords,
+            row.meta.newArrival,
+            row.meta.bestSelling);
+    }
     _parseProductId(productId) {
         productId = parseInt(productId);
         if (isNaN(productId)) throw new Error("Invalid Product Id");
         return productId;
     }
 
-    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords) {
+    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, newArrival, bestSelling) {
 
         id = this._parseProductId(id);
 
@@ -292,6 +253,10 @@ class Products {
         if (searchKeywords === undefined) {
             searchKeywords = "";
         }
+
+        newArrival = newArrival === true;
+        bestSelling = bestSelling === true;
+
         return {
             id: id,
             "name": name,
@@ -309,11 +274,12 @@ class Products {
                 "category": category,
                 "subCategory": subCategory,
                 "mname": manufactureName,
-                "mwebsite": manufactureWebsite
+                "mwebsite": manufactureWebsite,
+                "newArrival": newArrival,
+                "bestSelling": bestSelling
             },
             "description": desc,
             "ingredients": ingredients
-
         }
     }
 }

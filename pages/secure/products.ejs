@@ -147,6 +147,27 @@
                                      <hr>
                                 </div>
                             </div>
+                             <div class="row m-2">
+                                <div class="col-md">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" name="bestSelling" class="custom-control-input" id="bestSelling"
+                                        ${pageData.productinfo!==undefined && pageData.productinfo.meta.bestSelling===true?'checked':''} >
+                                        <label class="custom-control-label" for="bestSelling">Best selling</label>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" name="newArrival" class="custom-control-input" id="newArrival"
+                                        ${pageData.productinfo!==undefined && pageData.productinfo.meta.newArrival===true?'checked':''} >
+                                        <label class="custom-control-label" for="newArrival">New Arrival</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row m-2">
+                                    <div class="col">
+                                        <hr>
+                                    </div>
+                            </div>
                             <div class="row m-2">
                                 <div class="col">
                                     <h4>F.A.Q's</h4>
