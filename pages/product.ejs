@@ -36,9 +36,11 @@
                             <li>Item # : <b>
                                     <%= pageData.product.id %></b></li>
                             <li>Category : <b>
-                                    <span id="category" ><%= pageData.product.meta.category %></span></b></li>
+                                    <span id="category">
+                                        <%= pageData.product.meta.category %></span></b></li>
                             <li>Sub-Category : <b>
-                                    <span id="subcategory" ><%= pageData.product.meta.subCategory %></span></b></li>
+                                    <span id="subcategory">
+                                        <%= pageData.product.meta.subCategory %></span></b></li>
                             <li>Product Code : <b>
                                     <%= pageData.product.meta.code %></b></li>
                             <li>Package Details : <b>
@@ -49,12 +51,14 @@
                                     <%= pageData.product.meta.serving_per_container %></b></li>
                             <li>Ships in: <b>
                                     <%= pageData.product.meta.shippingdetail %> day(s)</b></li>
-                            <li><form action="/search" method="POST">
-                             <input type="hidden" name="mname" value="<%= pageData.product.meta.mname %>" />
-                            <button type="Submit" class="btn btn-link pl-0"><%= pageData.product.meta.mname %></button>
-                            </form>
+                            <li>
+                                <form action="/search" method="POST">
+                                    <input type="hidden" name="mname" value="<%= pageData.product.meta.mname %>" />
+                                    <button type="Submit" class="btn btn-link pl-0">
+                                        <%= pageData.product.meta.mname %></button>
+                                </form>
                             </li>
-                             <li><a target="blank" href="<%= pageData.product.meta.mwebsite %>">
+                            <li><a target="blank" href="<%= pageData.product.meta.mwebsite %>">
                                     Website</a></li>
                         </ul>
                         <div class="d-flex">
@@ -142,48 +146,16 @@
                 </div>
 
                 <!-- Related Products -->
-                <div class="row my-1 py-2">
+                <div class="row my-1 py-2" <%- pageData.product.meta.relatedProducts.length<1?'hidden':'' %>>
                     <div class="col">
                         <h4>Related Products</h4>
-                        <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap"></div>
-                        <div id="loadingSpinner" class="my-2">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    <span id="loadingMessage">Loading Products</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <% include ./footer %>
-    <script src="../../static/resources/scripts/paginatedtemplates.js"></script>
-    <script>
-        var shoppingBadge = $('#shoppingCart');
-
-        function addProductToSession(productId, quantity) {
-            $.post("/v1/cart/products", { productId: productId, quantity: quantity }).always((responseData) => {
-                if (responseData !== undefined && responseData.TotalProducts !== undefined && parseInt(responseData.TotalProducts)) {
-                    showSucess("Product added to your shopping cart.")
-                    shoppingBadge.text(parseInt(responseData.TotalProducts));
-                }
-                else {
-                    showFailure("Failed to add product to cart.");
-                }
-            });
-        }
-
-        function productTemplate(product) {
-            return `<div class="card m-2 myshadow myproductcard">
+                        <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap">
+                            <%  pageData.product.meta.relatedProducts.forEach(function(product){ %>
+                            <%- `<div class="card m-2 myshadow myproductcard">
             <a href="/product?pid=${product.id}" >
-            <center>
-                <img class="productThumbnail" src="../static/resources/images/products/${product.image}" style="max-width:150px;max-height:170px" alt="Product Image">
-            </center>
+                <center>
+                <img class="productThumbnail mx-auto" src="../static/resources/images/products/${product.image}" style="max-width:150px;max-height:170px" alt="Product Image">
+                </center>
             </a>
             <div class="card-body bg-light">
            <strong>${product.name}</strong>
@@ -201,7 +173,30 @@
                         Add to cart</button>
                 </div>
             </div>
-        </div>`;
+        </div>` %>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <% include ./footer %>
+    <script>
+        var shoppingBadge = $('#shoppingCart');
+
+        function addProductToSession(productId, quantity) {
+            $.post("/v1/cart/products", { productId: productId, quantity: quantity }).always((responseData) => {
+                if (responseData !== undefined && responseData.TotalProducts !== undefined && parseInt(responseData.TotalProducts)) {
+                    showSucess("Product added to your shopping cart.")
+                    shoppingBadge.text(parseInt(responseData.TotalProducts));
+                }
+                else {
+                    showFailure("Failed to add product to cart.");
+                }
+            });
         }
 
         function setStatus(pageNo, status) {
@@ -216,9 +211,6 @@
                 $("#loadingMessage").text("Loading more products from page " + pageNo);
             }
         }
-
-        hookUpPagination("/v1/home/products?&c=" + encodeURIComponent($("#category").text().trim())+"&sc=" + encodeURIComponent($("#subcategory").text().trim()), productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10);
-
     </script>
 </body>
 
