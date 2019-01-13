@@ -112,16 +112,23 @@ class pageProducts extends adminPage {
             return;
         }
 
-        if (req.body.relatedProducts.filter((e) => this.util.validateIsWholeNumberBetween(e, 1000000, 0)).length !== req.body.relatedProducts.length) {
-            req.flash(this.const.newProductError, "Invalid related products, values should be valid product ids.");
-            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
-            return;
-        }
+        req.body.relatedProducts = req.body.relatedProducts.filter((value, index, self) => self.indexOf(value) === index && value !== "-1");
+        req.body.relatedProducts = req.body.relatedProducts.map(e => parseInt(e));
 
-        if (await this.dal.products.readProducts(req.body.relatedProducts).length !== req.body.relatedProducts.length) {
-            req.flash(this.const.newProductError, "Invalid related products, values should exisitng product ids.");
-            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
-            return;
+        if (req.body.relatedProducts.length > 0) {
+
+            if (req.body.relatedProducts.filter((e) => this.util.validateIsWholeNumberBetween(e, 1000000, 0)).length !== req.body.relatedProducts.length) {
+                req.flash(this.const.newProductError, "Invalid related products, values should be valid product ids.");
+                this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+                return;
+            }
+
+            let dbProducts = await this.dal.products.readProducts(req.body.relatedProducts);
+            if (dbProducts.length !== req.body.relatedProducts.length) {
+                req.flash(this.const.newProductError, "Invalid related products, values should exisitng product ids.");
+                this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+                return;
+            }
         }
 
         if (this.util.validateIsFloatNumberBetween(req.body.offerPrice, 100000, 0) === false) {
