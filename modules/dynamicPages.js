@@ -52,6 +52,8 @@ class dynamicPages extends page {
         server.get('/terms', this.safeRenderView('../pages/static/termsandconditions'));
         server.get('/about', this.safeRenderView('../pages/static/about'));
         server.get('/contact', this.safeRenderView('../pages/static/contact'));
+
+        server.get('/test', this.safeRenderView('../pages/components/arraySelect'));
        
         return server;
     }

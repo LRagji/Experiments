@@ -22,7 +22,7 @@ class Products {
         return this.instance;
     }
 
-    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling) {
+    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts) {
 
         let newProduct = this._fromProperties(-1,
             name,
@@ -43,7 +43,8 @@ class Products {
             faq,
             searchKeywords,
             newArrival,
-            bestSelling);
+            bestSelling,
+            relatedProducts);
 
         if (imageBuffer !== undefined) {
             fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
@@ -59,7 +60,7 @@ class Products {
         return newProduct;
     }
 
-    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling) {
+    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts) {
 
         let updatedProduct = this._fromProperties(
             id,
@@ -81,7 +82,8 @@ class Products {
             faq,
             searchKeywords,
             newArrival,
-            bestSelling);
+            bestSelling,
+            relatedProducts);
 
         if (imageBuffer !== undefined) {
             fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
@@ -140,8 +142,8 @@ class Products {
         let propertyMap = {
             "mname": "meta->>'mname'",
             "keyword": "keywords",
-            "bestSeller":"meta->>'bestSelling'",
-            "newArrivals":"meta->>'newArrival'"
+            "bestSeller": "meta->>'bestSelling'",
+            "newArrivals": "meta->>'newArrival'"
         };
 
         let operatorMap = {
@@ -226,16 +228,17 @@ class Products {
             row.faq,
             row.keywords,
             row.meta.newArrival,
-            row.meta.bestSelling);
+            row.meta.bestSelling,
+            row.meta.relatedProducts);
     }
-    
+
     _parseProductId(productId) {
         productId = parseInt(productId);
         if (isNaN(productId)) throw new Error("Invalid Product Id");
         return productId;
     }
 
-    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, newArrival, bestSelling) {
+    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, newArrival, bestSelling, relatedProducts) {
 
         id = this._parseProductId(id);
 
@@ -260,6 +263,9 @@ class Products {
         newArrival = newArrival === true;
         bestSelling = bestSelling === true;
 
+        if (!Array.isArray(relatedProducts)) relatedProducts = [];
+        relatedProducts = relatedProducts.map((e) => parseInt(e));
+
         return {
             id: id,
             "name": name,
@@ -279,7 +285,8 @@ class Products {
                 "mname": manufactureName,
                 "mwebsite": manufactureWebsite,
                 "newArrival": newArrival,
-                "bestSelling": bestSelling
+                "bestSelling": bestSelling,
+                "relatedProducts": relatedProducts
             },
             "description": desc,
             "ingredients": ingredients

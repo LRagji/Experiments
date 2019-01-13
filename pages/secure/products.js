@@ -58,7 +58,8 @@ class pageProducts extends adminPage {
                 "mname": req.body.mName,
                 "mwebsite": req.body.mWebsite,
                 "newArrival": req.body.newArrival !== undefined,
-                "bestSelling": req.body.bestSelling !== undefined
+                "bestSelling": req.body.bestSelling !== undefined,
+                "relatedProducts": Array.isArray(req.body.relatedProducts) ? req.body.relatedProducts : []
             }
         }
 
@@ -101,6 +102,24 @@ class pageProducts extends adminPage {
 
         if (this.util.validateIsFloatNumberBetween(req.body.price, 100000, 0) === false) {
             req.flash(this.const.newProductError, "Invalid product price, should be between 0 to 100000.");
+            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+            return;
+        }
+
+        if (!Array.isArray(req.body.relatedProducts)) {
+            req.flash(this.const.newProductError, "Invalid related products, should be an array value.");
+            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+            return;
+        }
+
+        if (req.body.relatedProducts.filter((e) => this.util.validateIsWholeNumberBetween(e, 1000000, 0)).length !== req.body.relatedProducts.length) {
+            req.flash(this.const.newProductError, "Invalid related products, values should be valid product ids.");
+            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+            return;
+        }
+
+        if (await this.dal.products.readProducts(req.body.relatedProducts).length !== req.body.relatedProducts.length) {
+            req.flash(this.const.newProductError, "Invalid related products, values should exisitng product ids.");
             this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
             return;
         }
@@ -242,7 +261,8 @@ class pageProducts extends adminPage {
                 req.body.keywords,
                 req.file !== undefined ? req.file.buffer : undefined,
                 req.body.newArrival !== undefined,
-                req.body.bestSelling !== undefined
+                req.body.bestSelling !== undefined,
+                req.body.relatedProducts
             );
         }
         else {
@@ -268,7 +288,8 @@ class pageProducts extends adminPage {
                 req.body.keywords,
                 req.file !== undefined ? req.file.buffer : undefined,
                 req.body.newArrival !== undefined,
-                req.body.bestSelling !== undefined
+                req.body.bestSelling !== undefined,
+                req.body.relatedProducts
             );
         }
         req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);

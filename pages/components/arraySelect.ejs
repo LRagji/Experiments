@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="../static/resources/styles/owl.carousel.min.css">
+    <link rel="stylesheet" href="../static/resources/styles/owl.theme.default.min.css">
+    <% include ../head %>
+
+    <title>Health Mall</title>
+</head>
+
+<body class="bg-light ">
+    <!-- Main Nav -->
+    <% include ../header %>
+    <div class="container">
+        <form class="w-50">
+            <label for="basic-url">Related Products</label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">Product Id:</span>
+                </div>
+                <input type="text" value="[1,2,3,1,4,2,3]" class="form-control" id="newProductId" aria-describedby="basic-addon3">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" onclick="addNewItem($('#newProductId').val())" type="button"
+                        id="basic-addon3">Add</button>
+                </div>
+            </div>
+            <div id="selectedIds" class="d-flex flex-wrap">
+
+            </div>
+
+        </form>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+    <script>
+        $(document).ready(function () {
+            JSON.parse($('#newProductId').val()).forEach(element => {
+                addNewItem(element);
+            });
+            $('#newProductId').val("");
+        });
+        function addNewItem(value) {
+            $('#selectedIds').append(templatedSelections(value));
+        }
+
+        function templatedSelections(val) {
+            return `<div class="form-check m-2">
+                    <input class="form-check-input" onchange="removeMe(this)" checked type="checkbox" name="relatedProducts" id="check${val}">
+                    <label class="form-check-label" for="check${val}">
+                    ${val}
+                    </label>
+                    </div>`;
+        }
+
+        function removeMe(element) {
+            element.parentElement.remove();
+        }
+
+    </script>
+</body>
+
+</html>
