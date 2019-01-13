@@ -9,6 +9,7 @@ let _triggerPane = undefined, _resultPane = undefined;
 let _apiUrl = "";
 let _loadingCallback = undefined, _templateProcessCallback = undefined;
 let _payload = undefined;
+let _networkRequestActive = undefined;
 
 $.fn.isInViewport = function () {
     var elementTop = $(this).offset().top;
@@ -45,12 +46,14 @@ function shouldLoadNextPage(e) {
 function loadData(query) {
     _loadingCallback(_pageNo, 0);
     if (_payload === undefined)
-        $.getJSON(query).always(handleResponse);
+        _networkRequestActive = $.getJSON(query);
     else
-        $.post(query, _payload, undefined, "json").always(handleResponse);
+        _networkRequestActive = $.post(query, _payload, undefined, "json");
+    _networkRequestActive.always(handleResponse)
 }
 
 function handleResponse(data, textStatus, xhrObj) {
+    _networkRequestActive = undefined;
     if (xhrObj.status === 206) {
         extractData(data);
         $(window).scroll(shouldLoadNextPage);
@@ -73,4 +76,10 @@ function extractData(data) {
         _resultPane.append(clonedTemplate);
     });
     _pageNo++;
+}
+
+function breakupPagination() {
+    if (_networkRequestActive !== undefined) _networkRequestActive.abort();
+    $(window).off('scroll', shouldLoadNextPage);
+    if (_loadingCallback !== undefined) _loadingCallback(_pageNo, 2);
 }
