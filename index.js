@@ -18,6 +18,7 @@ let authenticationModule = require('./modules/auth');
 let authenticationService = null;
 let util = require('./modules/utilities');
 let textService = require('./modules/messages');
+var cookieParser = require('cookie-parser')
 
 
 //Minify on the fly
@@ -31,6 +32,10 @@ app.use(minifyHTML({
         minifyCSS: true
     }
 }));
+
+//Adding Cookie Parser
+console.log("Piping cookie service..");
+app.use(cookieParser(_cookiesecret));
 
 //Use Flash
 console.log("Piping flash service..");

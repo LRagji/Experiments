@@ -24,7 +24,8 @@ class pageSuccess extends securePage {
                 return;
             }
 
-            let productInfo = await this.dal.products.readProducts(order.products.map(p => p.productId))
+            let productIds = order.products.map(p => p.productId);
+            let productInfo = await this.dal.products.readProducts(productIds)
 
             order.products.forEach((prductKVP) => {
                 let pi = productInfo.find((p) => p.id === prductKVP.productId);
@@ -45,9 +46,23 @@ class pageSuccess extends securePage {
 
             order.products = productInfo;
 
+            let cookieData = req.signedCookies[this.const.recentlyBoughtProducts];
+            if (productIds.length > this.const.maxProductsToShowOnScreen) {
+                cookieData = productIds.splice(0, this.const.maxProductsToShowOnScreen);
+            }
+            else if (cookieData !== undefined && Array.isArray(cookieData)) {
+                if (cookieData.length > this.const.maxProductsToShowOnScreen) cookieData = cookieData.splice(0, this.const.maxProductsToShowOnScreen);
+                let excessLength = (cookieData.length + productIds.length) - this.const.maxProductsToShowOnScreen;
+                if (excessLength > 0) cookieData.splice(0, excessLength);
+                while (cookieData.length < this.const.maxProductsToShowOnScreen && productIds.length > 0) cookieData.push(productIds.pop());
+            }
+            else {
+                cookieData = productIds;
+            }
+
             let pageData = {};
             pageData[this.const.orderdetails] = order;
-            renderView('../pages/secure/success', pageData);
+            renderView('../pages/secure/success', pageData, { name: this.const.recentlyBoughtProducts, data: cookieData, maxAgeInMilliSeconds: (1000 * 60 * 24 * 30) });
         }
         else {
             renderRedirect('/cart');

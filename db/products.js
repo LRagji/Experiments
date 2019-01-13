@@ -228,6 +228,7 @@ class Products {
             row.meta.newArrival,
             row.meta.bestSelling);
     }
+    
     _parseProductId(productId) {
         productId = parseInt(productId);
         if (isNaN(productId)) throw new Error("Invalid Product Id");

@@ -9,7 +9,7 @@
     "winstart": "cls && node \node_modules\nodemon\bin\nodemon.js index.js;",
     "winbundle": "cls && if exist dist rd /s /q dist && mkdir dist && bundle.bat",
     "detectDuplicateCode": "jsinspect ./ > ./extras/DuplicateCodeReport.txt",
-    "injestData":"node migration\\InsertMockData.js products:50"
+    "injestData": "node migration\\InsertMockData.js products:50"
   },
   "repository": {
     "type": "",

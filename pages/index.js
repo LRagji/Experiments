@@ -17,9 +17,15 @@ class pageHome extends page {
     async renderHomePage(req, renderView) {
 
         let pageData = {};
-        pageData[this.const.bestSellers] = await this.dal.products.readAllProducts(0, 20, { equal: { bestSeller: true } });
-        pageData[this.const.newArrivals] = await this.dal.products.readAllProducts(0, 20, { equal: { newArrivals: true } });
-        pageData[this.const.recentlyBought] = [];
+        let recentlyPurchasedProducts = [];
+        let cookieData = req.signedCookies[this.const.recentlyBoughtProducts];
+        if (cookieData !== undefined && Array.isArray(cookieData)) {
+            if (cookieData.length > this.const.maxProductsToShowOnScreen) cookieData = cookieData.splice(0, this.const.maxProductsToShowOnScreen)
+            recentlyPurchasedProducts = await this.dal.products.readProducts(cookieData);
+        }
+        pageData[this.const.bestSellers] = await this.dal.products.readAllProducts(0, this.const.maxProductsToShowOnScreen, { equal: { bestSeller: true } });
+        pageData[this.const.newArrivals] = await this.dal.products.readAllProducts(0, this.const.maxProductsToShowOnScreen, { equal: { newArrivals: true } });
+        pageData[this.const.recentlyBought] = recentlyPurchasedProducts;
         renderView('../pages/index', pageData);
     }
 }

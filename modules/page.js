@@ -16,9 +16,10 @@ class page {
     safeRender(renderCallback) {
         return async (req, res) => {
             try {
-                await renderCallback(req, (viewPath, data) => {
+                await renderCallback(req, (viewPath, data, cookie) => {
                     if (data === undefined) data = {};
                     data[this.const.cartItems] = this.util.getCartItemsCount(req);
+                    if (cookie !== undefined) res.cookie(cookie.name, cookie.data, { maxAge: cookie.maxAgeInMilliSeconds, httpOnly: true, signed: true });
                     res.render(viewPath, { user: req.user, pageData: data });
                 },
                     (pageUrl) => {

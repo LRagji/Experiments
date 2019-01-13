@@ -33,6 +33,8 @@ module.exports = {
     menu: "menu",
     maxProducts: 25,
     maxQuantity: 10,
+    maxProductsToShowOnScreen:20,
+    recentlyBoughtProducts:"rbp",
     registerError: "registerError",
     salutations: ["Mr.", "Miss.", "Prof.", "Dr."],
     bankAccounts: ["HDFC", "Canara"],
