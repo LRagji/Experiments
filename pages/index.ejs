@@ -53,11 +53,11 @@
                     <div class="card-body">
                         <div class="owl-carousel owl-theme">
                             <% pageData.bestSellers.forEach(function(product){ %>
-                            <%- `<div class="item card-body m-2 myproductcard">
+                            <%- `<div class="item card-body p-0 myproductcard">
                                     <a href="/product?pid=${product.id}" >
                                         <img class="productThumbnail mx-auto" src="../static/resources/images/products/${product.image}" style="max-width:100px;max-height:120px" alt="Product Image">
                                     </a>
-                                    <div class="card-body">
+                                    <div class="card-body p-0">
                                    <strong>${product.name}</strong>
                                         <div class="d-flex justify-content-center align-items-center my-2">
                                         <h3 class="text-success">
@@ -90,11 +90,11 @@
                     <div class="card-body">
                         <div class="owl-carousel owl-theme">
                             <% pageData.newArrivals.forEach(function(product){ %>
-                            <%- `<div class="item card-body m-2 myproductcard">
+                            <%- `<div class="item card-body p-0 myproductcard">
                                         <a href="/product?pid=${product.id}" >
                                             <img class="productThumbnail mx-auto" src="../static/resources/images/products/${product.image}" style="max-width:100px;max-height:120px" alt="Product Image">
                                         </a>
-                                        <div class="card-body">
+                                        <div class="card-body p-0">
                                        <strong>${product.name}</strong>
                                             <div class="d-flex justify-content-center align-items-center my-2">
                                             <h3 class="text-success">
@@ -127,11 +127,11 @@
                     <div class="card-body">
                         <div class="owl-carousel owl-theme">
                             <% pageData.rb.forEach(function(product){ %>
-                            <%- `<div class="item card-body m-2 myproductcard">
+                            <%- `<div class="item card-body p-0 myproductcard">
                                     <a href="/product?pid=${product.id}" >
                                         <img class="productThumbnail mx-auto" src="../static/resources/images/products/${product.image}" style="max-width:100px;max-height:120px" alt="Product Image">
                                     </a>
-                                    <div class="card-body">
+                                    <div class="card-body p-0">
                                    <strong>${product.name}</strong>
                                         <div class="d-flex justify-content-center align-items-center my-2">
                                         <h3 class="text-success">
