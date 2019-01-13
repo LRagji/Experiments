@@ -18,7 +18,7 @@ class pageSearch extends page {
     async renderSearch(req, renderView) {
         let pageData = {};
         pageData[this.const.searchTittle] = "Showing All Products";
-        pageData[this.const.searchFilter] = JSON.stringify({});
+        pageData[this.const.searchFilter] = JSON.stringify({ like: { keyword: "" } });
         renderView('../pages/search', pageData);
     }
 
