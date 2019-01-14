@@ -178,12 +178,31 @@
         $(document).ready(function () {
             $(".owl-carousel").owlCarousel(
                 {
-                    margin: 0,
+                    margin: 10,
                     loop: false,
                     autoWidth: true,
                     items: 4,
                     nav: true,
-                    dots: true
+                    dots: true,
+                    responsiveClass: true,
+                    responsive: {
+                        0: {
+                            items: 1,
+                            center:true,
+                            nav: false,
+                            loop: false
+                        },
+                        600: {
+                            items: 3,
+                            nav: true,
+                            loop: false
+                        },
+                        1000: {
+                            items: 5,
+                            nav: true,
+                            loop: false
+                        }
+                    }
                 }
             );
         });
