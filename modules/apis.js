@@ -14,8 +14,15 @@ class apiServer extends page {
         server.post('/v1/cart/products', this.safeApi(this.addProductToSession));
     }
 
-   async searchProducts(req, renderResponse) {
-        
+    async searchProducts(req, renderResponse) {
+        // EG: filter = {
+        //     like: {"columnname":value},
+        //     equal: {},
+        //     ascending: {"price":0},
+        //     descending: {},
+        //     greaterThan: {},
+        //     lessThan: {}
+        // };
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);
         let filter = this.util.cloneFilterForNetworkTransport(req.body);

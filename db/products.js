@@ -143,7 +143,9 @@ class Products {
             "mname": "meta->>'mname'",
             "keyword": "keywords",
             "bestSeller": "meta->>'bestSelling'",
-            "newArrivals": "meta->>'newArrival'"
+            "newArrivals": "meta->>'newArrival'",
+            "price": "price",
+            "name": "name"
         };
 
         let operatorMap = {
@@ -185,7 +187,7 @@ class Products {
 
         });
 
-        let selectQuery = 'select * from products ' + (whereClause !== "" ? ('where ' + whereClause) : '') + (orderClause !== "" ? ('order by ' + orderClause) : ' order by id ') + ' limit $1 offset $2';
+        let selectQuery = 'select * from products ' + (whereClause !== "" ? ('where ' + whereClause) : '') + (orderClause !== "" ? (' order by ' + orderClause) : ' order by id ') + ' limit $1 offset $2';
         let response = await this.pgPool.query(selectQuery, argumentArray);
 
         let fetchedProducts = [];

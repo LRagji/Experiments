@@ -11,6 +11,37 @@
     <!-- Main Nav -->
     <% include ./header %>
 
+    <!-- Filter -->
+    <nav class="navbar fixed-bottom navbar-collapse navbar-dark bg-success">
+        <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#filterNavBar"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle filter">
+            <i class="fas fa-filter text-white"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="filterNavBar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Sort
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(1)"
+                            href="#">Price:High to Low</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(2)"
+                            href="#">Price:Low to High</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(3)"
+                            href="#">Name:A to Z</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(4)"
+                            href="#">Name:Z to A</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
     <!-- Site Content -->
     <div class="container mt-5">
         <div class="row">
@@ -21,57 +52,56 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-2" hidden>
+                <!-- Categories -->
+                <div class="card myshadow mt-2 w-100">
+                    <div class="card-header">CATEGORIES</div>
+                    <div class="card-body">
+                        <ul>
+                            <a href="#">
+                                <li>Category A</li>
+                            </a>
+                            <a href="#">
+                                <li>Category B</li>
+                            </a>
+                            <a href="#">
+                                <li>Category C</li>
+                            </a>
+                            <a href="#">
+                                <li>Category D</li>
+                            </a>
+                            <a href="#">
+                                <li>Category E</li>
+                            </a>
+                            <a href="#">
+                                <li>Category F</li>
+                            </a>
+                            <a href="#">
+                                <li>Category G</li>
+                            </a>
+                            <a href="#">
+                                <li>Category H</li>
+                            </a>
+                            <a href="#">
+                                <li>Category I</li>
+                            </a>
+                            <a href="#">
+                                <li>Category J</li>
+                            </a>
+                            <a href="#">
+                                <li>Category K</li>
+                            </a>
+                            <a href="#">
+                                <li>Category L</li>
+                            </a>
+                            <a href="#">
+                                <li>Category M</li>
+                            </a>
 
-                <div class="col-2">
-                        <!-- Categories -->
-                        <div class="card myshadow mt-2 w-100">
-                            <div class="card-header">CATEGORIES</div>
-                            <div class="card-body">
-                                <ul>
-                                    <a href="#">
-                                        <li>Category A</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category B</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category C</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category D</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category E</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category F</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category G</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category H</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category I</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category J</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category K</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category L</li>
-                                    </a>
-                                    <a href="#">
-                                        <li>Category M</li>
-                                    </a>
-        
-                                </ul>
-                            </div>
-                        </div>
+                        </ul>
                     </div>
+                </div>
+            </div>
 
             <div class="col">
                 <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap">
@@ -95,6 +125,7 @@
     <script src="../../static/resources/scripts/paginatedtemplates.js"></script>
     <script>
         var shoppingBadge = $('#shoppingCart');
+        let filter =<%- pageData.sf -%>;
 
         function addProductToSession(productId, quantity) {
             $.post("/v1/cart/products", { productId: productId, quantity: quantity }).always((responseData) => {
@@ -147,8 +178,64 @@
             }
         }
 
-        hookUpPagination("/v1/products/search", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10,  <%-pageData.sf-%>);
+        hookUpPagination("/v1/products/search", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10, filter);
 
+    </script>
+    <script>
+        function sort(index) {
+            switch (index) {
+                case 1://1=Price High to low
+                    if (filter.descending !== undefined) {
+                        if (filter.descending.price === undefined) {
+                            filter.descending.price = Object.keys(filter.ascending.name).length;
+                        }
+                    }
+                    else {
+                        filter.descending = { "price": 0 };
+                    }
+                    break;
+                case 2://2=Price Low to high
+                    if (filter.ascending !== undefined) {
+                        if (filter.ascending.price === undefined) {
+                            filter.ascending.price = Object.keys(filter.ascending.name).length;
+                        }
+                    }
+                    else {
+                        filter.ascending = { "price": 0 };
+                    }
+                    break;
+                case 3://3=Name Asc
+                    if (filter.ascending !== undefined) {
+                        if (filter.ascending.name === undefined) {
+                            filter.ascending.name = Object.keys(filter.ascending.name).length;
+                        }
+                    }
+                    else {
+                        filter.ascending = { "name": 0 };
+                    }
+                    break;
+                case 4://4=Name Desc
+                    if (filter.descending !== undefined) {
+                        if (filter.descending.name === undefined) {
+                            filter.descending.name = Object.keys(filter.ascending.name).length;
+                        }
+                    }
+                    else {
+                        filter.descending = { "name": 0 };
+                    }
+                    break;
+            }
+            searchProducts(filter);
+            console.log(filter);
+        }
+
+        function searchProducts(filter) {
+            breakupPagination();
+            $('#resultContainer').empty();
+            hookUpPagination("/v1/products/search", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10, filter);
+            $("#loadingMessage").text("Searching Products");
+            $("#loadingSpinner").show();
+        }
     </script>
 </body>
 
