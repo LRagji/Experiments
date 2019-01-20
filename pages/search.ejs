@@ -10,38 +10,7 @@
 <body class="bg-light">
     <!-- Main Nav -->
     <% include ./header %>
-
-    <!-- Filter -->
-    <nav class="navbar fixed-bottom navbar-collapse navbar-dark bg-success d-none d-">
-        <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#filterNavBar"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle filter">
-            <i class="fas fa-filter text-white"></i>
-        </button>
-
-        <div class="collapse navbar-collapse" id="filterNavBar">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Sort
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(1)"
-                            href="#">Price:High to Low</a>
-                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(2)"
-                            href="#">Price:Low to High</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(3)"
-                            href="#">Name:A to Z</a>
-                        <a class="dropdown-item" data-toggle="collapse" data-target="#filterNavBar" onclick="sort(4)"
-                            href="#">Name:Z to A</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-
+    
     <!-- Site Content -->
     <div class="container mt-5">
         <div class="row">
@@ -81,47 +50,7 @@
                 <div class="card myshadow mt-2 w-100">
                     <div class="card-header">CATEGORIES</div>
                     <div class="card-body">
-                        <ul>
-                            <a href="#">
-                                <li>Category A</li>
-                            </a>
-                            <a href="#">
-                                <li>Category B</li>
-                            </a>
-                            <a href="#">
-                                <li>Category C</li>
-                            </a>
-                            <a href="#">
-                                <li>Category D</li>
-                            </a>
-                            <a href="#">
-                                <li>Category E</li>
-                            </a>
-                            <a href="#">
-                                <li>Category F</li>
-                            </a>
-                            <a href="#">
-                                <li>Category G</li>
-                            </a>
-                            <a href="#">
-                                <li>Category H</li>
-                            </a>
-                            <a href="#">
-                                <li>Category I</li>
-                            </a>
-                            <a href="#">
-                                <li>Category J</li>
-                            </a>
-                            <a href="#">
-                                <li>Category K</li>
-                            </a>
-                            <a href="#">
-                                <li>Category L</li>
-                            </a>
-                            <a href="#">
-                                <li>Category M</li>
-                            </a>
-
+                        <ul id="lstCatagories">
                         </ul>
                     </div>
                 </div>
@@ -202,8 +131,6 @@
             }
         }
 
-        hookUpPagination("/v1/products/search", productTemplate, "resultContainer", setStatus, "loadingSpinner", 0, 10, filter);
-
     </script>
     <script>
         function sort(index) {
@@ -263,6 +190,51 @@
             $("#loadingMessage").text("Searching Products");
             $("#loadingSpinner").show();
         }
+    </script>
+    <script>
+        let _activeSummaryCall = undefined;
+
+        function getSummary(filter) {
+            $("#lstCatagories").empty();
+            _activeSummaryCall = $.post('/v1/products/search/summary', filter, undefined, "json");
+            _activeSummaryCall.always(handleSummary)
+        }
+
+        function handleSummary(data, textStatus, xhrObj) {
+            _activeSummaryCall = undefined;
+            if (xhrObj.status === 200) {
+                //Success
+                data.categories.forEach(category => {
+                    $("#lstCatagories").append(`<a href="#" onclick="filterByCategory('${category}')">
+                                <li>${category}</li>
+                            </a>`);
+                });
+            }
+        }
+
+        function cancelActiveNetworkCallForSummary() {
+            if (_activeSummaryCall !== undefined) _activeSummaryCall.abort();
+        }
+
+        function filterByCategory(value) {
+            if (filter.equal !== undefined) {
+                filter.equal.category = value;
+            }
+            else {
+                filter.equal = { category: value };
+            }
+            searchProducts(filter);
+        }
+
+        function refreshLeftPane(filter)
+        {
+            cancelActiveNetworkCallForSummary();
+            getSummary(filter);
+        }
+    </script>
+    <script>
+        searchProducts(filter);
+        refreshLeftPane(filter);
     </script>
 </body>
 

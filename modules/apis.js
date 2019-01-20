@@ -5,12 +5,14 @@ class apiServer extends page {
 
         this.addProductToSession = this.addProductToSession.bind(this);
         this.searchProducts = this.searchProducts.bind(this);
+        this.searchSummary=this.searchSummary.bind(this);
 
         this.loadRoutes(server);
     }
 
     loadRoutes(server) {
         server.post('/v1/products/search', this.safeApi(this.searchProducts));
+        server.post('/v1/products/search/summary', this.safeApi(this.searchSummary));
         server.post('/v1/cart/products', this.safeApi(this.addProductToSession));
     }
 
@@ -35,6 +37,24 @@ class apiServer extends page {
             renderResponse(206, products);
         else
             renderResponse(200, products);
+    }
+
+    async searchSummary(req, renderResponse) {
+        // EG: filter = {
+        //     like: {"columnname":value},
+        //     equal: {},
+        //     ascending: {"price":0},
+        //     descending: {},
+        //     greaterThan: {},
+        //     lessThan: {}
+        // };
+        let filter = this.util.cloneFilterForNetworkTransport(req.body);
+        if (filter === undefined) {
+            throw new Error("Invalid filter parameter.")
+        }
+
+        let summary = await this.dal.products.summarizeResults(filter);
+        renderResponse(200, summary);
     }
 
     async addProductToSession(req, renderResponse) {

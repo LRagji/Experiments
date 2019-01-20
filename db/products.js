@@ -10,9 +10,11 @@ class Products {
         this.createProduct = this.createProduct.bind(this);
         this.updateProduct = this.updateProduct.bind(this);
         this.readAllProducts = this.readAllProducts.bind(this);
+        this.summarizeResults = this.summarizeResults.bind(this);
         this._fromProperties = this._fromProperties.bind(this);
         this._parseProductId = this._parseProductId.bind(this);
         this._rowToProduct = this._rowToProduct.bind(this);
+        this._constructFilterClause = this._constructFilterClause.bind(this);
     }
 
     static singleton(pgPool) {
@@ -137,6 +139,46 @@ class Products {
         let startIndex = (pageNo * size);
         let argumentArray = [size, startIndex];
 
+        let filterClause = this._constructFilterClause(filter, argumentArray, false);
+
+        let selectQuery = 'select * from products ' + filterClause + ' limit $1 offset $2';
+        let response = await this.pgPool.query(selectQuery, argumentArray);
+
+        let fetchedProducts = [];
+        response.rows.forEach(row => fetchedProducts.push(this._rowToProduct(row)));
+
+        return fetchedProducts;
+    }
+
+    async summarizeResults(filter) {
+        let argumentArray = [];
+
+        let filterClause = this._constructFilterClause(filter, argumentArray, true);
+
+        let selectQuery = "select distinct(meta->>'category') as category from products " + filterClause;
+        let response = await this.pgPool.query(selectQuery, argumentArray);
+
+        return {
+            "categories": response.rows.map((r) => r.category)
+        };
+    }
+
+    async readProducts(productIds) {
+
+        productIds = productIds.map((id) => this._parseProductId(id));
+
+        let selectQuery = `select * from products where id = ANY($1)`;
+        let response = await this.pgPool.query(selectQuery, [productIds]);
+
+        let fetchedProducts = [];
+        response.rows.forEach(row => fetchedProducts.push(this._rowToProduct(row)));
+
+        return fetchedProducts;
+    }
+
+    _constructFilterClause(filter, argumentArray, skipOrdering) {
+
+        skipOrdering = skipOrdering === true;
         let whereClause = "", orderClause = "";
 
         let propertyMap = {
@@ -145,7 +187,8 @@ class Products {
             "bestSeller": "meta->>'bestSelling'",
             "newArrivals": "meta->>'newArrival'",
             "price": "price",
-            "name": "name"
+            "name": "name",
+            "category": "meta->>'category'"
         };
 
         let operatorMap = {
@@ -176,9 +219,11 @@ class Products {
                     break;
                 case 'ascending':
                 case 'descending':
-                    Object.keys(filter[operator]).forEach((operand) => {
-                        orderClause += (orderClause === "" ? "" : " , ") + propertyMap[operand] + " " + operatorMap[operator];
-                    });
+                    if (skipOrdering === false) {
+                        Object.keys(filter[operator]).forEach((operand) => {
+                            orderClause += (orderClause === "" ? "" : " , ") + propertyMap[operand] + " " + operatorMap[operator];
+                        });
+                    }
                     break;
                 default:
                     console.warn("New Operator found: " + operator)
@@ -187,26 +232,7 @@ class Products {
 
         });
 
-        let selectQuery = 'select * from products ' + (whereClause !== "" ? ('where ' + whereClause) : '') + (orderClause !== "" ? (' order by ' + orderClause) : ' order by id ') + ' limit $1 offset $2';
-        let response = await this.pgPool.query(selectQuery, argumentArray);
-
-        let fetchedProducts = [];
-        response.rows.forEach(row => fetchedProducts.push(this._rowToProduct(row)));
-
-        return fetchedProducts;
-    }
-
-    async readProducts(productIds) {
-
-        productIds = productIds.map((id) => this._parseProductId(id));
-
-        let selectQuery = `select * from products where id = ANY($1)`;
-        let response = await this.pgPool.query(selectQuery, [productIds]);
-
-        let fetchedProducts = [];
-        response.rows.forEach(row => fetchedProducts.push(this._rowToProduct(row)));
-
-        return fetchedProducts;
+        return ((whereClause !== "" ? ('where ' + whereClause) : '')) + (skipOrdering === false ? ((orderClause !== "" ? (' order by ' + orderClause) : ' order by id ')) : "");
     }
 
     _rowToProduct(row) {
