@@ -11,6 +11,8 @@ let products = require('./products').singleton(pgPool);
 class DAL {
     constructor(constantService) {
 
+        console.log(util.getHash("admin"));
+        
         this.const = constantService;
 
         this.appSettings = settings.singleton(constantService);
@@ -46,11 +48,11 @@ class DAL {
                     {
                         id: i,
                         salutation: "Mr",
-                        first: "Laukik",
+                        first: i === 0 ? "Admin" : "Laukik",
                         last: i,
                         mobile: "123456789",
-                        email: i === 0 ? "Laukik.Ragji@gmail.com" : i + "@gmail.com",
-                        password: "81d7df2cd5d931a654f48a43a8442d5d",
+                        email: i === 0 ? "admin@gmail.com" : i + "@gmail.com",
+                        password: "bc1f2f74f887ea16acee259f8c380ae8",
                         meta: {
                             "status": "active",
                             "type": i === 0 ? "admin" : "normal"
