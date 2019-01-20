@@ -12,7 +12,7 @@
     <% include ./header %>
 
     <!-- Filter -->
-    <nav class="navbar fixed-bottom navbar-collapse navbar-dark bg-success">
+    <nav class="navbar fixed-bottom navbar-collapse navbar-dark bg-success d-none d-">
         <button class="navbar-toggler mx-auto" type="button" data-toggle="collapse" data-target="#filterNavBar"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle filter">
             <i class="fas fa-filter text-white"></i>
@@ -52,7 +52,31 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-2" hidden>
+            <div class="col-md-2 p-md-0 d-none d-lg-block">
+                <!-- Sort -->
+                <div class="card myshadow mt-2 w-100">
+                    <div class="card-header">SORT</div>
+                    <div class="card-body">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortBtn" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                Select Sort
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Price:High to Low');sort(1)" href="#">Price:High
+                                    to Low</a>
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Price:Low to High');sort(2)" href="#">Price:Low
+                                    to High</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Name:A to Z');sort(3)" href="#">Name:A
+                                    to Z</a>
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Name:Z to A');sort(4)" href="#">Name:Z
+                                    to A</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Categories -->
                 <div class="card myshadow mt-2 w-100">
                     <div class="card-header">CATEGORIES</div>
@@ -103,7 +127,7 @@
                 </div>
             </div>
 
-            <div class="col">
+            <div class="col-md p-md-0">
                 <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap">
 
                 </div>
@@ -185,48 +209,51 @@
         function sort(index) {
             switch (index) {
                 case 1://1=Price High to low
-                    if (filter.descending !== undefined) {
-                        if (filter.descending.price === undefined) {
-                            filter.descending.price = Object.keys(filter.ascending.name).length;
-                        }
-                    }
-                    else {
-                        filter.descending = { "price": 0 };
-                    }
+                    //     if (filter.descending !== undefined) {
+                    //         if (filter.descending.price === undefined) {
+                    //             filter.descending.price = Object.keys(filter.descending).length;
+                    //         }
+                    //     }
+                    //     else {
+                    filter.descending = { "price": 0 };
+                    filter.ascending = {};
+                    // }
                     break;
                 case 2://2=Price Low to high
-                    if (filter.ascending !== undefined) {
-                        if (filter.ascending.price === undefined) {
-                            filter.ascending.price = Object.keys(filter.ascending.name).length;
-                        }
-                    }
-                    else {
-                        filter.ascending = { "price": 0 };
-                    }
+                    // if (filter.ascending !== undefined) {
+                    //     if (filter.ascending.price === undefined) {
+                    //         filter.ascending.price = Object.keys(filter.ascending).length;
+                    //     }
+                    // }
+                    // else {
+                    filter.descending = {};
+                    filter.ascending = { "price": 0 };
+                    // }
                     break;
                 case 3://3=Name Asc
-                    if (filter.ascending !== undefined) {
-                        if (filter.ascending.name === undefined) {
-                            filter.ascending.name = Object.keys(filter.ascending.name).length;
-                        }
-                    }
-                    else {
-                        filter.ascending = { "name": 0 };
-                    }
+                    // if (filter.ascending !== undefined) {
+                    //     if (filter.ascending.name === undefined) {
+                    //         filter.ascending.name = Object.keys(filter.ascending).length;
+                    //     }
+                    // }
+                    // else {
+                    filter.descending = {};
+                    filter.ascending = { "name": 0 };
+                    // }
                     break;
                 case 4://4=Name Desc
-                    if (filter.descending !== undefined) {
-                        if (filter.descending.name === undefined) {
-                            filter.descending.name = Object.keys(filter.ascending.name).length;
-                        }
-                    }
-                    else {
-                        filter.descending = { "name": 0 };
-                    }
+                    // if (filter.descending !== undefined) {
+                    //     if (filter.descending.name === undefined) {
+                    //         filter.descending.name = Object.keys(filter.descending).length;
+                    //     }
+                    // }
+                    // else {
+                    filter.descending = { "name": 0 };
+                    filter.ascending = {};
+                    //}
                     break;
             }
             searchProducts(filter);
-            console.log(filter);
         }
 
         function searchProducts(filter) {

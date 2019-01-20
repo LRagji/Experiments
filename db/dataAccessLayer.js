@@ -10,8 +10,6 @@ let products = require('./products').singleton(pgPool);
 // TODO:Call the appropiate API
 class DAL {
     constructor(constantService) {
-
-        console.log(util.getHash("admin"));
         
         this.const = constantService;
 
