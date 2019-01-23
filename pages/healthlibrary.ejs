@@ -15,7 +15,7 @@
     <div class="container mt-5">
         <h1>Health Library:</h1>
         <div class="d-flex justify-content-center justify-content-md-around flex-wrap">
-            <% Object.keys(pageData.hli).forEach(function(key){ %>
+            <% Object.keys(pageData.hli).sort().forEach(function(key){ %>
             <%- `
                 <div class="card myshadow m-2">
                         <div class="card-header text-center">
