@@ -6,17 +6,19 @@ let settings = require('./appSettings');
 let orders = require('./orders').singleton();
 let banners = require('./banners').singleton();
 let products = require('./products').singleton(pgPool);
+let healthTopics = require('./healthtopics').singleton();
 
 // TODO:Call the appropiate API
 class DAL {
     constructor(constantService) {
-        
+
         this.const = constantService;
 
         this.appSettings = settings.singleton(constantService);
         this.orders = orders;
         this.products = products;
         this.banners = banners;
+        this.healthTopics = healthTopics;
 
         //TODO: This binding list is not upto date
         this.pool = this.pool.bind(this);

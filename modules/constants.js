@@ -34,6 +34,8 @@ module.exports = {
     maxProducts: 25,
     maxQuantity: 10,
     maxProductsToShowOnScreen:20,
+    healthTopicError:"hte",
+    healthTopics:"ht",
     recentlyBoughtProducts:"rbp",
     registerError: "registerError",
     salutations: ["Mr.", "Miss.", "Prof.", "Dr."],

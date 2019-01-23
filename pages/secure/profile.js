@@ -70,6 +70,11 @@ class pageProfile extends securePage {
                 url: "/secure/settings",
                 name: "App Settings"
             });
+            menuItems.push({
+                icon: "fas fa-journal-whills",
+                url: "/secure/healthtopics",
+                name: "Health Topics"
+            });
         }
         return menuItems;
     }

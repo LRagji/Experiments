@@ -9,10 +9,10 @@ class pageLinks extends adminPage {
         this.handleDelete = this.handleDelete.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
 
-        this.loadRoutes(server, basePath, auth);
+        this.loadRoutes(server, basePath);
     }
 
-    loadRoutes(server, basePath, auth) {
+    loadRoutes(server, basePath) {
         server.get(basePath + '/healthlinks', this.safeRender(this.renderLinks));
         server.post(basePath + '/healthlinks/edit', this.safeRender(this.handleEdit));
         server.post(basePath + '/healthlinks/delete', this.safeRender(this.handleDelete));
