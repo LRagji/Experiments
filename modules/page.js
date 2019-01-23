@@ -5,6 +5,8 @@ class page {
         this.const = constantsService;
         this.textService = textService;
 
+        this.loginPageUrl = "/secure/login";
+
         this.safeRender = this.safeRender.bind(this);
         this.safeRenderView = this.safeRenderView.bind(this);
     }

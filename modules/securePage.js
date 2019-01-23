@@ -5,8 +5,7 @@ class securePage extends page {
         super(dataAccessService, utilityService, constantsService, textService)
 
         this.auth = auth;
-        this.loginPageUrl = "/secure/login";
-
+       
         this.safeRender = this.safeRender.bind(this);
         this.safeRenderView = this.safeRenderView.bind(this);
     }
