@@ -21,7 +21,7 @@ class pageLinks extends adminPage {
 
     async renderLinks(req, renderView) {
         let pageData = {};
-        pageData[this.const.footerPageLinks] = await this.dal.getAllHealthLinks();
+        pageData[this.const.footerPageLinks] = await this.dal.healthLinks.getAllHealthLinks();
         pageData[this.const.footerLinksErr] = req.flash(this.const.footerLinksErr);
 
         renderView('../pages/secure/healthlinks', pageData);
@@ -35,7 +35,7 @@ class pageLinks extends adminPage {
             return;
         }
 
-        await this.dal.deleteHealthLink(req.body.name);
+        await this.dal.healthLinks.deleteHealthLink(req.body.name);
         renderRedirect("/secure/healthlinks");
         return;
     }
@@ -54,7 +54,7 @@ class pageLinks extends adminPage {
             return;
         }
 
-        await this.dal.updateHealthLink(req.body.name, req.body.contents);
+        await this.dal.healthLinks.updateHealthLink(req.body.name, req.body.contents);
         renderRedirect("/secure/healthlinks");
         return;
     }
@@ -67,7 +67,7 @@ class pageLinks extends adminPage {
             return;
         }
 
-        await this.dal.insertHealthLink(req.body.name, "Comming Soon");
+        await this.dal.healthLinks.createHealthLink(req.body.name, "Comming Soon");
         renderRedirect("/secure/healthlinks");
         return;
     }

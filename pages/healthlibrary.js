@@ -17,7 +17,7 @@ class pageHealthLibrary extends page {
     async renderHealthLibrary(req, renderView) {
         let pageData = {};
         let category = {};
-        let links = await this.dal.getAllHealthLinks();
+        let links = await this.dal.healthLinks.getAllHealthLinks();
         links.forEach(link => {
             let key = link.name.toUpperCase().substring(0, 1);
             if (category[key] === undefined) {

@@ -19,7 +19,7 @@ class pageHealthLinks extends page {
             throw new Error("Invalid Input parameter name length.")
         }
         let pageData = {};
-        pageData[this.const.footerLinksView] = await this.dal.getHealthLinkContentFor(req.query.id);
+        pageData[this.const.footerLinksView] = await this.dal.healthLinks.getHealthLinkContentFor(req.query.id);
         renderView('../pages/healthlinks', pageData);
     }
 

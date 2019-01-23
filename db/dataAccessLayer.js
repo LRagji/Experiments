@@ -1,12 +1,13 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
-let users = [], healthLinks = [], FAQ = [];
+let users = [], FAQ = [];
 let util = require('../modules/utilities');
 let settings = require('./appSettings');
 let orders = require('./orders').singleton();
 let banners = require('./banners').singleton();
 let products = require('./products').singleton(pgPool);
 let healthTopics = require('./healthtopics').singleton();
+let healthLinks = require('./healthlinks').singleton();
 
 // TODO:Call the appropiate API
 class DAL {
@@ -19,6 +20,7 @@ class DAL {
         this.products = products;
         this.banners = banners;
         this.healthTopics = healthTopics;
+        this.healthLinks = healthLinks;
 
         //TODO: This binding list is not upto date
         this.pool = this.pool.bind(this);
@@ -29,11 +31,6 @@ class DAL {
         this.updateUserActivationState = this.updateUserActivationState.bind(this);
         this.updateUserAccountType = this.updateUserAccountType.bind(this);
         this.resetUserAccountPassword = this.resetUserAccountPassword.bind(this);
-        this.insertHealthLink = this.insertHealthLink.bind(this);
-        this.updateHealthLink = this.updateHealthLink.bind(this);
-        this.deleteHealthLink = this.deleteHealthLink.bind(this);
-        this.getAllHealthLinks = this.getAllHealthLinks.bind(this);
-        this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
         this.createFAQ = this.createFAQ.bind(this);
         this.updateFAQ = this.updateFAQ.bind(this);
         this.deleteFAQ = this.deleteFAQ.bind(this);
@@ -59,11 +56,6 @@ class DAL {
                         }
                     }
                 );
-        }
-
-        if (healthLinks.length === 0) {
-            for (let i = 0; i < 1;)
-                this.insertHealthLink("Link " + i, "Random html text for link " + i).then(i++);
         }
 
         if (FAQ.length === 0) {
@@ -151,84 +143,6 @@ class DAL {
         })
     }
     // END Product FAQ
-
-
-    //START Health Links
-
-    async getAllHealthLinks() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(healthLinks);
-            } catch (err) {
-                rej(err);
-            }
-        });
-    }
-
-    async insertHealthLink(name, contents) {
-        return new Promise((acc, rej) => {
-            try {
-
-                if (healthLinks.find((l) => l.name === name) !== undefined) throw new Error(name + " name already exists.");
-                let healthLinkObj = {
-                    "name": name,
-                    "url": "/healthLinks?id=" + encodeURIComponent(name),
-                    "contents": contents
-                };
-                healthLinks.push(healthLinkObj);
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
-    }
-
-    async deleteHealthLink(name) {
-        return new Promise((acc, rej) => {
-            try {
-                let dbHealthLinkIdx = healthLinks.findIndex((l) => l.name === name);
-                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
-
-                healthLinks.splice(dbHealthLinkIdx, 1);
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
-    }
-
-    async updateHealthLink(name, contents) {
-        return new Promise((acc, rej) => {
-            try {
-                let dbHealthLinkIdx = healthLinks.findIndex((l) => l.name === name);
-                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
-
-                healthLinks[dbHealthLinkIdx].contents = contents;
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
-    }
-
-    async getHealthLinkContentFor(name) {
-        return new Promise((acc, rej) => {
-            try {
-                let dbHealthLinkIdx = healthLinks.findIndex((l) => l.name === name);
-                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
-                acc(Object.assign({}, healthLinks[dbHealthLinkIdx]));
-            } catch (err) {
-                rej(err);
-            }
-        })
-    }
-    // END Health Links
 
     updateUserPassword(userId, password) {
         return new Promise((acc, rej) => {
