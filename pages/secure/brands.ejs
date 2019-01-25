@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Brands</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+
+    <div class="container mt-5">
+      <div class="d-flex">
+            <h4>Brands</h4>
+            <form action="brands/new" method="POST" class="form-inline ml-auto">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Brand Name:</div>
+                    </div>
+                    <input type="hidden" name="website" value="https://www.health-mall.in/" />
+                    <input type="text" name="name" class="form-control" placeholder="Brand Name" minlength="1" maxlength="50"
+                        required>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> New Brand</button>
+            </form>
+        </div>
+        <div class="accordion myshadow" id="brands">
+
+            <% pageData.b.forEach(function(brand){ %>
+            <% brand.uiid='b'+Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1) %>
+
+            <% if (pageData.be.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.be[0]}</div>` %>
+            <% } %>
+            <div class="card">
+
+                <div class="card-header" id="<%-brand.uiid%>">
+                    <div class="d-flex">
+                        <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapse<%-brand.uiid%>"
+                            aria-expanded="false" aria-controls="collapse<%-brand.uiid%>">
+                            <h4>
+                                <%-brand.name-%>
+                            </h4>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="collapse<%-brand.uiid%>" class="collapse" aria-labelledby="<%-brand.uiid%>" data-parent="#brands">
+                    <div class="card-body">
+                        <form action="brands/edit" method="POST">
+                            <input type="hidden" name="id" value="<%-brand.id-%>" />
+                             <div class="form-group">
+                            <label for="lblName<%-brand.uiid%>">Brand name:</label>
+                            <input type="text" id="lblName<%-brand.uiid%>" name="name" class="form-control" placeholder="Brand Name" value="<%-brand.name-%>" minlength="1" maxlength="50"
+                        required>
+                        </div>
+                          <div class="form-group">
+                            <label for="lblWeb<%-brand.uiid%>">Brand Website:</label>
+                         <input type="url" id="lblWeb<%-brand.uiid%>" class="form-control" placeholder="Website" pattern="https://.*" title="Please use https urls only; with protocols"
+                                        value="<%-brand.website-%>"
+                                        minlength="1" maxlength="100" required name="website">
+                                        </div>
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-secondary ml-auto">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <% }); %>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>

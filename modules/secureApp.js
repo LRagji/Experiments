@@ -24,6 +24,8 @@ let modPageSettings = require('../pages/secure/appsettings');
 let pageSettings = undefined;
 let modPageHealthTopics = require('../pages/secure/healthtopics');
 let pageHealthTopics = undefined;
+let modPageBrands = require('../pages/secure/brands');
+let pageBrands = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
@@ -44,6 +46,7 @@ class secureapp {
         pageFAQs = new modPageFAQs(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageSettings = new modPageSettings(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageHealthTopics = new modPageHealthTopics(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageBrands = new modPageBrands(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
     }
 }
 

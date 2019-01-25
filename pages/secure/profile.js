@@ -75,6 +75,11 @@ class pageProfile extends securePage {
                 url: "/secure/healthtopics",
                 name: "Health Topics"
             });
+            menuItems.push({
+                icon: "fas fa-industry",
+                url: "/secure/brands",
+                name: "Brands"
+            });
         }
         return menuItems;
     }
