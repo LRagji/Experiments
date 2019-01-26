@@ -51,8 +51,8 @@ class pageFAQS extends adminPage {
             return;
         }
 
-        if (this.util.validateLength(req.body.A, 200, 1) === false) {
-            req.flash(this.const.FAQSError, "Invalid Input parameter Answer length.");
+        if (this.util.validateLength(req.body.A, 1500, 1) === false) {
+            req.flash(this.const.FAQSError, "Answers length should be between 1, to 1000 characters.");
             renderRedirect("/secure/faqs");
             return;
         }
