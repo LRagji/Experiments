@@ -5,7 +5,7 @@ class categories {
     constructor() {
 
         this.readAllCategories = this.readAllCategories.bind(this);
-        this.createCategory=this.createCategory.bind(this);
+        this.createCategory = this.createCategory.bind(this);
         this.updateCategory = this.updateCategory.bind(this);
         this.readCategoryId = this.readCategoryId.bind(this);
         this.retriveIdFor = this.retriveIdFor.bind(this);
@@ -25,24 +25,15 @@ class categories {
     }
 
     async createCategory(name) {
-        return new Promise((acc, rej) => {
-            try {
+        if (await this.retriveIdFor(name) >= 0) throw new Error(name + " name already exists.");
+        let categrory = {
+            "id": categoriesArray.length + 1,
+            "name": name
+        };
+        categoriesArray.push(categrory);
 
-                if (this.retriveIdFor(name) >= 0) throw new Error(name + " name already exists.");
-                let categrory = {
-                    "id": categoriesArray.length + 1,
-                    "name": name
-                };
-                categoriesArray.push(categrory);
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
     }
-    
+
     retriveIdFor(name) {
         return new Promise((acc, rej) => {
             try {

@@ -25,23 +25,14 @@ class subcategories {
     }
 
     async createSubCategory(categoryId, subCatName) {
-        return new Promise((acc, rej) => {
-            try {
-                categoryId = parseInt(categoryId);
-                if (this.retriveIdFor(subCatName) >= 0) throw new Error(subCatName + " name already exists.");
-                let subCategrory = {
-                    "id": subCategoriesArray.length + 1,
-                    "catid": categoryId,
-                    "name": subCatName
-                };
-                subCategoriesArray.push(subCategrory);
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
+        categoryId = parseInt(categoryId);
+        if (await this.retriveIdFor(subCatName) >= 0) throw new Error(subCatName + " name already exists.");
+        let subCategrory = {
+            "id": subCategoriesArray.length + 1,
+            "catid": categoryId,
+            "name": subCatName
+        };
+        subCategoriesArray.push(subCategrory);
     }
 
     retriveIdFor(name) {

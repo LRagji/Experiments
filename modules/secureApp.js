@@ -28,6 +28,8 @@ let modPageBrands = require('../pages/secure/brands');
 let pageBrands = undefined;
 let modPageCategory = require('../pages/secure/category');
 let pageCategory = undefined;
+let modPageSubCategory = require('../pages/secure/subcategory');
+let pageSubCategory = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
@@ -50,6 +52,7 @@ class secureapp {
         pageHealthTopics = new modPageHealthTopics(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageBrands = new modPageBrands(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageCategory = new modPageCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageSubCategory = new modPageSubCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
     }
 }
 

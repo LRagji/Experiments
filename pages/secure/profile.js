@@ -83,7 +83,12 @@ class pageProfile extends securePage {
             menuItems.push({
                 icon: "fas fa-tags",
                 url: "/secure/category",
-                name: "category"
+                name: "Category"
+            });
+            menuItems.push({
+                icon: "fas fa-tag",
+                url: "/secure/subcategory",
+                name: "Sub-Category"
             });
         }
         return menuItems;

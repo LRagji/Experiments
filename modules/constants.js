@@ -38,6 +38,8 @@ module.exports = {
     brandError:"be",
     categories:"cat",
     categoriesError:"ce",
+    subcategories:"scat",
+    subcategoriesError:"se",
     healthTopicError:"hte",
     healthTopics:"ht",
     recentlyBoughtProducts:"rbp",
