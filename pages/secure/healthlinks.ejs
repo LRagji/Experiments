@@ -28,14 +28,15 @@
         </div>
         <div class="accordion myshadow" id="healthlinks">
 
+            <% if (pageData.fle.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.fle[0]}</div>` %>
+            <% } %>
+
             <% pageData.fpl.forEach(function(link){ %>
             <% link.uiid='hl'+Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
                 .substring(1) %>
-
-            <% if (pageData.fle.length>=1) { %>
-            <%- `<div class="alert alert alert-danger" role="alert">${pageData.fle[0]}</div>` %>
-            <% } %>
+         
             <div class="card">
 
                 <div class="card-header" id="<%-link.uiid%>">

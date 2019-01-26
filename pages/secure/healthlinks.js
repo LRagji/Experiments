@@ -21,7 +21,7 @@ class pageLinks extends adminPage {
 
     async renderLinks(req, renderView) {
         let pageData = {};
-        pageData[this.const.footerPageLinks] =  this.util.sortArrayByProperty(await this.dal.healthLinks.getAllHealthLinks(),"name");
+        pageData[this.const.footerPageLinks] = this.util.sortArrayByProperty(await this.dal.healthLinks.getAllHealthLinks(), "name");
         pageData[this.const.footerLinksErr] = req.flash(this.const.footerLinksErr);
 
         renderView('../pages/secure/healthlinks', pageData);
@@ -63,6 +63,12 @@ class pageLinks extends adminPage {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
             req.flash(this.const.footerLinksErr, "Invalid Input parameter name length.");
+            renderRedirect("/secure/healthlinks");
+            return;
+        }
+
+        if (await this.dal.healthLinks.isNameTaken(req.body.name) === true) {
+            req.flash(this.const.footerLinksErr, "Link Name already exists.");
             renderRedirect("/secure/healthlinks");
             return;
         }

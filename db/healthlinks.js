@@ -9,6 +9,7 @@ class healthLinks {
         this.deleteHealthLink = this.deleteHealthLink.bind(this);
         this.getAllHealthLinks = this.getAllHealthLinks.bind(this);
         this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
+        this.isNameTaken = this.isNameTaken.bind(this);
 
         if (healthLinksArray.length === 0) {
             for (let i = 0; i < 1;)
@@ -86,6 +87,17 @@ class healthLinks {
         });
     }
 
+    isNameTaken(name) {
+        return new Promise((acc, rej) => {
+            try {
+                let dbHealthLinkIdx = healthLinksArray.findIndex((l) => l.name === name);
+                acc(dbHealthLinkIdx >= 0);
+            } catch (err) {
+                rej(err);
+            }
+        })
+    }
+
     async getHealthLinkContentFor(name) {
         return new Promise((acc, rej) => {
             try {
@@ -97,7 +109,7 @@ class healthLinks {
             }
         })
     }
-    
+
 }
 
 module.exports = healthLinks;

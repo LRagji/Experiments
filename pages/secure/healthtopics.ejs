@@ -28,16 +28,16 @@
         </div>
         <div class="accordion myshadow" id="healthTopics">
 
+            <% if (pageData.hte.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.hte[0]}</div>` %>
+            <% } %>
+
             <% pageData.ht.forEach(function(healthTopic){ %>
             <% healthTopic.uiid='ht'+Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
                 .substring(1) %>
 
-            <% if (pageData.hte.length>=1) { %>
-            <%- `<div class="alert alert alert-danger" role="alert">${pageData.hte[0]}</div>` %>
-            <% } %>
             <div class="card">
-
                 <div class="card-header" id="<%-healthTopic.uiid%>">
                     <div class="d-flex">
                         <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapse<%-healthTopic.uiid%>"
