@@ -14,12 +14,12 @@ class pageHealthTopics extends adminPage {
     loadRoutes(server, basePath) {
         server.get(basePath + '/healthtopics', this.safeRender(this.renderTopics));
         server.post(basePath + '/healthtopics/edit', this.safeRender(this.handleEdit));
-         server.post(basePath + '/healthtopics/new', this.safeRender(this.handleCreate));
+        server.post(basePath + '/healthtopics/new', this.safeRender(this.handleCreate));
     }
 
     async renderTopics(req, renderView) {
         let pageData = {};
-        pageData[this.const.healthTopics] = await this.dal.healthTopics.readHealthTopics();
+        pageData[this.const.healthTopics] = this.util.sortArrayByProperty(await this.dal.healthTopics.readHealthTopics(), "name");
         pageData[this.const.healthTopicError] = req.flash(this.const.healthTopicError);
 
         renderView('../pages/secure/healthtopics', pageData);
@@ -39,7 +39,7 @@ class pageHealthTopics extends adminPage {
             return;
         }
 
-        await this.dal.healthTopics.updateHealthTopic(req.body.id,req.body.name);
+        await this.dal.healthTopics.updateHealthTopic(req.body.id, req.body.name);
         renderRedirect("/secure/healthtopics");
         return;
     }

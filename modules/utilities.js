@@ -245,5 +245,9 @@ module.exports = {
         }
 
         return returnFilter;
+    },
+
+    sortArrayByProperty(arrayToSort, propertyName) {
+        return arrayToSort.sort((a, b) => a[propertyName].charCodeAt(0) - b[propertyName].charCodeAt(0))
     }
 }

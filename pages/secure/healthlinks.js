@@ -21,7 +21,7 @@ class pageLinks extends adminPage {
 
     async renderLinks(req, renderView) {
         let pageData = {};
-        pageData[this.const.footerPageLinks] = await this.dal.healthLinks.getAllHealthLinks();
+        pageData[this.const.footerPageLinks] =  this.util.sortArrayByProperty(await this.dal.healthLinks.getAllHealthLinks(),"name");
         pageData[this.const.footerLinksErr] = req.flash(this.const.footerLinksErr);
 
         renderView('../pages/secure/healthlinks', pageData);
