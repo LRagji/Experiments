@@ -9,6 +9,7 @@ let products = require('./products').singleton(pgPool);
 let healthTopics = require('./healthtopics').singleton();
 let healthLinks = require('./healthlinks').singleton();
 let brands = require('./brands').singleton();
+let categories = require('./categories').singleton();
 
 // TODO:Call the appropiate API
 class DAL {
@@ -23,6 +24,7 @@ class DAL {
         this.healthTopics = healthTopics;
         this.healthLinks = healthLinks;
         this.brands = brands;
+        this.categories = categories;
 
         //TODO: This binding list is not upto date
         this.pool = this.pool.bind(this);
