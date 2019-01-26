@@ -26,6 +26,8 @@ let modPageHealthTopics = require('../pages/secure/healthtopics');
 let pageHealthTopics = undefined;
 let modPageBrands = require('../pages/secure/brands');
 let pageBrands = undefined;
+let modPageCategory = require('../pages/secure/category');
+let pageCategory = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
@@ -47,6 +49,7 @@ class secureapp {
         pageSettings = new modPageSettings(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageHealthTopics = new modPageHealthTopics(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageBrands = new modPageBrands(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageCategory = new modPageCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
     }
 }
 

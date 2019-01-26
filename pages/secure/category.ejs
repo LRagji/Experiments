@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Categories</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+
+    <div class="container mt-5">
+      <div class="d-flex">
+            <h4>Categories</h4>
+            <form action="category/new" method="POST" class="form-inline ml-auto">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Category Name:</div>
+                    </div>
+                    <input type="text" name="name" class="form-control" placeholder="Category Name" minlength="1" maxlength="50"
+                        required>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> New Category</button>
+            </form>
+        </div>
+        <div class="accordion myshadow" id="categories">
+
+            <% if (pageData.ce.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.ce[0]}</div>` %>
+            <% } %>
+
+            <% pageData.cat.forEach(function(category){ %>
+            <% category.uiid='cat'+Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1) %>
+
+            <div class="card">
+                <div class="card-header" id="<%-category.uiid%>">
+                    <div class="d-flex">
+                        <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapse<%-category.uiid%>"
+                            aria-expanded="false" aria-controls="collapse<%-category.uiid%>">
+                            <h4>
+                                <%-category.name-%>
+                            </h4>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="collapse<%-category.uiid%>" class="collapse" aria-labelledby="<%-category.uiid%>" data-parent="#categories">
+                    <div class="card-body">
+                        <form action="category/edit" method="POST">
+                            <input type="hidden" name="id" value="<%-category.id-%>" />
+                            <input type="text" name="name" class="form-control" placeholder="Category Name" value="<%-category.name-%>" minlength="1" maxlength="50"
+                        required>
+                            <div class="d-flex mt-2">
+                                <button type="submit" class="btn btn-secondary ml-auto">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <% }); %>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>

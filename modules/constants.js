@@ -36,6 +36,8 @@ module.exports = {
     maxProductsToShowOnScreen:20,
     brands:"b",
     brandError:"be",
+    categories:"cat",
+    categoriesError:"ce",
     healthTopicError:"hte",
     healthTopics:"ht",
     recentlyBoughtProducts:"rbp",

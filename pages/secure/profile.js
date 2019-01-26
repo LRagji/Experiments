@@ -80,6 +80,11 @@ class pageProfile extends securePage {
                 url: "/secure/brands",
                 name: "Brands"
             });
+            menuItems.push({
+                icon: "fas fa-tags",
+                url: "/secure/category",
+                name: "category"
+            });
         }
         return menuItems;
     }
