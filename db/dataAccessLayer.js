@@ -10,6 +10,7 @@ let healthTopics = require('./healthtopics').singleton();
 let healthLinks = require('./healthlinks').singleton();
 let brands = require('./brands').singleton();
 let categories = require('./categories').singleton();
+let subCategories = require('./subCategories').singleton();
 
 // TODO:Call the appropiate API
 class DAL {
@@ -25,6 +26,7 @@ class DAL {
         this.healthLinks = healthLinks;
         this.brands = brands;
         this.categories = categories;
+        this.subCategories = subCategories;
 
         //TODO: This binding list is not upto date
         this.pool = this.pool.bind(this);
