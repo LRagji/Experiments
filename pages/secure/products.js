@@ -30,6 +30,7 @@ class pageProducts extends adminPage {
 
         let pageData = {};
         pageData[this.const.FAQS] = await this.dal.getAllFAQ();
+        pageData[this.const.brands] = await this.dal.brands.readBrands();
         pageData[this.const.healthTopics] = this.util.sortArrayByProperty(await this.dal.healthTopics.readHealthTopics(), "name");
         pageData[this.const.productinfo] = existingProduct === undefined ? req.flash(this.const.newProductState)[0] : existingProduct;
         pageData[this.const.newProductError] = req.flash(this.const.newProductError);
@@ -48,6 +49,7 @@ class pageProducts extends adminPage {
             "faq": req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
             "keywords": req.body.keywords,
             "healthTopics": Array.isArray(req.body.healthTopics) ? req.body.healthTopics.map(e => parseInt(e)) : [],
+            "brand": parseInt(req.body.brand),
             meta: {
                 "code": req.body.code,
                 "package_detail": req.body.packageDetail,
@@ -103,6 +105,14 @@ class pageProducts extends adminPage {
 
         if (this.util.validateIsFloatNumberBetween(req.body.price, 100000, 0) === false) {
             req.flash(this.const.newProductError, "Invalid product price, should be between 0 to 100000.");
+            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+            return;
+        }
+
+        //Validate Brand
+        req.body.brand = parseInt(req.body.brand);
+        if (this.util.validateIsWholeNumberBetween(req.body.brand, 10000, 0) === false) {
+            req.flash(this.const.newProductError, "Invalid parameter brand, please select one");
             this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
             return;
         }
@@ -282,7 +292,8 @@ class pageProducts extends adminPage {
                 req.body.newArrival !== undefined,
                 req.body.bestSelling !== undefined,
                 req.body.relatedProducts,
-                req.body.healthTopics
+                req.body.healthTopics,
+                req.body.brand
             );
         }
         else {
@@ -310,7 +321,8 @@ class pageProducts extends adminPage {
                 req.body.newArrival !== undefined,
                 req.body.bestSelling !== undefined,
                 req.body.relatedProducts,
-                req.body.healthTopics
+                req.body.healthTopics,
+                req.body.brand
             );
         }
         req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);

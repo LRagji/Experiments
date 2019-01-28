@@ -9,8 +9,8 @@ class brands {
         this.updateBrand = this.updateBrand.bind(this);
 
         if (brandsArray.length === 0) {
-            for (let i = 0; i < 1; i++) {
-                this.createBrand("Laukik","https://www.facebook.com/");
+            for (let i = 0; i < 10; i++) {
+                this.createBrand("Laukik"+i,"https://www.facebook.com/");
             }
         }
     }

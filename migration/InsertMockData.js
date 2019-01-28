@@ -27,7 +27,8 @@ async function InsertMockProducts(numberOfProducts) {
             true,
             true,
             [],
-            []
+            [],
+            0
         );
     }
     process.stdout.write("\r\n");

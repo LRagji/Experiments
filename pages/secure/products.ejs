@@ -134,6 +134,18 @@
                                         minlength="1" maxlength="100" required name="mWebsite">
                                 </div>
                             </div>
+                             <div class="row m-2">
+                                <div class="col-md">
+                                     <div class="form-group">
+                                        <label>Brand:</label>
+                                     <select name="brand" class="custom-select">`%>
+                                        <% pageData.b.forEach(function(brand){ %>
+                                        <%- `<option value="${brand.id}" ${brand.id===(pageData.productinfo!==undefined?pageData.productinfo.brand:undefined)?'selected':''} >${brand.name}</option>` %>
+                                            <% }); %>
+                                     <%-`</select>
+                                 </div>
+                                </div>
+                            </div>
                             <div class="row m-2">
                                 <div class="col-md">
                                     <div class="form-group">
