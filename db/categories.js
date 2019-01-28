@@ -27,7 +27,7 @@ class categories {
     async createCategory(name) {
         if (await this.retriveIdFor(name) >= 0) throw new Error(name + " name already exists.");
         let categrory = {
-            "id": categoriesArray.length + 1,
+            "id": categoriesArray.length,
             "name": name
         };
         categoriesArray.push(categrory);
@@ -47,6 +47,7 @@ class categories {
     async readCategoryId(id) {
         return new Promise((acc, rej) => {
             try {
+                id = parseInt(id);
                 let idx = categoriesArray.findIndex((l) => l.id === id);
                 if (idx < 0) throw new Error("Category Id:" + id + " doesnot exists.");
                 acc(Object.assign({}, categoriesArray[idx]));

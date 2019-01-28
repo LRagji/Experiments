@@ -19,6 +19,7 @@ class pageSubCategory extends adminPage {
 
     async renderSubCategories(req, renderView) {
         let pageData = {};
+        pageData[this.const.categories] = this.util.sortArrayByProperty(await this.dal.categories.readAllCategories(), "name");
         pageData[this.const.subcategories] = this.util.sortArrayByProperty(await this.dal.subCategories.readAllSubCategories(), "name");
         pageData[this.const.subcategoriesError] = req.flash(this.const.subcategoriesError);
 
@@ -28,18 +29,24 @@ class pageSubCategory extends adminPage {
     async handleEdit(req, renderView, renderRedirect) {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
-            req.flash(this.const.subcategoriesError, "Invalid Input parameter name length.");
+            req.flash(this.const.subcategoriesError, "Invalid input parameter name length.");
             renderRedirect("/secure/subcategory");
             return;
         }
 
         if (this.util.validateIsWholeNumberBetween(req.body.id, 10000, 0) === false) {
-            req.flash(this.const.subcategoriesError, "Invalid Input parameter Id.");
+            req.flash(this.const.subcategoriesError, "Invalid input parameter Id.");
             renderRedirect("/secure/subcategory");
             return;
         }
 
-        await this.dal.categories.updateCategory(req.body.id, req.body.name);
+        if (await this.dal.categories.readCategoryId(req.body.catid) === undefined) {
+            req.flash(this.const.subcategoriesError, "Invalid input parameter category id.");
+            renderRedirect("/secure/subcategory");
+            return;
+        }
+
+        await this.dal.subCategories.updateSubCategory(req.body.id, req.body.catid, req.body.name);
         renderRedirect("/secure/subcategory");
         return;
     }
@@ -52,7 +59,7 @@ class pageSubCategory extends adminPage {
             return;
         }
 
-        await this.dal.categories.createCategory(req.body.name);
+        await this.dal.subCategories.createSubCategory(req.body.catid, req.body.name);
         renderRedirect("/secure/subcategory");
         return;
     }

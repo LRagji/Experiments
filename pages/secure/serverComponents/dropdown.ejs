@@ -1,0 +1,5 @@
+  <select name="<%=name%>" class="custom-select">
+   <% options.forEach(function(option){ %>
+ <%- `<option value="${option.id}" ${option.id===selectedId?'selected':''} >${option.name}</option>` %>
+    <% }); %>
+    </select>

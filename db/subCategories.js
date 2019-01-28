@@ -6,13 +6,13 @@ class subcategories {
 
         this.readAllSubCategories = this.readAllSubCategories.bind(this);
         this.createSubCategory = this.createSubCategory.bind(this);
-        this.updateCategory = this.updateCategory.bind(this);
+        this.updateSubCategory = this.updateSubCategory.bind(this);
         this.readSubCategoryId = this.readSubCategoryId.bind(this);
         this.retriveIdFor = this.retriveIdFor.bind(this);
 
         if (subCategoriesArray.length === 0) {
             for (let i = 0; i < 1;)
-                this.createSubCategory(0, "SubCategory " + i).then(i++);
+                this.createSubCategory(1, "SubCate\"gory " + i).then(i++);
         }
 
     }
@@ -28,7 +28,7 @@ class subcategories {
         categoryId = parseInt(categoryId);
         if (await this.retriveIdFor(subCatName) >= 0) throw new Error(subCatName + " name already exists.");
         let subCategrory = {
-            "id": subCategoriesArray.length + 1,
+            "id": subCategoriesArray.length,
             "catid": categoryId,
             "name": subCatName
         };
@@ -67,7 +67,7 @@ class subcategories {
         });
     }
 
-    async updateCategory(id, categoryId, subCatName) {
+    async updateSubCategory(id, categoryId, subCatName) {
         return new Promise((acc, rej) => {
             try {
                 id = parseInt(id);
