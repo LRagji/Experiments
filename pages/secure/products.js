@@ -30,6 +30,8 @@ class pageProducts extends adminPage {
 
         let pageData = {};
         pageData[this.const.FAQS] = await this.dal.getAllFAQ();
+        pageData[this.const.categories] = this.util.sortArrayByProperty(await this.dal.categories.readAllCategories(), "name");
+        pageData[this.const.subcategories] = this.util.sortArrayByProperty(await this.dal.subCategories.readAllSubCategories(), "name");
         pageData[this.const.brands] = await this.dal.brands.readBrands();
         pageData[this.const.healthTopics] = this.util.sortArrayByProperty(await this.dal.healthTopics.readHealthTopics(), "name");
         pageData[this.const.productinfo] = existingProduct === undefined ? req.flash(this.const.newProductState)[0] : existingProduct;
@@ -50,6 +52,8 @@ class pageProducts extends adminPage {
             "keywords": req.body.keywords,
             "healthTopics": Array.isArray(req.body.healthTopics) ? req.body.healthTopics.map(e => parseInt(e)) : [],
             "brand": parseInt(req.body.brand),
+            "categories": Array.isArray(req.body.categories) ? req.body.categories.map(e => parseInt(e)) : [],
+            "subcategories": Array.isArray(req.body.subcategories) ? req.body.subcategories.map(e => parseInt(e)) : [],
             meta: {
                 "code": req.body.code,
                 "package_detail": req.body.packageDetail,
@@ -116,6 +120,26 @@ class pageProducts extends adminPage {
             this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
             return;
         }
+
+         //Categories check
+         if (!Array.isArray(req.body.categories)) {
+            req.flash(this.const.newProductError, "Invalid categories, should be an array value.");
+            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+            return;
+        }
+
+        req.body.categories = req.body.categories.filter((value, index, self) => self.indexOf(value) === index && value !== "-1");
+        req.body.categories = req.body.categories.map(e => parseInt(e));
+
+        //Sub Categories check
+        if (!Array.isArray(req.body.subcategories)) {
+            req.flash(this.const.newProductError, "Invalid subcategories, should be an array value.");
+            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+            return;
+        }
+
+        req.body.subcategories = req.body.subcategories.filter((value, index, self) => self.indexOf(value) === index && value !== "-1");
+        req.body.subcategories = req.body.subcategories.map(e => parseInt(e));
 
         //Health Topics check
         if (!Array.isArray(req.body.healthTopics)) {
@@ -293,7 +317,9 @@ class pageProducts extends adminPage {
                 req.body.bestSelling !== undefined,
                 req.body.relatedProducts,
                 req.body.healthTopics,
-                req.body.brand
+                req.body.brand,
+                req.body.categories,
+                req.body.subcategories
             );
         }
         else {
@@ -322,7 +348,9 @@ class pageProducts extends adminPage {
                 req.body.bestSelling !== undefined,
                 req.body.relatedProducts,
                 req.body.healthTopics,
-                req.body.brand
+                req.body.brand,
+                req.body.categories,
+                req.body.subcategories
             );
         }
         req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);

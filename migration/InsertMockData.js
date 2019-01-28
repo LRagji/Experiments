@@ -22,13 +22,15 @@ async function InsertMockProducts(numberOfProducts) {
             "NOW FOODS",
             "https://www.health-mall.in",
             [],
-            "search Laukik Ragji Hello",
+            "search Laukik Ragji Hello "+ i,
             undefined,
             true,
             true,
             [],
-            [],
-            0
+            [0],
+            0,
+            [0],
+            [0]
         );
     }
     process.stdout.write("\r\n");

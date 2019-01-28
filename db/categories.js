@@ -11,7 +11,7 @@ class categories {
         this.retriveIdFor = this.retriveIdFor.bind(this);
 
         if (categoriesArray.length === 0) {
-            for (let i = 0; i < 1;)
+            for (let i = 0; i < 10;)
                 this.createCategory("Category " + i).then(i++);
         }
 

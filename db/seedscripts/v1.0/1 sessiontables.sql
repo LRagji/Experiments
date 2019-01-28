@@ -18,7 +18,9 @@ create table products (
 "description" text,
 "ingredients" text,
 "healthTopics" integer[],
-"brand" integer
+"brand" integer,
+"categories" integer[],
+"subcategories" integer[]
 );
 
 SELECT * INTO products_archive FROM products;

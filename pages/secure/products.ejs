@@ -245,7 +245,9 @@
                                 </div>
                                 </div>
                             </div>`%>
-                            <%- include('./serverComponents/productPage.ejs',{healthTopics:pageData.ht,selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.healthTopics:[])}) %>
+                        <%- include('./serverComponents/productPage.ejs',{id:"healthTopics", tittle:"Associate Health Topics", healthTopics:pageData.ht, selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.healthTopics:[])}) %>
+                        <%- include('./serverComponents/productPage.ejs',{id:"categories",tittle:"Associate Categories",healthTopics:pageData.cat, selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.categories:[])}) %>
+                        <%- include('./serverComponents/productPage.ejs',{id:"subcategories",tittle:"Associate Sub-Categories",healthTopics:pageData.scat, selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.subcategories:[])}) %>
                             <%-`<div class="row m-2">
                                 <div class="col">
                                         <div class="form-group">

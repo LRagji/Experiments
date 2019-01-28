@@ -11,7 +11,7 @@ class subcategories {
         this.retriveIdFor = this.retriveIdFor.bind(this);
 
         if (subCategoriesArray.length === 0) {
-            for (let i = 0; i < 1;)
+            for (let i = 0; i < 10;)
                 this.createSubCategory(1, "SubCate\"gory " + i).then(i++);
         }
 
