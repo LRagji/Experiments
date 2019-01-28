@@ -16,7 +16,8 @@ create table products (
 "keywords"varchar(250),
 "meta" jsonb,
 "description" text,
-"ingredients" text
+"ingredients" text,
+"healthTopics" integer[]
 );
 
 SELECT * INTO products_archive FROM products;

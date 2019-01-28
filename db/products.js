@@ -24,7 +24,7 @@ class Products {
         return this.instance;
     }
 
-    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts) {
+    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts, healthTopics) {
 
         let newProduct = this._fromProperties(-1,
             name,
@@ -46,15 +46,16 @@ class Products {
             searchKeywords,
             newArrival,
             bestSelling,
-            relatedProducts);
+            relatedProducts,
+            healthTopics);
 
         if (imageBuffer !== undefined) {
             fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
         }
 
-        let insertStatement = `INSERT INTO products (name,price,offerPrice,"imageName",faq,keywords,meta,description,ingredients) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING ID`;
+        let insertStatement = `INSERT INTO products (name,price,offerPrice,"imageName",faq,keywords,meta,description,ingredients,"healthTopics") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING ID`;
 
-        let response = await this.pgPool.query(insertStatement, [newProduct.name, newProduct.price, newProduct.offerprice, newProduct.image, newProduct.faq, newProduct.keywords, newProduct.meta, newProduct.description, newProduct.ingredients]);
+        let response = await this.pgPool.query(insertStatement, [newProduct.name, newProduct.price, newProduct.offerprice, newProduct.image, newProduct.faq, newProduct.keywords, newProduct.meta, newProduct.description, newProduct.ingredients, healthTopics]);
 
         if (response.rows.length !== 1) throw new Error("Failed to persist product");
         newProduct.id = response.rows[0].id;
@@ -62,7 +63,7 @@ class Products {
         return newProduct;
     }
 
-    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts) {
+    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts, healthTopics) {
 
         let updatedProduct = this._fromProperties(
             id,
@@ -85,17 +86,18 @@ class Products {
             searchKeywords,
             newArrival,
             bestSelling,
-            relatedProducts);
+            relatedProducts,
+            healthTopics);
 
         if (imageBuffer !== undefined) {
             fs.writeFileSync('static/resources/images/products/' + image, imageBuffer);
         }
 
         let updateStatement = `UPDATE products
-                 	SET name=$1, offerprice=$2, price=$3, "imageName"=$4, faq=$5, keywords=$6, meta=$7, description=$8, ingredients=$9
-                    WHERE id=$10 returning id`;
+                 	SET name=$1, offerprice=$2, price=$3, "imageName"=$4, faq=$5, keywords=$6, meta=$7, description=$8, ingredients=$9, "healthTopics"=$10
+                    WHERE id=$11 returning id`;
 
-        let response = await this.pgPool.query(updateStatement, [updatedProduct.name, updatedProduct.offerprice, updatedProduct.price, updatedProduct.image, updatedProduct.faq, updatedProduct.keywords, updatedProduct.meta, updatedProduct.description, updatedProduct.ingredients, updatedProduct.id]);
+        let response = await this.pgPool.query(updateStatement, [updatedProduct.name, updatedProduct.offerprice, updatedProduct.price, updatedProduct.image, updatedProduct.faq, updatedProduct.keywords, updatedProduct.meta, updatedProduct.description, updatedProduct.ingredients, updatedProduct.healthTopics, updatedProduct.id]);
 
         if (response.rows.length !== 1) throw new Error("Product updation failed, or product doesnt exits with id:" + updatedProduct.id);
         if (updatedProduct.id !== response.rows[0].id) throw new Error("Incorrect product updated expected id:" + updatedProduct.id + " but updated id:" + response.rows[0].id);
@@ -257,7 +259,8 @@ class Products {
             row.keywords,
             row.meta.newArrival,
             row.meta.bestSelling,
-            row.meta.relatedProducts);
+            row.meta.relatedProducts,
+            row.healthTopics);
     }
 
     _parseProductId(productId) {
@@ -266,7 +269,7 @@ class Products {
         return productId;
     }
 
-    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, newArrival, bestSelling, relatedProducts) {
+    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, newArrival, bestSelling, relatedProducts, healthTopics) {
 
         id = this._parseProductId(id);
 
@@ -294,6 +297,9 @@ class Products {
         if (!Array.isArray(relatedProducts)) relatedProducts = [];
         relatedProducts = relatedProducts.map((e) => parseInt(e));
 
+        if (!Array.isArray(healthTopics)) healthTopics = [];
+        healthTopics = healthTopics.map((e) => parseInt(e));
+
         return {
             id: id,
             "name": name,
@@ -302,6 +308,7 @@ class Products {
             "image": image,
             "faq": faq, //Has to be int array always
             "keywords": searchKeywords,
+            "healthTopics": healthTopics,
             "meta": {
                 "code": code,
                 "package_detail": package_detail,

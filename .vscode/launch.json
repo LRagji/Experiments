@@ -14,7 +14,8 @@
             "type": "node",
             "request": "launch",
             "name": "Migration",
-            "program": "${workspaceFolder}\\migration\\index.js"
+            "program": "${workspaceFolder}\\migration\\InsertMockData.js",
+            "args": ["products:50"]
         }
     ]
 }

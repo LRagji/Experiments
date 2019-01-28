@@ -225,12 +225,16 @@
                             </div>
                             <div class="row m-2">
                                 <div class="col">
+                                 <div class="form-group">
+                                        <label>Search keywords:</label>
                                         <input type="text" class="form-control" placeholder="Search Keywords"
                                         value="${pageData.productinfo!==undefined?pageData.productinfo.keywords:''}"
                                         minlength="0" maxlength="200" name="keywords">
                                 </div>
-                            </div>
-                            <div class="row m-2">
+                                </div>
+                            </div>`%>
+                            <%- include('./serverComponents/productPage.ejs',{healthTopics:pageData.ht,selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.healthTopics:[])}) %>
+                            <%-`<div class="row m-2">
                                 <div class="col">
                                         <div class="form-group">
                                                 <div class="form-group form-check">

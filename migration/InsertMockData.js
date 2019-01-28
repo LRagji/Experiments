@@ -26,6 +26,7 @@ async function InsertMockProducts(numberOfProducts) {
             undefined,
             true,
             true,
+            [],
             []
         );
     }

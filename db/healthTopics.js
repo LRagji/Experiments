@@ -9,8 +9,8 @@ class healthTopics {
         this.updateHealthTopic = this.updateHealthTopic.bind(this);
 
         if (topics.length === 0) {
-            for (let i = 0; i < 1; i++) {
-                this.createHealthTopic("Laukik");
+            for (let i = 0; i < 20; i++) {
+                this.createHealthTopic("Laukik"+i);
             }
         }
     }

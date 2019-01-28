@@ -11,7 +11,6 @@ class pageProducts extends adminPage {
         this.saveProduct = this.saveProduct.bind(this);
         this.respondWithRightPage = this.respondWithRightPage.bind(this);
 
-
         this.loadRoutes(server, basePath);
     }
 
@@ -31,6 +30,7 @@ class pageProducts extends adminPage {
 
         let pageData = {};
         pageData[this.const.FAQS] = await this.dal.getAllFAQ();
+        pageData[this.const.healthTopics] = this.util.sortArrayByProperty(await this.dal.healthTopics.readHealthTopics(), "name");
         pageData[this.const.productinfo] = existingProduct === undefined ? req.flash(this.const.newProductState)[0] : existingProduct;
         pageData[this.const.newProductError] = req.flash(this.const.newProductError);
         pageData[this.const.newProductSuccess] = req.flash(this.const.newProductSuccess);
@@ -47,6 +47,7 @@ class pageProducts extends adminPage {
             "ingredients": req.body.ingredients,
             "faq": req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
             "keywords": req.body.keywords,
+            "healthTopics": Array.isArray(req.body.healthTopics) ? req.body.healthTopics.map(e => parseInt(e)) : [],
             meta: {
                 "code": req.body.code,
                 "package_detail": req.body.packageDetail,
@@ -106,6 +107,17 @@ class pageProducts extends adminPage {
             return;
         }
 
+        //Health Topics check
+        if (!Array.isArray(req.body.healthTopics)) {
+            req.flash(this.const.newProductError, "Invalid health topics, should be an array value.");
+            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
+            return;
+        }
+
+        req.body.healthTopics = req.body.healthTopics.filter((value, index, self) => self.indexOf(value) === index && value !== "-1");
+        req.body.healthTopics = req.body.healthTopics.map(e => parseInt(e));
+
+        //Related products check
         if (!Array.isArray(req.body.relatedProducts)) {
             req.flash(this.const.newProductError, "Invalid related products, should be an array value.");
             this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
@@ -269,7 +281,8 @@ class pageProducts extends adminPage {
                 req.file !== undefined ? req.file.buffer : undefined,
                 req.body.newArrival !== undefined,
                 req.body.bestSelling !== undefined,
-                req.body.relatedProducts
+                req.body.relatedProducts,
+                req.body.healthTopics
             );
         }
         else {
@@ -296,7 +309,8 @@ class pageProducts extends adminPage {
                 req.file !== undefined ? req.file.buffer : undefined,
                 req.body.newArrival !== undefined,
                 req.body.bestSelling !== undefined,
-                req.body.relatedProducts
+                req.body.relatedProducts,
+                req.body.healthTopics
             );
         }
         req.flash(this.const.newProductSuccess, "Product " + freshProduct.name + " saved sucessfully with product id:" + freshProduct.id);
@@ -313,7 +327,6 @@ class pageProducts extends adminPage {
             renderRedirect("/secure/products?tab=new&pid=" + req.body.id);
         }
     }
-
 }
 
 module.exports = pageProducts;
