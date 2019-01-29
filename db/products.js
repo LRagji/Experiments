@@ -24,7 +24,7 @@ class Products {
         return this.instance;
     }
 
-    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts, healthTopics, brand, categories, subcategories) {
+    async createProduct(name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts, healthTopics, brand, categories, subcategories) {
 
         let newProduct = this._fromProperties(-1,
             name,
@@ -40,8 +40,6 @@ class Products {
             shippingdetail,
             category,
             subCategory,
-            manufactureName,
-            manufactureWebsite,
             faq,
             searchKeywords,
             newArrival,
@@ -66,7 +64,7 @@ class Products {
         return newProduct;
     }
 
-    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts, healthTopics, brand, categories, subcategories) {
+    async updateProduct(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, faq, searchKeywords, imageBuffer, newArrival, bestSelling, relatedProducts, healthTopics, brand, categories, subcategories) {
 
         let updatedProduct = this._fromProperties(
             id,
@@ -83,8 +81,6 @@ class Products {
             shippingdetail,
             category,
             subCategory,
-            manufactureName,
-            manufactureWebsite,
             faq,
             searchKeywords,
             newArrival,
@@ -190,7 +186,6 @@ class Products {
         let whereClause = "", orderClause = "";
 
         let propertyMap = {
-            "mname": "meta->>'mname'",
             "keyword": "keywords",
             "bestSeller": "meta->>'bestSelling'",
             "newArrivals": "meta->>'newArrival'",
@@ -260,8 +255,6 @@ class Products {
             row.meta.shippingdetail,
             row.meta.category,
             row.meta.subCategory,
-            row.meta.mname,
-            row.meta.mwebsite,
             row.faq,
             row.keywords,
             row.meta.newArrival,
@@ -279,7 +272,7 @@ class Products {
         return productId;
     }
 
-    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, manufactureName, manufactureWebsite, faq, searchKeywords, newArrival, bestSelling, relatedProducts, healthTopics, brand, categories, subcategories) {
+    _fromProperties(id, name, productPrice, offerPrice, image, desc, ingredients, code, package_detail, serving_size, serving_per_container, shippingdetail, category, subCategory, faq, searchKeywords, newArrival, bestSelling, relatedProducts, healthTopics, brand, categories, subcategories) {
 
         id = this._parseProductId(id);
 
@@ -338,8 +331,6 @@ class Products {
                 "shippingdetail": shippingdetail,
                 "category": category,
                 "subCategory": subCategory,
-                "mname": manufactureName,
-                "mwebsite": manufactureWebsite,
                 "newArrival": newArrival,
                 "bestSelling": bestSelling,
                 "relatedProducts": relatedProducts

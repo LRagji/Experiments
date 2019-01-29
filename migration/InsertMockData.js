@@ -19,8 +19,6 @@ async function InsertMockProducts(numberOfProducts) {
             i + 1,
             "Category" + i.toString(),
             "Sub Category" + i.toString(),
-            "NOW FOODS",
-            "https://www.health-mall.in",
             [],
             "search Laukik Ragji Hello "+ i,
             undefined,
