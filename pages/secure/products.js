@@ -60,8 +60,6 @@ class pageProducts extends adminPage {
                 "serving_size": req.body.servingSize,
                 "serving_per_container": req.body.servingPerContainer,
                 "shippingdetail": req.body.shippingDetails,
-                "category": req.body.cat,
-                "subCategory": req.body.subCat,
                 "newArrival": req.body.newArrival !== undefined,
                 "bestSelling": req.body.bestSelling !== undefined,
                 "relatedProducts": Array.isArray(req.body.relatedProducts) ? req.body.relatedProducts : []
@@ -229,18 +227,6 @@ class pageProducts extends adminPage {
             return;
         }
 
-        if (this.util.validateLength(req.body.cat, 20, 1) === false) {
-            req.flash(this.const.newProductError, "Invalid category length [20,1].");
-            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
-            return;
-        }
-
-        if (this.util.validateLength(req.body.subCat, 20, 1) === false) {
-            req.flash(this.const.newProductError, "Invalid sub category length [20,1].");
-            this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
-            return;
-        }
-
         if (this.util.validateLength(req.body.imageName, 50, 1) === false) {
             req.flash(this.const.newProductError, "Form has been tampared with for image name.");
             this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
@@ -286,8 +272,6 @@ class pageProducts extends adminPage {
                 req.body.servingSize,
                 req.body.servingPerContainer,
                 req.body.shippingDetails,
-                req.body.cat,
-                req.body.subCat,
                 req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
                 req.body.keywords,
                 req.file !== undefined ? req.file.buffer : undefined,
@@ -315,8 +299,6 @@ class pageProducts extends adminPage {
                 req.body.servingSize,
                 req.body.servingPerContainer,
                 req.body.shippingDetails,
-                req.body.cat,
-                req.body.subCat,
                 req.body.faq === undefined ? [] : req.body.faq.map((e) => parseInt(e)),
                 req.body.keywords,
                 req.file !== undefined ? req.file.buffer : undefined,

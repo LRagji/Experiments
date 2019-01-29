@@ -17,8 +17,6 @@ async function InsertMockProducts(numberOfProducts) {
             "1 Softgels",
             "This bottle will last 180 days.",
             i + 1,
-            "Category" + i.toString(),
-            "Sub Category" + i.toString(),
             [],
             "search Laukik Ragji Hello "+ i,
             undefined,
