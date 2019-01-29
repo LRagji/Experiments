@@ -30,6 +30,8 @@ class pageProduct extends page {
 
             product.meta.relatedProducts = await this.dal.products.readProducts(product.meta.relatedProducts);
 
+            product.brand = await this.dal.brands.readBrandById(product.brand);
+
             let pageData = {};
             pageData[this.const.product] = product;
             renderView('../pages/product', pageData);

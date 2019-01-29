@@ -33,12 +33,13 @@ class pageSearch extends page {
             searchText += (searchText === "" ? "" : ", ") + "keywords like:" + filter.like.keyword;
         }
 
-        if (req.body.mname !== undefined) {
-            if (this.util.validateLength(req.body.mname, 50, 1) === false) {
-                throw new Error("Invalid search parameter manufacturer name length.")
+        if (req.body.brandID !== undefined) {
+            let brand = await this.dal.brands.readBrandById(req.body.brandID);
+            if (brand === undefined) {
+                throw new Error("Invalid search parameter Brand Id.")
             }
-            filter.equal.mname = req.body.mname;
-            searchText += (searchText === "" ? "" : ", ") + "manufactured by:" + filter.equal.mname;
+            filter.equal.brand = brand.id;
+            searchText += (searchText === "" ? "" : ", ") + "manufactured by:" + brand.name;
         }
 
         let optimizedFilter = this.util.cloneFilterForNetworkTransport(filter);

@@ -53,12 +53,12 @@
                                     <%= pageData.product.meta.shippingdetail %> day(s)</b></li>
                             <li>
                                 <form action="/search" method="POST">
-                                    <input type="hidden" name="mname" value="<%= pageData.product.meta.mname %>" />
+                                    <input type="hidden" name="brandID" value="<%= pageData.product.brand.id %>" />
                                     <button type="Submit" class="btn btn-link pl-0">
-                                        <%= pageData.product.meta.mname %></button>
+                                        <%= pageData.product.brand.name %></button>
                                 </form>
                             </li>
-                            <li><a target="blank" href="<%= pageData.product.meta.mwebsite %>">
+                            <li><a target="blank" href="<%= pageData.product.brand.website %>">
                                     Website</a></li>
                         </ul>
                         <div class="d-flex">

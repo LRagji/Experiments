@@ -10,7 +10,7 @@ class brands {
 
         if (brandsArray.length === 0) {
             for (let i = 0; i < 10; i++) {
-                this.createBrand("Laukik"+i,"https://www.facebook.com/");
+                this.createBrand("Laukik" + i, "https://www.facebook.com/");
             }
         }
     }
@@ -46,13 +46,29 @@ class brands {
         });
     }
 
+    readBrandById(id) {
+        return new Promise((acc, rej) => {
+            try {
+                id = parseInt(id);
+                let idx = brandsArray.findIndex((l) => l.id === id);
+                if (idx < 0)
+                    acc(undefined);
+                else
+                    acc(Object.assign({}, brandsArray[idx]));
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        });
+    }
+
+
     updateBrand(id, brandName, brandWebsite) {
         return new Promise((acc, rej) => {
             try {
                 id = parseInt(id);
                 let foundBrands = brandsArray.filter((e) => e.id === id);
-                if (foundBrands.length > 0)
-                { 
+                if (foundBrands.length > 0) {
                     foundBrands[0].name = brandName;
                     foundBrands[0].website = brandWebsite;
                 }

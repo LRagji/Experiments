@@ -196,7 +196,8 @@ class Products {
             "newArrivals": "meta->>'newArrival'",
             "price": "price",
             "name": "name",
-            "category": "meta->>'category'"
+            "category": "meta->>'category'",
+            "brand":"brand"
         };
 
         let operatorMap = {
