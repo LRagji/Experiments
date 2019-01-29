@@ -7,6 +7,7 @@ class healthTopics {
         this.createHealthTopic = this.createHealthTopic.bind(this);
         this.readHealthTopics = this.readHealthTopics.bind(this);
         this.updateHealthTopic = this.updateHealthTopic.bind(this);
+        this.readHealthTopicById=this.readHealthTopicById.bind(this);
 
         if (topics.length === 0) {
             for (let i = 0; i < 20; i++) {
@@ -28,6 +29,22 @@ class healthTopics {
                 let healthTopic = { name: topicName, id: topics.length };
                 topics.push(healthTopic);
                 acc(healthTopic);
+            }
+            catch (ex) {
+                rej(ex);
+            }
+        });
+    }
+
+    readHealthTopicById(id) {
+        return new Promise((acc, rej) => {
+            try {
+                id = parseInt(id);
+                let idx = topics.findIndex((l) => l.id === id);
+                if (idx < 0)
+                    acc(undefined);
+                else
+                    acc(Object.assign({}, topics[idx]));
             }
             catch (ex) {
                 rej(ex);

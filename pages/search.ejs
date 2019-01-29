@@ -10,7 +10,7 @@
 <body class="bg-light">
     <!-- Main Nav -->
     <% include ./header %>
-    
+
     <!-- Site Content -->
     <div class="container mt-5">
         <div class="row">
@@ -50,7 +50,25 @@
                 <div class="card myshadow mt-2 w-100">
                     <div class="card-header">CATEGORIES</div>
                     <div class="card-body">
-                        <ul id="lstCatagories">
+                        <ul class="list-unstyled" id="lstCatagories">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Brands -->
+                <div class="card myshadow mt-2 w-100">
+                    <div class="card-header">BRANDS</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled" id="lstBrands">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- HealthTopics -->
+                <div class="card myshadow mt-2 w-100">
+                    <div class="card-header">Health Topics</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled" id="lstHealthtopics">
                         </ul>
                     </div>
                 </div>
@@ -196,6 +214,8 @@
 
         function getSummary(filter) {
             $("#lstCatagories").empty();
+            $("#lstBrands").empty();
+            $("#lstHealthtopics").empty();
             _activeSummaryCall = $.post('/v1/products/search/summary', filter, undefined, "json");
             _activeSummaryCall.always(handleSummary)
         }
@@ -205,9 +225,28 @@
             if (xhrObj.status === 200) {
                 //Success
                 data.categories.forEach(category => {
-                    $("#lstCatagories").append(`<a href="#" onclick="filterByCategory([${category}])">
-                                <li>${category}</li>
-                            </a>`);
+                    $("#lstCatagories").append(`<li>
+                                <div class="custom-control custom-checkbox">
+                                <input id="cat${category.id}" type="checkbox" onchange="filterByCategory([${category.id}],this)" class="custom-control-input">
+                                <label for="cat${category.id}" class="custom-control-label">${category.name}</label>
+                                </div>
+                                </li>`);
+                });
+                data.brands.forEach(brand => {
+                    $("#lstBrands").append(`<li>
+                                <div class="custom-control custom-radio">
+                                <input id="br${brand.id}" type="radio" name="brand" onchange="filterByBrand(${brand.id},this)" class="custom-control-input">
+                                <label for="br${brand.id}" class="custom-control-label">${brand.name}</label>
+                                </div>
+                                </li>`);
+                });
+                data.healthTopics.forEach(ht => {
+                    $("#lstHealthtopics").append(`<li>
+                                <div class="custom-control custom-checkbox">
+                                <input id="ht${ht.id}" type="checkbox" onchange="filterByHealthTopic([${ht.id}],this)" class="custom-control-input">
+                                <label for="ht${ht.id}" class="custom-control-label">${ht.name}</label>
+                                </div>
+                                </li>`);
                 });
             }
         }
@@ -216,18 +255,79 @@
             if (_activeSummaryCall !== undefined) _activeSummaryCall.abort();
         }
 
-        function filterByCategory(value) {
-            if (filter.containsArr !== undefined) {
-                filter.containsArr.categories = value;
+        function filterByCategory(value, element) {
+            if (element.checked === true) {
+                if (filter.containsArr === undefined) {
+                    filter.containsArr = { categories: value };
+                }
+                else {
+                    if (filter.containsArr.categories === undefined) {
+                        filter.containsArr.categories = value;
+                    }
+                    else {
+                        filter.containsArr.categories.push(value[0]);
+                    }
+                }
             }
             else {
-                filter.containsArr = { categories: value };
+                if (filter.containsArr.categories.length === 1) {
+                    delete filter.containsArr.categories;
+                }
+                else {
+                    filter.containsArr.categories.splice(filter.containsArr.categories.indexOf(value[0]), 1);
+                }
             }
+
             searchProducts(filter);
         }
 
-        function refreshLeftPane(filter)
-        {
+        function filterByHealthTopic(value, element) {
+            if (element.checked === true) {
+                if (filter.containsArr === undefined) {
+                    filter.containsArr = { healthtopics: value };
+                }
+                else {
+                    if (filter.containsArr.healthtopics === undefined) {
+                        filter.containsArr.healthtopics = value;
+                    }
+                    else {
+                        filter.containsArr.healthtopics.push(value[0]);
+                    }
+                }
+            }
+            else {
+                if (filter.containsArr.healthtopics.length === 1) {
+                    delete filter.containsArr.healthtopics;
+                }
+                else {
+                    filter.containsArr.healthtopics.splice(filter.containsArr.healthtopics.indexOf(value[0]), 1);
+                }
+            }
+
+            searchProducts(filter);
+        }
+
+        function filterByBrand(value, element) {
+
+            if (element.checked === true) {
+                if (filter.equal === undefined) {
+                    filter.equal = { brand: value };
+                }
+                else {
+                    filter.equal.brand = value;
+                }
+            }
+
+            // if (filter.equal !== undefined) {
+            //     filter.equal.brand = value;
+            // }
+            // else {
+            //     filter.equal = { brand: value };
+            // }
+            searchProducts(filter);
+        }
+
+        function refreshLeftPane(filter) {
             cancelActiveNetworkCallForSummary();
             getSummary(filter);
         }

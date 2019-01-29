@@ -2,8 +2,9 @@ let fs = require('fs');
 
 class Products {
 
-    constructor(pgPool) {
+    constructor(pgPool, dal) {
         this.pgPool = pgPool;
+        this.dal = dal;//TODO remove this code once line number 166 TODO is implemented.
         this.deleteProduct = this.deleteProduct;
         this.readProductById = this.readProductById.bind(this);
         this.readProducts = this.readProducts.bind(this);
@@ -17,9 +18,9 @@ class Products {
         this._constructFilterClause = this._constructFilterClause.bind(this);
     }
 
-    static singleton(pgPool) {
+    static singleton(pgPool, dal) {
         if (this.instance === undefined) {
-            this.instance = new Products(pgPool);
+            this.instance = new Products(pgPool, dal);
         }
         return this.instance;
     }
@@ -155,11 +156,18 @@ class Products {
 
         let filterClause = this._constructFilterClause(filter, argumentArray, true);
 
-        let selectQuery = "select  distinct(unnest(categories)) as category from products " + filterClause;
-        let response = await this.pgPool.query(selectQuery, argumentArray);
+        let selectQuery = 'select distinct(unnest(categories)) as category from products ' + filterClause;
+        let categoryResponse = await this.pgPool.query(selectQuery, argumentArray);
+        selectQuery = 'select  distinct brand as brand from products ' + filterClause;
+        let brandsResponse = await this.pgPool.query(selectQuery, argumentArray);
+        selectQuery = 'select distinct(unnest("healthTopics")) as healthtopics from products ' + filterClause;
+        let healthTopicsResponse = await this.pgPool.query(selectQuery, argumentArray);
 
+        //TODO:Move th following calls to query so that we get peformance enhancement
         return {
-            "categories": response.rows.map((r) => r.category)
+            "categories": await Promise.all(categoryResponse.rows.map((r) => this.dal.categories.readCategoryId(r.category))),
+            "brands": await Promise.all(brandsResponse.rows.map((r) => this.dal.brands.readBrandById(r.brand))),
+            "healthTopics": await Promise.all(healthTopicsResponse.rows.map((r) => this.dal.healthTopics.readHealthTopicById(r.healthtopics)))
         };
     }
 
@@ -188,7 +196,8 @@ class Products {
             "price": "price",
             "name": "name",
             "categories": "categories",
-            "brand": "brand"
+            "brand": "brand",
+            "healthtopics": '"healthTopics"'
         };
 
         let operatorMap = {

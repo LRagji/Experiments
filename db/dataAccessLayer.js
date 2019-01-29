@@ -5,7 +5,7 @@ let util = require('../modules/utilities');
 let settings = require('./appSettings');
 let orders = require('./orders').singleton();
 let banners = require('./banners').singleton();
-let products = require('./products').singleton(pgPool);
+let products = undefined;
 let healthTopics = require('./healthtopics').singleton();
 let healthLinks = require('./healthlinks').singleton();
 let brands = require('./brands').singleton();
@@ -17,7 +17,8 @@ class DAL {
     constructor(constantService) {
 
         this.const = constantService;
-
+        products = require('./products').singleton(pgPool, this); //TODO kill this line it should be required in the top with only pgpool param.
+        
         this.appSettings = settings.singleton(constantService);
         this.orders = orders;
         this.products = products;
@@ -27,6 +28,8 @@ class DAL {
         this.brands = brands;
         this.categories = categories;
         this.subCategories = subCategories;
+
+       
 
         //TODO: This binding list is not upto date
         this.pool = this.pool.bind(this);
