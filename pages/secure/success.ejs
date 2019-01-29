@@ -82,7 +82,7 @@
                     </ul>
                     <h3 class="ml-auto">
                         <small><small class="text-muted">Invoice Total</small></small>
-                        &#8377;<%=  (pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0))+((pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0)) *((pageData.od.tax)/100)) %>
+                        &#8377;<%=  (pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0)) %>
                      
                     </h3>
                     <small class="text-muted" >Tax:&#8377;<%= pageData.od.products.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) *((pageData.od.tax)/100) %></small>

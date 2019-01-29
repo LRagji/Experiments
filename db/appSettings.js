@@ -68,7 +68,7 @@ class appSettings {
                     throw new Error(key + " doesnt exists.");
                 }
                 else {
-                    this.settings.key = value;
+                    this.settings[key] = value;
                     acc(undefined);
                 }
             } catch (err) {

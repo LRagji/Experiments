@@ -13,7 +13,7 @@
     <div class="container mt-5">
         <div class="card myshadow">
             <h4 class="card-header text-uppercase">App Settings</h4>
-            <form class="card-body">
+            <form class="card-body" action="settings/edit" method="POST" >
                 <div class="row my-2">
                     <div class="col-md">
                         <div class="container mt-5">
@@ -22,7 +22,7 @@
                                     <div class="input-group-text">Tax in (%)</div>
                                 </div>
                                 <input type="text" class="form-control" id="inlineFormInputGroup" minlength="1"
-                                    maxlength="3" placeholder="0-100" value="<%=pageData.tsk%>" required>
+                                    maxlength="3" name="tax" placeholder="0-100" value="<%=pageData.tsk%>" required>
                             </div>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                 <div class="row my-2">
                     <div class="col-md">
                         <div class="d-flex">
-                            <button type="submit" disabled class="btn btn-primary ml-auto">Save</button>
+                            <button type="submit" class="btn btn-primary ml-auto">Save</button>
                         </div>
                     </div>
                 </div>
