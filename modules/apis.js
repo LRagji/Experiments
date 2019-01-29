@@ -23,7 +23,10 @@ class apiServer extends page {
         //     ascending: {"price":0},
         //     descending: {},
         //     greaterThan: {},
-        //     lessThan: {}
+        //     lessThan: {},
+        //     containsArr:{
+        //                      columnname:[]
+        //                 }
         // };
         let page = parseInt(req.query.page);
         let size = parseInt(req.query.size);

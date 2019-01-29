@@ -205,7 +205,7 @@
             if (xhrObj.status === 200) {
                 //Success
                 data.categories.forEach(category => {
-                    $("#lstCatagories").append(`<a href="#" onclick="filterByCategory('${category}')">
+                    $("#lstCatagories").append(`<a href="#" onclick="filterByCategory([${category}])">
                                 <li>${category}</li>
                             </a>`);
                 });
@@ -217,11 +217,11 @@
         }
 
         function filterByCategory(value) {
-            if (filter.equal !== undefined) {
-                filter.equal.category = value;
+            if (filter.containsArr !== undefined) {
+                filter.containsArr.categories = value;
             }
             else {
-                filter.equal = { category: value };
+                filter.containsArr = { categories: value };
             }
             searchProducts(filter);
         }

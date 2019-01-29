@@ -243,6 +243,10 @@ module.exports = {
             if (returnFilter === undefined) returnFilter = {};
             returnFilter.lessThan = filter.lessThan;
         }
+        if (Object.keys(filter.containsArr === undefined ? {} : filter.containsArr).length > 0) {
+            if (returnFilter === undefined) returnFilter = {};
+            returnFilter.containsArr = filter.containsArr;
+        }
 
         return returnFilter;
     },

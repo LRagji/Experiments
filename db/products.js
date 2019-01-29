@@ -159,7 +159,7 @@ class Products {
 
         let filterClause = this._constructFilterClause(filter, argumentArray, true);
 
-        let selectQuery = "select distinct(meta->>'category') as category from products " + filterClause;
+        let selectQuery = "select  distinct(unnest(categories)) as category from products " + filterClause;
         let response = await this.pgPool.query(selectQuery, argumentArray);
 
         return {
@@ -191,8 +191,8 @@ class Products {
             "newArrivals": "meta->>'newArrival'",
             "price": "price",
             "name": "name",
-            "category": "meta->>'category'",
-            "brand":"brand"
+            "categories": "categories",
+            "brand": "brand"
         };
 
         let operatorMap = {
@@ -201,7 +201,8 @@ class Products {
             "greaterThan": ">",
             "lessThan": "<",
             "ascending": "asc",
-            "descending": "desc"
+            "descending": "desc",
+            "containsArr": "&&"
         };
 
         Object.keys(filter).forEach((operator) => {
@@ -219,6 +220,12 @@ class Products {
                     Object.keys(filter[operator]).forEach((operand) => {
                         whereClause += (whereClause === "" ? "" : " and ") + " lower(" + propertyMap[operand] + ") " + operatorMap[operator] + " $" + (argumentArray.length + 1);
                         argumentArray.push("%" + filter[operator][operand].toLowerCase() + "%");
+                    });
+                    break;
+                case 'containsArr':
+                    Object.keys(filter[operator]).forEach((operand) => {
+                        whereClause += (whereClause === "" ? "" : " and ") + propertyMap[operand] + " " + operatorMap[operator] + " $" + (argumentArray.length + 1);
+                        argumentArray.push(filter[operator][operand]);
                     });
                     break;
                 case 'ascending':
