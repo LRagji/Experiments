@@ -11,6 +11,7 @@ let healthLinks = require('./healthlinks').singleton();
 let brands = require('./brands').singleton();
 let categories = require('./categories').singleton();
 let subCategories = require('./subCategories').singleton();
+let healthVideos = require('./healthvideos').singleton();
 
 // TODO:Call the appropiate API
 class DAL {
@@ -28,6 +29,7 @@ class DAL {
         this.brands = brands;
         this.categories = categories;
         this.subCategories = subCategories;
+        this.healthVideos=healthVideos;
 
        
 
