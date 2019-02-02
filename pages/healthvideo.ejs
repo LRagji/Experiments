@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ./head %>
+
+    <title>Health Mall-
+        <%-pageData.hvd.name -%>
+    </title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ./header %>
+
+    <!-- Site Content -->
+    <div class="container mt-5">
+        <div class="card myshadow">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <h2>
+                            <%-pageData.hvd.name -%>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <%-pageData.hvd.text -%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ./footer %>
+</body>
+
+</html>

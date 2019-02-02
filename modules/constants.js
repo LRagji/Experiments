@@ -37,6 +37,7 @@ module.exports = {
     healthVideos:"hv",
     healthVideosError:"hve",
     healthConditions:"hc",
+    healthVideoDetail:"hvd",
     ingredients:'i',
     brands:"b",
     brandError:"be",
