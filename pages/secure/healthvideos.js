@@ -4,7 +4,7 @@ class pageHealthVideos extends adminPage {
         super(auth, dataAccessService, utilityService, constantsService, textService)
 
         this.loadRoutes = this.loadRoutes.bind(this);
-        this.renderTopics = this.renderTopics.bind(this);
+        this.renderVideos = this.renderVideos.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
 
@@ -29,18 +29,18 @@ class pageHealthVideos extends adminPage {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
             req.flash(this.const.healthTopicError, "Invalid Input parameter name length.");
-            renderRedirect("/secure/healthtopics");
+            renderRedirect("/secure/healthvideos");
             return;
         }
 
         if (this.util.validateIsWholeNumberBetween(req.body.id, 10000, 0) === false) {
             req.flash(this.const.healthTopicError, "Invalid Input parameter Id.");
-            renderRedirect("/secure/healthtopics");
+            renderRedirect("/secure/healthvideos");
             return;
         }
 
         await this.dal.healthTopics.updateHealthTopic(req.body.id, req.body.name);
-        renderRedirect("/secure/healthtopics");
+        renderRedirect("/secure/healthvideos");
         return;
     }
 
@@ -48,12 +48,12 @@ class pageHealthVideos extends adminPage {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
             req.flash(this.const.healthTopicError, "Invalid Input parameter name length.");
-            renderRedirect("/secure/healthtopics");
+            renderRedirect("/secure/healthvideos");
             return;
         }
 
         await this.dal.healthTopics.createHealthTopic(req.body.name);
-        renderRedirect("/secure/healthtopics");
+        renderRedirect("/secure/healthvideos");
         return;
     }
 }

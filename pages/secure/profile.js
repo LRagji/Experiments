@@ -90,6 +90,11 @@ class pageProfile extends securePage {
                 url: "/secure/subcategory",
                 name: "Sub-Category"
             });
+            menuItems.push({
+                icon: "fas fa-video",
+                url: "/secure/healthvideos",
+                name: "Health Videos"
+            });
         }
         return menuItems;
     }

@@ -30,6 +30,8 @@ let modPageCategory = require('../pages/secure/category');
 let pageCategory = undefined;
 let modPageSubCategory = require('../pages/secure/subcategory');
 let pageSubCategory = undefined;
+let modPageHealthVideos = require('../pages/secure/healthvideos');
+let pageHealthVideos = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
@@ -53,6 +55,7 @@ class secureapp {
         pageBrands = new modPageBrands(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageCategory = new modPageCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageSubCategory = new modPageSubCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageHealthVideos = new modPageHealthVideos(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
     }
 }
 
