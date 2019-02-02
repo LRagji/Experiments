@@ -15,6 +15,8 @@ let healthLibraryPage = undefined;
 let modHomePage = require('../pages/index');
 let healthVideoPage = undefined;
 let modHealthVideoPage = require('../pages/healthvideo');
+let healthVideosPage = undefined;
+let modHealthVideosPage = require('../pages/healthvideos');
 let homePage = undefined;
 let page = require('./page');
 
@@ -38,6 +40,7 @@ class dynamicPages extends page {
         errorPage = new modErrorPage(server, this.dal, this.util, this.const, this.textService);
         healthLibraryPage = new modHealthLibraryPage(server, this.dal, this.util, this.const, this.textService);
         healthVideoPage = new modHealthVideoPage(server, this.dal, this.util, this.const, this.textService);
+        healthVideosPage = new modHealthVideosPage(server, this.dal, this.util, this.const, this.textService);
         homePage = new modHomePage(server, this.dal, this.util, this.const, this.textService);
 
         this.loadRoutes(server);
