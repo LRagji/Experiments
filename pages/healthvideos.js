@@ -15,8 +15,9 @@ class pageHealthVideos extends page {
 
     async renderVideos(req, renderView) {
         let pageData = {};
-        // pageData[this.const.searchTittle] = "Showing All Products";
-        // pageData[this.const.searchFilter] = JSON.stringify({ like: { keyword: "" } });
+        pageData[this.const.healthConditions] = this.util.sortArrayByProperty(await this.dal.healthVideos.readHealthConditions(), "name");
+        pageData[this.const.ingredients] = this.util.sortArrayByProperty(await this.dal.healthVideos.readIngredients(), "name");
+        pageData[this.const.healthVideos] = this.util.sortArrayByProperty(await this.dal.healthVideos.readHealthVideos(), "name");
         renderView('../pages/healthvideos', pageData);
     }
 }

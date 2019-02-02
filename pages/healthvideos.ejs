@@ -3,8 +3,7 @@
 
 <head>
     <% include ./head %>
-
-    <title>Health Mall-Videos</title>
+        <title>Health Mall-Videos</title>
 </head>
 
 <body class="bg-light">
@@ -16,12 +15,19 @@
         <div class="row">
             <div class="col-md p-md-0">
                 <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap">
-
+                    <% pageData.hv.forEach(function(healthVideo){ %>
+                    <%- `<div class="card m-2 myshadow myproductcard">
+                            ${healthVideo.tag}
+                                <div class="card-body">
+                                    <h5 class="card-title">${healthVideo.name}</h5>
+                                 <a href="/healthvideo?id=${healthVideo.id}" class="btn btn-primary ml-auto">Read More</a>
+                                </div>
+                        </div>` %>
+                    <% }); %>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Footer -->
     <% include ./footer %>
 </body>

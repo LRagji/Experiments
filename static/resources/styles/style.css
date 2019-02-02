@@ -24,3 +24,13 @@
 {
     max-width:250px;
 }
+
+.myproductcard iframe
+{
+    width:inherit;
+    height:inherit;
+}
+.youtubewidth iframe
+{
+    width:inherit;
+}
