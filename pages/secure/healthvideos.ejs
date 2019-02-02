@@ -70,6 +70,8 @@
                                 <input type="text" name="tag" class="form-control" placeholder="Health Video Script"
                                     value="<%=healthVideo.tag-%>" minlength="1" maxlength="500" required>
                             </div>
+                            <%- include('./serverComponents/productPage.ejs',{id:"healthConditions", tittle:"Associate Health Condition", healthTopics:pageData.hc, selectedHealthTopics:healthVideo.healthConditions}) %>
+                            <%- include('./serverComponents/productPage.ejs',{id:"ingredients", tittle:"Associate Ingredients", healthTopics:pageData.i, selectedHealthTopics:healthVideo.ingredients}) %>
                             <div class="d-flex mt-2">
                                 <button type="submit" class="btn btn-secondary ml-auto">Save</button>
                             </div>

@@ -36,6 +36,8 @@ module.exports = {
     maxProductsToShowOnScreen:20,
     healthVideos:"hv",
     healthVideosError:"hve",
+    healthConditions:"hc",
+    ingredients:'i',
     brands:"b",
     brandError:"be",
     categories:"cat",

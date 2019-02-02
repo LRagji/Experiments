@@ -19,6 +19,8 @@ class pageHealthVideos extends adminPage {
 
     async renderVideos(req, renderView) {
         let pageData = {};
+        pageData[this.const.healthConditions] = this.util.sortArrayByProperty(await this.dal.healthVideos.readHealthConditions(), "name");
+        pageData[this.const.ingredients] = this.util.sortArrayByProperty(await this.dal.healthVideos.readIngredients(), "name");
         pageData[this.const.healthVideos] = this.util.sortArrayByProperty(await this.dal.healthVideos.readHealthVideos(), "name");
         pageData[this.const.healthVideosError] = req.flash(this.const.healthVideosError);
 
@@ -26,6 +28,24 @@ class pageHealthVideos extends adminPage {
     }
 
     async handleEdit(req, renderView, renderRedirect) {
+
+        if (Array.isArray(req.body.healthConditions) === false) {
+            req.flash(this.const.healthVideosError, "Invalid Input parameter health conditions type.");
+            renderRedirect("/secure/healthvideos");
+            return;
+        }
+
+        req.body.healthConditions = req.body.healthConditions.filter((value, index, self) => self.indexOf(value) === index && value !== "-1");
+        req.body.healthConditions = req.body.healthConditions.map(e => parseInt(e));
+
+        if (Array.isArray(req.body.ingredients) === false) {
+            req.flash(this.const.healthVideosError, "Invalid Input parameter ingredients type.");
+            renderRedirect("/secure/healthvideos");
+            return;
+        }
+
+        req.body.ingredients = req.body.ingredients.filter((value, index, self) => self.indexOf(value) === index && value !== "-1");
+        req.body.ingredients = req.body.ingredients.map(e => parseInt(e));
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
             req.flash(this.const.healthVideosError, "Invalid Input parameter name length.");
@@ -51,7 +71,7 @@ class pageHealthVideos extends adminPage {
             return;
         }
 
-        await this.dal.healthVideos.updateHealthVideo(req.body.id, req.body.name, req.body.text, req.body.tag, [], []);
+        await this.dal.healthVideos.updateHealthVideo(req.body.id, req.body.name, req.body.text, req.body.tag, req.body.ingredients, req.body.healthConditions);
         renderRedirect("/secure/healthvideos");
         return;
     }
