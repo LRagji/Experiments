@@ -19,7 +19,7 @@ class DAL {
 
         this.const = constantService;
         products = require('./products').singleton(pgPool, this); //TODO kill this line it should be required in the top with only pgpool param.
-        
+
         this.appSettings = settings.singleton(constantService);
         this.orders = orders;
         this.products = products;
@@ -29,9 +29,9 @@ class DAL {
         this.brands = brands;
         this.categories = categories;
         this.subCategories = subCategories;
-        this.healthVideos=healthVideos;
+        this.healthVideos = healthVideos;
 
-       
+
 
         //TODO: This binding list is not upto date
         this.pool = this.pool.bind(this);

@@ -17,7 +17,7 @@ class healthVideos {
 
         if (videos.length === 0) {
             for (let i = 0; i < 20; i++) {
-                this.createHealthVideo("Laukik" + i, "Video Text", '<iframe width="560" height="315" src="https://www.youtube.com/embed/nm1lYAvx2mw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', [], []);
+                this.createHealthVideo("Health Video" + i, "Video Text", '<iframe width="560" height="315" src="https://www.youtube.com/embed/nm1lYAvx2mw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', [], []);
             }
         }
 
@@ -44,7 +44,12 @@ class healthVideos {
     createHealthVideo(videoName, videoText, videoTag, ingredients, healthConditions) {
         return new Promise((acc, rej) => {
             try {
-                let healthVideo = { name: videoName, id: videos.length, text: videoText, ingredients: ingredients, healthConditions: healthConditions, videoTag: videoTag };
+                let healthVideo = { name: videoName, 
+                    id: videos.length, 
+                    text: videoText, 
+                    ingredients: ingredients, 
+                    healthConditions: healthConditions, 
+                    tag: videoTag };
                 videos.push(healthVideo);
                 acc(healthVideo);
             }

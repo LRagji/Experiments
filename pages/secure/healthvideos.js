@@ -19,8 +19,8 @@ class pageHealthVideos extends adminPage {
 
     async renderVideos(req, renderView) {
         let pageData = {};
-        pageData[this.const.healthTopics] = this.util.sortArrayByProperty(await this.dal.healthTopics.readHealthTopics(), "name");
-        pageData[this.const.healthTopicError] = req.flash(this.const.healthTopicError);
+        pageData[this.const.healthVideos] = this.util.sortArrayByProperty(await this.dal.healthVideos.readHealthVideos(), "name");
+        pageData[this.const.healthVideosError] = req.flash(this.const.healthVideosError);
 
         renderView('../pages/secure/healthvideos', pageData);
     }
@@ -28,18 +28,30 @@ class pageHealthVideos extends adminPage {
     async handleEdit(req, renderView, renderRedirect) {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
-            req.flash(this.const.healthTopicError, "Invalid Input parameter name length.");
+            req.flash(this.const.healthVideosError, "Invalid Input parameter name length.");
+            renderRedirect("/secure/healthvideos");
+            return;
+        }
+
+        if (this.util.validateLength(req.body.tag, 500, 1) === false) {
+            req.flash(this.const.healthVideosError, "Invalid Input parameter video script length.");
+            renderRedirect("/secure/healthvideos");
+            return;
+        }
+
+        if (this.util.validateLength(req.body.text, 2000, 1) === false) {
+            req.flash(this.const.healthVideosError, "Invalid Input parameter video text length.");
             renderRedirect("/secure/healthvideos");
             return;
         }
 
         if (this.util.validateIsWholeNumberBetween(req.body.id, 10000, 0) === false) {
-            req.flash(this.const.healthTopicError, "Invalid Input parameter Id.");
+            req.flash(this.const.healthVideosError, "Invalid Input parameter Id.");
             renderRedirect("/secure/healthvideos");
             return;
         }
 
-        await this.dal.healthTopics.updateHealthTopic(req.body.id, req.body.name);
+        await this.dal.healthVideos.updateHealthVideo(req.body.id, req.body.name, req.body.text, req.body.tag, [], []);
         renderRedirect("/secure/healthvideos");
         return;
     }
@@ -47,12 +59,12 @@ class pageHealthVideos extends adminPage {
     async handleCreate(req, renderView, renderRedirect) {
 
         if (this.util.validateLength(req.body.name, 50, 1) === false) {
-            req.flash(this.const.healthTopicError, "Invalid Input parameter name length.");
+            req.flash(this.const.healthVideosError, "Invalid Input parameter name length.");
             renderRedirect("/secure/healthvideos");
             return;
         }
 
-        await this.dal.healthTopics.createHealthTopic(req.body.name);
+        await this.dal.healthVideos.createHealthVideo(req.body.name, "", "", [], []);
         renderRedirect("/secure/healthvideos");
         return;
     }

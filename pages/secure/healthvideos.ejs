@@ -4,7 +4,7 @@
 <head>
     <% include ../head %>
 
-    <title>Health Mall-Health Topics</title>
+    <title>Health Mall-Health Videos</title>
 </head>
 
 <body class="bg-light">
@@ -12,49 +12,64 @@
     <% include ../header %>
 
     <div class="container mt-5">
-      <div class="d-flex">
-            <h4>Health Topics</h4>
-            <form action="healthtopics/new" method="POST" class="form-inline ml-auto">
+        <div class="d-flex">
+            <h4>Health Videos</h4>
+            <form action="healthvideos/new" method="POST" class="form-inline ml-auto">
                 <div class="input-group mb-2 mr-sm-2">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">Health Topic Name:</div>
+                        <div class="input-group-text">Health Video Name:</div>
                     </div>
-                    <input type="text" name="name" class="form-control" placeholder="Health Topic Name" minlength="1" maxlength="50"
-                        required>
+                    <input type="text" name="name" class="form-control" placeholder="Health Video" minlength="1"
+                        maxlength="50" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> New Health Topic</button>
+                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> New Health Video</button>
             </form>
         </div>
-        <div class="accordion myshadow" id="healthTopics">
+        <div class="accordion myshadow" id="healthVideos">
 
-            <% if (pageData.hte.length>=1) { %>
-            <%- `<div class="alert alert alert-danger" role="alert">${pageData.hte[0]}</div>` %>
+            <% if (pageData.hve.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.hve[0]}</div>` %>
             <% } %>
 
-            <% pageData.ht.forEach(function(healthTopic){ %>
-            <% healthTopic.uiid='ht'+Math.floor((1 + Math.random()) * 0x10000)
+            <% pageData.hv.forEach(function(healthVideo){ %>
+            <% healthVideo.uiid='hv'+Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
                 .substring(1) %>
 
             <div class="card">
-                <div class="card-header" id="<%-healthTopic.uiid%>">
+                <div class="card-header" id="<%-healthVideo.uiid%>">
                     <div class="d-flex">
-                        <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapse<%-healthTopic.uiid%>"
-                            aria-expanded="false" aria-controls="collapse<%-healthTopic.uiid%>">
+                        <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapse<%-healthVideo.uiid%>"
+                            aria-expanded="false" aria-controls="collapse<%-healthVideo.uiid%>">
                             <h4>
-                                <%-healthTopic.name-%>
+                                <%-healthVideo.name-%>
                             </h4>
                         </button>
                     </div>
                 </div>
 
-                <div id="collapse<%-healthTopic.uiid%>" class="collapse" aria-labelledby="<%-healthTopic.uiid%>" data-parent="#healthTopics">
+                <div id="collapse<%-healthVideo.uiid%>" class="collapse" aria-labelledby="<%-healthVideo.uiid%>"
+                    data-parent="#healthVideos">
                     <div class="card-body">
-                        <form action="healthtopics/edit" method="POST">
-                            <input type="hidden" name="id" value="<%-healthTopic.id-%>" />
-                            <input type="text" name="name" class="form-control" placeholder="Health Topic Name" value="<%-healthTopic.name-%>" minlength="1" maxlength="50"
-                        required>
+                        <form action="healthvideos/edit" method="POST">
+                            <input type="hidden" name="id" value="<%-healthVideo.id-%>" />
+                            <div class="form-group">
+                                <label for="desc">Video Name</label>
+                                <input type="text" name="name" class="form-control" placeholder="Health Video Name"
+                                    value="<%-healthVideo.name-%>" minlength="1" maxlength="50" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="desc">Video Text</label>
+                                <textarea style="width:600px" class="form-control" name="text">
+                                    <%-healthVideo.text-%>
+                            </textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="desc">Video Script</label>
+                                <input type="text" name="tag" class="form-control" placeholder="Health Video Script"
+                                    value="<%=healthVideo.tag-%>" minlength="1" maxlength="500" required>
+                            </div>
                             <div class="d-flex mt-2">
                                 <button type="submit" class="btn btn-secondary ml-auto">Save</button>
                             </div>
@@ -68,6 +83,16 @@
     </div>
     <!-- Footer -->
     <% include ../footer %>
+    <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("textarea").each(function () {
+                CKEDITOR.replace(this, {
+                    customConfig: '/static/resources/scripts/editor_config.js'
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
