@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Health Topics</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+
+    <div class="container mt-5">
+      <div class="d-flex">
+            <h4>Health Topics</h4>
+            <form action="healthtopics/new" method="POST" class="form-inline ml-auto">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Health Topic Name:</div>
+                    </div>
+                    <input type="text" name="name" class="form-control" placeholder="Health Topic Name" minlength="1" maxlength="50"
+                        required>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i> New Health Topic</button>
+            </form>
+        </div>
+        <div class="accordion myshadow" id="healthTopics">
+
+            <% if (pageData.hte.length>=1) { %>
+            <%- `<div class="alert alert alert-danger" role="alert">${pageData.hte[0]}</div>` %>
+            <% } %>
+
+            <% pageData.ht.forEach(function(healthTopic){ %>
+            <% healthTopic.uiid='ht'+Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1) %>
+
+            <div class="card">
+                <div class="card-header" id="<%-healthTopic.uiid%>">
+                    <div class="d-flex">
+                        <button class="btn btn-link pl-0" type="button" data-toggle="collapse" data-target="#collapse<%-healthTopic.uiid%>"
+                            aria-expanded="false" aria-controls="collapse<%-healthTopic.uiid%>">
+                            <h4>
+                                <%-healthTopic.name-%>
+                            </h4>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="collapse<%-healthTopic.uiid%>" class="collapse" aria-labelledby="<%-healthTopic.uiid%>" data-parent="#healthTopics">
+                    <div class="card-body">
+                        <form action="healthtopics/edit" method="POST">
+                            <input type="hidden" name="id" value="<%-healthTopic.id-%>" />
+                            <input type="text" name="name" class="form-control" placeholder="Health Topic Name" value="<%-healthTopic.name-%>" minlength="1" maxlength="50"
+                        required>
+                            <div class="d-flex mt-2">
+                                <button type="submit" class="btn btn-secondary ml-auto">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <% }); %>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>
