@@ -3,7 +3,11 @@
 
 <head>
     <% include ./head %>
-        <title>Health Mall-Videos</title>
+    <title>Health Mall-Videos</title>
+    <style title="filter">
+        <%- pageData.hc.map(e=>'.filter_healthCondition_'+e.id+' { display:flex; }').join(' ');
+        %>
+    </style>
 </head>
 
 <body class="bg-light">
@@ -13,10 +17,41 @@
     <!-- Site Content -->
     <div class="container mt-5">
         <div class="row">
+            <div class="col-md-2 p-md-0 d-none d-lg-block">
+                <!-- Health Conditions -->
+                <div class="card myshadow mt-2 w-100">
+                    <div class="card-header">Health Conditions</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <% pageData.hc.forEach(function(healthCondition){ %>
+                            <%- `<li><div class="custom-control custom-checkbox">
+                                <input id="healthC${healthCondition.id}" type="checkbox" checked onchange="filterByHealthCondition('filter_healthCondition_${healthCondition.id}',this)" class="custom-control-input">
+                                <label for="healthC${healthCondition.id}" class="custom-control-label">${healthCondition.name}</label>
+                                </div></li>`%>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Ingredients -->
+                <div class="card myshadow mt-2 w-100">
+                    <div class="card-header">Ingredients</div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <% pageData.i.forEach(function(ingredient){ %>
+                            <%- `<li><div class="custom-control custom-checkbox">
+                                <input id="healthC${ingredient.id}" type="checkbox" onchange="filterByCategory([${ingredient.id}],this)" class="custom-control-input">
+                                <label for="healthC${ingredient.id}" class="custom-control-label">${ingredient.name}</label>
+                                </div></li>`%>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="col-md p-md-0">
                 <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap">
                     <% pageData.hv.forEach(function(healthVideo){ %>
-                    <%- `<div class="card m-2 myshadow myproductcard">
+                    <% healthVideo.healthConditionsclass=healthVideo.healthConditions.map(e=>'filter_healthCondition_'+e).join(" ");%>
+                    <%- `<div class="card m-2 myshadow myproductcard ${healthVideo.healthConditionsclass}">
                             ${healthVideo.tag}
                                 <div class="card-body">
                                     <h5 class="card-title">${healthVideo.name}</h5>
@@ -30,6 +65,19 @@
     </div>
     <!-- Footer -->
     <% include ./footer %>
+    <script>
+        var filterSyleSheet = Object.values(document.styleSheets).filter(e => e.title === "filter")[0];
+        function filterByHealthCondition(cssRuleName, element) {
+            if (filterSyleSheet !== undefined) {
+                cssRuleName = "." + cssRuleName;
+                let ruleIndexs = Object.entries(filterSyleSheet.cssRules).find((entry) => entry[1].selectorText === cssRuleName);
+                if (ruleIndexs !== undefined) filterSyleSheet.deleteRule(ruleIndexs[0]);
+
+                filterSyleSheet.insertRule(cssRuleName + " { display: " + (element.checked === true ? "flex" : "none") + "; }", (element.checked === true ? filterSyleSheet.cssRules.length: 0));
+            }
+
+        }
+    </script>
 </body>
 
 </html>
