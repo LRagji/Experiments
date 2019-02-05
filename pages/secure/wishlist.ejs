@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Dashboard</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+    <div class="container">
+        <div class="d-flex justify-content-center justify-content-md-around flex-wrap mt-5">
+            <% pageData.menu.forEach(function(item){ %>
+            <%- 
+        `<a href="${item.url}">
+            <div class="card text-white bg-success myshadow text-center m-2" style="max-width: 300px;width:300px">
+            <div class="card-header text-uppercase">${item.name}</div>
+            <div class="card-body">
+                <i style="width:100px;height:100px" class="${item.icon}"></i>
+            </div>
+        </div></a>`
+        %>
+            <% }); %>
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>

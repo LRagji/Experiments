@@ -38,6 +38,11 @@ class pageProfile extends securePage {
             url: "/secure/logout",
             name: "Logout"
         });
+        menuItems.push({
+            icon: "fas fa-heart",
+            url: "/secure/wishlist",
+            name: "Wishlist"
+        });
 
         if (this.util.isAdmin(user)) {
             menuItems.push({
@@ -95,6 +100,7 @@ class pageProfile extends securePage {
                 url: "/secure/healthvideos",
                 name: "Health Videos"
             });
+          
         }
         return menuItems;
     }

@@ -32,6 +32,8 @@ let modPageSubCategory = require('../pages/secure/subcategory');
 let pageSubCategory = undefined;
 let modPageHealthVideos = require('../pages/secure/healthvideos');
 let pageHealthVideos = undefined;
+let wishlistPage = undefined;
+let modWishlistPage = require('../pages/secure/wishlist');
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
@@ -39,12 +41,15 @@ class secureapp {
         //TODO: Move all of these page inits to index.js
         secureApi = new modSecureApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
 
+        //General User Pages
         pageOrders = new modPageOrders(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageLogin = new modPageLogin(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageProfile = new modPageProfile(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pagePassword = new modPagePassword(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        wishlistPage = new modWishlistPage(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
 
+        //Admin Pages
         pageProducts = new modPageProducts(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageBanner = new modPageBanner(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
         pageUser = new modPageUser(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
