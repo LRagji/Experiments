@@ -5,7 +5,8 @@ class apiServer extends page {
 
         this.addProductToSession = this.addProductToSession.bind(this);
         this.searchProducts = this.searchProducts.bind(this);
-        this.searchSummary=this.searchSummary.bind(this);
+        this.searchSummary = this.searchSummary.bind(this);
+        this.addProductToWishlist = this.addProductToWishlist.bind(this);
 
         this.loadRoutes(server);
     }
@@ -14,6 +15,7 @@ class apiServer extends page {
         server.post('/v1/products/search', this.safeApi(this.searchProducts));
         server.post('/v1/products/search/summary', this.safeApi(this.searchSummary));
         server.post('/v1/cart/products', this.safeApi(this.addProductToSession));
+        server.post('/v1/wishlist/products', this.safeApi(this.addProductToWishlist));
     }
 
     async searchProducts(req, renderResponse) {
@@ -64,6 +66,17 @@ class apiServer extends page {
         await this.util.addProductOrQuantityToCartItem(req, parseInt(req.body.productId), 1, this.dal);
 
         renderResponse(201, { "TotalProducts": this.util.getCartItemsCount(req) });
+    }
+
+    async addProductToWishlist(req, renderResponse) {
+        if (req.user === undefined) {
+            renderResponse(401, { "redirect": this.loginPageUrl });
+            return;
+        }
+
+        let totalWishlistItems = await this.dal.wishlist.createWishlist(parseInt(req.body.productId));
+
+        renderResponse(201, { "TotalProducts": totalWishlistItems });
     }
 }
 

@@ -58,6 +58,8 @@
                         <div class="d-flex">
                             <button onClick="addProductToSession(<%=pageData.product.id %>,1)" class="btn btn-primary"
                                 type="button">Add to Cart</button>
+                            <button onClick="addProductToWishlist(<%=pageData.product.id %>)" class="ml-1 btn btn-primary"
+                                type="button">Add to Wishlist</button>
                         </div>
                     </div>
                 </div>
@@ -189,6 +191,21 @@
                 }
                 else {
                     showFailure("Failed to add product to cart.");
+                }
+            });
+        }
+
+        function addProductToWishlist(productId) {
+            let xhrObj = $.post("/v1/wishlist/products", { productId: productId })
+            xhrObj.always((data) => {
+                if (xhrObj.status === 401) {
+                    window.location = xhrObj.responseJSON.redirect;
+                }
+                else if (xhrObj.status === 201) {
+                    showSucess("Product added to your wish list.")
+                }
+                else {
+                    showFailure("Failed to add product to your wish list.");
                 }
             });
         }
