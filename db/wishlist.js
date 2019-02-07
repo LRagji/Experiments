@@ -22,7 +22,7 @@ class wishlist {
                 productId = parseInt(productId);
                 let idx = list.indexOf(productId);
                 if (idx < 0) {
-                    list.push(idx);
+                    list.push(productId);
                 }
                 acc(list.length);
             }
@@ -35,7 +35,7 @@ class wishlist {
     readAllWishlist() {
         return new Promise((acc, rej) => {
             try {
-                acc(list.map((e) => Object.assign({}, e)));
+                acc(list);
             }
             catch (ex) {
                 rej(ex);
@@ -48,7 +48,7 @@ class wishlist {
             try {
                 productId = parseInt(productId);
                 let idx = list.indexOf(productId);
-                if (idx > 0) {
+                if (idx >= 0) {
                     list.splice(idx, 1);
                 }
                 acc();
