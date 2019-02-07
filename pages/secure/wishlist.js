@@ -17,7 +17,15 @@ class pageWishlist extends securePage {
 
     async renderProfile(req, renderView) {
         let pageData = {};
-        pageData[this.const.wishlist] = await this.dal.products.readProducts(await this.dal.wishlist.readAllWishlist());
+        let productIds = await this.dal.wishlist.readAllWishlist();
+        let wishedProducts = await this.dal.products.readProducts(productIds);
+        if (wishedProducts.length < productIds.length) {
+            let productsToRemove = productIds.filter((pid) => wishedProducts.find((p) => p.id === pid) === undefined);
+            await Promise.all(productsToRemove.map((productId) => {
+                this.dal.wishlist.deleteWishlist(productId);
+            }));
+        }
+        pageData[this.const.wishlist] = wishedProducts;
         renderView('../pages/secure/wishlist', pageData);
     }
 
