@@ -1,4 +1,25 @@
 let fs = require('fs');
+let fpType = require('filter-query-parser-pg').filterQueryParserPg;
+let operatorMap = {
+    "like": "like",
+    "equal": "=",
+    "greaterThan": ">",
+    "lessThan": "<",
+    "ascending": "asc",
+    "descending": "desc",
+    "containsArr": "&&"
+};
+let propertyMap = {
+    "keyword": "keywords",
+    "bestSeller": "meta->>'bestSelling'",
+    "newArrivals": "meta->>'newArrival'",
+    "price": "price",
+    "name": "name",
+    "categories": "categories",
+    "brand": "brand",
+    "healthtopics": '"healthTopics"'
+};
+let queryBuilder = new fpType(propertyMap);
 
 class Products {
 
@@ -187,68 +208,8 @@ class Products {
     _constructFilterClause(filter, argumentArray, skipOrdering) {
 
         skipOrdering = skipOrdering === true;
-        let whereClause = "", orderClause = "";
 
-        let propertyMap = {
-            "keyword": "keywords",
-            "bestSeller": "meta->>'bestSelling'",
-            "newArrivals": "meta->>'newArrival'",
-            "price": "price",
-            "name": "name",
-            "categories": "categories",
-            "brand": "brand",
-            "healthtopics": '"healthTopics"'
-        };
-
-        let operatorMap = {
-            "like": "like",
-            "equal": "=",
-            "greaterThan": ">",
-            "lessThan": "<",
-            "ascending": "asc",
-            "descending": "desc",
-            "containsArr": "&&"
-        };
-
-        Object.keys(filter).forEach((operator) => {
-
-            switch (operator) {
-                case 'equal':
-                case 'greaterThan':
-                case 'lessThan':
-                    Object.keys(filter[operator]).forEach((operand) => {
-                        whereClause += (whereClause === "" ? "" : " and ") + propertyMap[operand] + " " + operatorMap[operator] + " $" + (argumentArray.length + 1);
-                        argumentArray.push(filter[operator][operand]);
-                    });
-                    break;
-                case 'like':
-                    Object.keys(filter[operator]).forEach((operand) => {
-                        whereClause += (whereClause === "" ? "" : " and ") + " lower(" + propertyMap[operand] + ") " + operatorMap[operator] + " $" + (argumentArray.length + 1);
-                        argumentArray.push("%" + filter[operator][operand].toLowerCase() + "%");
-                    });
-                    break;
-                case 'containsArr':
-                    Object.keys(filter[operator]).forEach((operand) => {
-                        whereClause += (whereClause === "" ? "" : " and ") + propertyMap[operand] + " " + operatorMap[operator] + " $" + (argumentArray.length + 1);
-                        argumentArray.push(filter[operator][operand]);
-                    });
-                    break;
-                case 'ascending':
-                case 'descending':
-                    if (skipOrdering === false) {
-                        Object.keys(filter[operator]).forEach((operand) => {
-                            orderClause += (orderClause === "" ? "" : " , ") + propertyMap[operand] + " " + operatorMap[operator];
-                        });
-                    }
-                    break;
-                default:
-                    console.warn("New Operator found: " + operator)
-                    break;
-            }
-
-        });
-
-        return ((whereClause !== "" ? ('where ' + whereClause) : '')) + (skipOrdering === false ? ((orderClause !== "" ? (' order by ' + orderClause) : ' order by id ')) : "");
+        return queryBuilder.constructWhereClause(filter, argumentArray) + (skipOrdering ? "" :(" "+ queryBuilder.constructOrderByClause(filter)));
     }
 
     _rowToProduct(row) {
