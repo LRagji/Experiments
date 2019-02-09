@@ -27,19 +27,23 @@
                     <div class="card-header">SORT</div>
                     <div class="card-body">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortBtn" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortBtn"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Select Sort
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" onclick="$('#sortBtn').text('Price:High to Low');sort(1)" href="#">Price:High
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Price:High to Low');sort(1)"
+                                    href="#">Price:High
                                     to Low</a>
-                                <a class="dropdown-item" onclick="$('#sortBtn').text('Price:Low to High');sort(2)" href="#">Price:Low
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Price:Low to High');sort(2)"
+                                    href="#">Price:Low
                                     to High</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" onclick="$('#sortBtn').text('Name:A to Z');sort(3)" href="#">Name:A
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Name:A to Z');sort(3)"
+                                    href="#">Name:A
                                     to Z</a>
-                                <a class="dropdown-item" onclick="$('#sortBtn').text('Name:Z to A');sort(4)" href="#">Name:Z
+                                <a class="dropdown-item" onclick="$('#sortBtn').text('Name:Z to A');sort(4)"
+                                    href="#">Name:Z
                                     to A</a>
                             </div>
                         </div>
@@ -150,57 +154,69 @@
         }
 
     </script>
-    <script>
-        function sort(index) {
+    <script type="module">
+        import { filterBuilder } from "../../static/resources/scripts/filterbuilder.mjs"
+        let operatorMap = {
+            "like": "singleOperand",
+            "equal": "singleOperand",
+            "greaterThan": "singleOperand",
+            "lessThan": "singleOperand",
+            "ascending": "asc",
+            "descending": "desc",
+            "containsArr": "multiOperand"
+        };
+        let fb = new filterBuilder(operatorMap);
+
+        window.sort = function sort(index) {
+            filter = fb.removeSortByConditionFor(filter, "price", true, 0);
+            filter = fb.removeSortByConditionFor(filter, "price", false, 0);
+            filter = fb.removeSortByConditionFor(filter, "name", false, 0);
+            filter = fb.removeSortByConditionFor(filter, "name", true, 0);
             switch (index) {
-                case 1://1=Price High to low
-                    //     if (filter.descending !== undefined) {
-                    //         if (filter.descending.price === undefined) {
-                    //             filter.descending.price = Object.keys(filter.descending).length;
-                    //         }
-                    //     }
-                    //     else {
-                    filter.descending = { "price": 0 };
-                    filter.ascending = {};
-                    // }
+                case 1://1=Price High to low  
+                    filter = fb.sortByConditionFor(filter, "price", false, 0);
                     break;
                 case 2://2=Price Low to high
-                    // if (filter.ascending !== undefined) {
-                    //     if (filter.ascending.price === undefined) {
-                    //         filter.ascending.price = Object.keys(filter.ascending).length;
-                    //     }
-                    // }
-                    // else {
-                    filter.descending = {};
-                    filter.ascending = { "price": 0 };
-                    // }
+                    filter = fb.sortByConditionFor(filter, "price", true, 0);
                     break;
                 case 3://3=Name Asc
-                    // if (filter.ascending !== undefined) {
-                    //     if (filter.ascending.name === undefined) {
-                    //         filter.ascending.name = Object.keys(filter.ascending).length;
-                    //     }
-                    // }
-                    // else {
-                    filter.descending = {};
-                    filter.ascending = { "name": 0 };
-                    // }
+                    filter = fb.sortByConditionFor(filter, "name", true, 0);
                     break;
                 case 4://4=Name Desc
-                    // if (filter.descending !== undefined) {
-                    //     if (filter.descending.name === undefined) {
-                    //         filter.descending.name = Object.keys(filter.descending).length;
-                    //     }
-                    // }
-                    // else {
-                    filter.descending = { "name": 0 };
-                    filter.ascending = {};
-                    //}
+                    filter = fb.sortByConditionFor(filter, "name", false, 0);
                     break;
             }
             searchProducts(filter);
         }
 
+        window.filterByCategory = function filterByCategory(value, element) {
+            if (element.checked === true) {
+                fb.addOperatorConditionFor(filter, "containsArr", "categories", value[0]);
+            }
+            else {
+                fb.removeOperatorConditionFor(filter, "containsArr", "categories", value[0]);
+            }
+            searchProducts(filter);
+        }
+
+        window.filterByHealthTopic = function filterByHealthTopic(value, element) {
+            if (element.checked === true) {
+                fb.addOperatorConditionFor(filter, "containsArr", "healthtopics", value[0]);
+            }
+            else {
+                fb.removeOperatorConditionFor(filter, "containsArr", "healthtopics", value[0]);
+            }
+            searchProducts(filter);
+        }
+
+        window.filterByBrand = function filterByBrand(value, element) {
+            if (element.checked === true) {
+                fb.addOperatorConditionFor(filter, "equal", "brand", value);
+            }
+            searchProducts(filter);
+        }
+    </script>
+    <script>
         function searchProducts(filter) {
             breakupPagination();
             $('#resultContainer').empty();
@@ -255,77 +271,7 @@
             if (_activeSummaryCall !== undefined) _activeSummaryCall.abort();
         }
 
-        function filterByCategory(value, element) {
-            if (element.checked === true) {
-                if (filter.containsArr === undefined) {
-                    filter.containsArr = { categories: value };
-                }
-                else {
-                    if (filter.containsArr.categories === undefined) {
-                        filter.containsArr.categories = value;
-                    }
-                    else {
-                        filter.containsArr.categories.push(value[0]);
-                    }
-                }
-            }
-            else {
-                if (filter.containsArr.categories.length === 1) {
-                    delete filter.containsArr.categories;
-                }
-                else {
-                    filter.containsArr.categories.splice(filter.containsArr.categories.indexOf(value[0]), 1);
-                }
-            }
 
-            searchProducts(filter);
-        }
-
-        function filterByHealthTopic(value, element) {
-            if (element.checked === true) {
-                if (filter.containsArr === undefined) {
-                    filter.containsArr = { healthtopics: value };
-                }
-                else {
-                    if (filter.containsArr.healthtopics === undefined) {
-                        filter.containsArr.healthtopics = value;
-                    }
-                    else {
-                        filter.containsArr.healthtopics.push(value[0]);
-                    }
-                }
-            }
-            else {
-                if (filter.containsArr.healthtopics.length === 1) {
-                    delete filter.containsArr.healthtopics;
-                }
-                else {
-                    filter.containsArr.healthtopics.splice(filter.containsArr.healthtopics.indexOf(value[0]), 1);
-                }
-            }
-
-            searchProducts(filter);
-        }
-
-        function filterByBrand(value, element) {
-
-            if (element.checked === true) {
-                if (filter.equal === undefined) {
-                    filter.equal = { brand: value };
-                }
-                else {
-                    filter.equal.brand = value;
-                }
-            }
-
-            // if (filter.equal !== undefined) {
-            //     filter.equal.brand = value;
-            // }
-            // else {
-            //     filter.equal = { brand: value };
-            // }
-            searchProducts(filter);
-        }
 
         function refreshLeftPane(filter) {
             cancelActiveNetworkCallForSummary();
