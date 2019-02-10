@@ -12,6 +12,7 @@ class healthVideos {
         this.readIngredientById = this.readIngredientById.bind(this);
         this.readHealthConditions = this.readHealthConditions.bind(this);
         this.readHealthConditionsById = this.readHealthConditionsById.bind(this);
+        this.readPaginatedHealthVideos = this.readPaginatedHealthVideos.bind(this);
 
         let propertyMap = {
             "id": "id",
@@ -23,7 +24,7 @@ class healthVideos {
         };
 
         this._entity = new eType("videos", propertyMap, pgPool);
-        
+
         propertyMap = {
             "id": "id",
             "name": "name"
@@ -56,6 +57,10 @@ class healthVideos {
 
     async readHealthVideos() {
         return await this._entity.readAllEntities({});
+    }
+
+    async readPaginatedHealthVideos(page, size, filter) {
+        return await this._entity.readPaginatedEntities(page, size, filter);
     }
 
     async updateHealthVideo(id, videoName, videoText, videoTag, ingredients, healthConditions) {

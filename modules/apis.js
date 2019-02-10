@@ -7,6 +7,7 @@ class apiServer extends page {
         this.searchProducts = this.searchProducts.bind(this);
         this.searchSummary = this.searchSummary.bind(this);
         this.addProductToWishlist = this.addProductToWishlist.bind(this);
+        this.searchVideos = this.searchVideos.bind(this);
 
         this.loadRoutes(server);
     }
@@ -16,6 +17,7 @@ class apiServer extends page {
         server.post('/v1/products/search/summary', this.safeApi(this.searchSummary));
         server.post('/v1/cart/products', this.safeApi(this.addProductToSession));
         server.post('/v1/wishlist/products', this.safeApi(this.addProductToWishlist));
+        server.post('/v1/videos/search', this.safeApi(this.searchVideos));
     }
 
     async searchProducts(req, renderResponse) {
@@ -42,6 +44,32 @@ class apiServer extends page {
             renderResponse(206, products);
         else
             renderResponse(200, products);
+    }
+
+    async searchVideos(req, renderResponse) {
+        // EG: filter = {
+        //     like: {"columnname":value},
+        //     equal: {},
+        //     ascending: {"price":0},
+        //     descending: {},
+        //     greaterThan: {},
+        //     lessThan: {},
+        //     containsArr:{
+        //                      columnname:[]
+        //                 }
+        // };
+        let page = parseInt(req.query.page);
+        let size = parseInt(req.query.size);
+        // let filter = this.util.cloneFilterForNetworkTransport(req.body);
+        // if (filter === undefined) {
+        //     throw new Error("Invalid filter parameter.")
+        // }
+
+        let videos = await this.dal.healthVideos.readPaginatedHealthVideos(page, size, req.body);
+        if (videos.moreResults === true)
+            renderResponse(206, videos.results);
+        else
+            renderResponse(200, videos.results);
     }
 
     async searchSummary(req, renderResponse) {
