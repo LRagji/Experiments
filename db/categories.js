@@ -1,88 +1,54 @@
 let categoriesArray = [];
+let eType = require('./entity');
 
 class categories {
 
-    constructor() {
+    constructor(pgPool) {
 
         this.readAllCategories = this.readAllCategories.bind(this);
         this.createCategory = this.createCategory.bind(this);
         this.updateCategory = this.updateCategory.bind(this);
         this.readCategoryId = this.readCategoryId.bind(this);
-        this.retriveIdFor = this.retriveIdFor.bind(this);
+        this.retriveCategoryByName = this.retriveCategoryByName.bind(this);
 
-        if (categoriesArray.length === 0) {
-            for (let i = 0; i < 10;)
-                this.createCategory("Category " + i).then(i++);
-        }
+        let propertyMap = {
+            "id": "id",
+            "name": "name"
+        };
 
+        this._entity = new eType("categories", propertyMap, pgPool);
     }
 
-    static singleton() {
+    static singleton(pgPool) {
         if (this.instance === undefined) {
-            this.instance = new categories();
+            this.instance = new categories(pgPool);
         }
         return this.instance;
     }
 
     async createCategory(name) {
-        if (await this.retriveIdFor(name) >= 0) throw new Error(name + " name already exists.");
-        let categrory = {
-            "id": categoriesArray.length,
-            "name": name
-        };
-        categoriesArray.push(categrory);
-
+        let results = await this.retriveCategoryByName(name);
+        if (results.length > 0) throw new Error(name + " name already exists.");
+        return await this._entity.createEntity({ "name": name });
     }
 
-    retriveIdFor(name) {
-        return new Promise((acc, rej) => {
-            try {
-                acc(categoriesArray.findIndex((l) => l.name === name));
-            } catch (err) {
-                rej(err);
-            }
-        })
+    async retriveCategoryByName(name) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
+        return await this._entity.readAllEntities(filter);
     }
 
     async readCategoryId(id) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let idx = categoriesArray.findIndex((l) => l.id === id);
-                if (idx < 0) throw new Error("Category Id:" + id + " doesnot exists.");
-                acc(Object.assign({}, categoriesArray[idx]));
-            } catch (err) {
-                rej(err);
-            }
-        })
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
+        return await this._entity.readAllEntities(filter);
     }
 
     async readAllCategories() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(categoriesArray);
-            } catch (err) {
-                rej(err);
-            }
-        });
+        return await this._entity.readAllEntities({});
     }
 
     async updateCategory(id, name) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let idx = categoriesArray.findIndex((l) => l.id === id);
-                if (idx < 0) throw new Error("Category Id:" + id + " doesnot exists.");
-                categoriesArray[idx].name = name;
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
+        return await this._entity.updateEntity(id, { "name": name });
     }
-
-
 }
 
 module.exports = categories;

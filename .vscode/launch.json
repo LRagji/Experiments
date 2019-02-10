@@ -7,15 +7,16 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Run Server",
-            "program": "${workspaceFolder}\\index.js"
+            "name": "Injest Data",
+            "program": "${workspaceFolder}/migration/InsertMockData.js",
+            "args": ["products:50","categories:10"]
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Migration",
-            "program": "${workspaceFolder}\\migration\\InsertMockData.js",
-            "args": ["products:50"]
-        }
+            "name": "Run Server",
+            "program": "${workspaceFolder}\\index.js"
+        },
+     
     ]
 }

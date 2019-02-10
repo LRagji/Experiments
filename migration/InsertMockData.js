@@ -1,6 +1,7 @@
 let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
 const products = require('../db/products').singleton(pgPool);
+const categories = require('../db/categories').singleton(pgPool);
 
 async function InsertMockProducts(numberOfProducts) {
     for (let i = 0; i < numberOfProducts; i++) {
@@ -18,7 +19,7 @@ async function InsertMockProducts(numberOfProducts) {
             "This bottle will last 180 days.",
             i + 1,
             [],
-            "search Laukik Ragji Hello "+ i,
+            "search Laukik Ragji Hello " + i,
             undefined,
             true,
             true,
@@ -32,15 +33,30 @@ async function InsertMockProducts(numberOfProducts) {
     process.stdout.write("\r\n");
 }
 
+async function InsertCategories(numberOfCategories) {
+    for (let i = 0; i < numberOfCategories; i++) {
+        await categories.createCategory("Category " + i).then(i++);
+    }
+}
+
 async function main() {
     console.log("Execution Started");
     for (let ctr = 0; ctr < process.argv.length; ctr++) {
         let kvp = process.argv[ctr].toLowerCase();
+
         if (kvp.startsWith("products:")) {
             let value = kvp.replace("products:", "");
             if (!isNaN(value)) {
                 console.log("Inserting " + value + " products.")
-                await InsertMockProducts(parseInt(value));
+                InsertMockProducts(parseInt(value));
+            }
+        }
+
+        if (kvp.startsWith("categories:")) {
+            let value = kvp.replace("categories:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " categories.")
+                InsertCategories(parseInt(value));
             }
         }
     };
