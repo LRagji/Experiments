@@ -1,10 +1,12 @@
+let eType = require('./entity');
+
 let videos = [];
 let ingredients = [];
 let healthConditions = [];
 
 class healthVideos {
 
-    constructor() {
+    constructor(pgPool) {
 
         this.createHealthVideo = this.createHealthVideo.bind(this);
         this.readHealthVideoById = this.readHealthVideoById.bind(this);
@@ -15,11 +17,16 @@ class healthVideos {
         this.readHealthConditions = this.readHealthConditions.bind(this);
         this.readHealthConditionsById = this.readHealthConditionsById.bind(this);
 
-        if (videos.length === 0) {
-            for (let i = 0; i < 20; i++) {
-                this.createHealthVideo("Health Video" + i, "Video Text", '<iframe width="560" height="315" src="https://www.youtube.com/embed/nm1lYAvx2mw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', [], []);
-            }
-        }
+        let propertyMap = {
+            "id": "id",
+            "name": "name",
+            "text": "text",
+            "tag": "tag",
+            "ingredients": "ingredients",
+            "healthConditions": "healthConditions"
+        };
+
+        this._entity = new eType("videos", propertyMap, pgPool);
 
         if (ingredients.length === 0) {
             for (let i = 0; i < 20; i++) {
@@ -34,79 +41,41 @@ class healthVideos {
         }
     }
 
-    static singleton() {
+    static singleton(pgPool) {
         if (this.instance === undefined) {
-            this.instance = new healthVideos();
+            this.instance = new healthVideos(pgPool);
         }
         return this.instance;
     }
 
     createHealthVideo(videoName, videoText, videoTag, ingredients, healthConditions) {
-        return new Promise((acc, rej) => {
-            try {
-                let healthVideo = { name: videoName, 
-                    id: videos.length, 
-                    text: videoText, 
-                    ingredients: ingredients, 
-                    healthConditions: healthConditions, 
-                    tag: videoTag };
-                videos.push(healthVideo);
-                acc(healthVideo);
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+        let healthVideo = {
+            name: videoName,
+            text: videoText,
+            ingredients: ingredients,
+            healthConditions: healthConditions,
+            tag: videoTag
+        };
+        return this._entity.createEntity(healthVideo);
     }
 
-    readHealthVideoById(id) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let idx = videos.findIndex((l) => l.id === id);
-                if (idx < 0)
-                    acc(undefined);
-                else
-                    acc(Object.assign({}, videos[idx]));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readHealthVideoById(id) {
+        return await this._entity.readEntitiesById(id);
     }
 
     readHealthVideos() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(videos.map((e) => Object.assign({}, e)));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+        return this._entity.readAllEntities({});
     }
 
-    updateHealthVideo(id, videoName, videoText, videoTag, ingredients, healthConditions) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let foundVideos = videos.filter((e) => e.id === id);
-                if (foundVideos.length > 0) {
-                    foundVideos[0].name = videoName;
-                    foundVideos[0].text = videoText;
-                    foundVideos[0].videoTag = videoTag;
-                    foundVideos[0].ingredients = ingredients;
-                    foundVideos[0].healthConditions = healthConditions;
-                    acc(Object.assign({}, foundVideos[0]));
-                }
-                else {
-                    acc(undefined);
-                }
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async updateHealthVideo(id, videoName, videoText, videoTag, ingredients, healthConditions) {
+        let healthVideo = {
+            name: videoName,
+            text: videoText,
+            ingredients: ingredients,
+            healthConditions: healthConditions,
+            tag: videoTag
+        };
+        return await this._entity.updateEntity(id, healthVideo);
     }
 
     readIngredients() {

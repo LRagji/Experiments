@@ -28,7 +28,7 @@ class entity {
     }
 
     async createEntity(propertiesNamesAndValues) {
-        let insertQuery = "insert into " + this._tableName + "(";
+        let insertQuery = 'insert into "' + this._tableName + '"(';
         let columnsValues = [];
         let valuesCommand = "values(";
 
@@ -39,7 +39,7 @@ class entity {
             let column = Object.keys(this._columns).filter(e => e.toLowerCase() === columnName.toLowerCase())
             if (column.length <= 0) throw new Error("No column defination for " + columnName + ", Please define column for same.");
             column = column[0];
-            insertQuery += " " + column + ",";
+            insertQuery += ' "' + columnName + '",';
             valuesCommand += " $" + (columnsValues.length + 1) + ",";
             columnsValues.push(columnvalue);
         });
@@ -56,7 +56,8 @@ class entity {
     }
 
     async updateEntity(id, propertiesNamesAndValues) {
-        let updateQuery = "update " + this._tableName + " set";
+        id = parseInt(id);
+        let updateQuery = 'update "' + this._tableName + '" set';
         let columnsValues = [];
         let columNames = Object.keys(this._columns).map(e => e.toLowerCase());
 
@@ -115,9 +116,13 @@ class entity {
     }
 
     async readEntitiesById(id) {
+        id = parseInt(id);
         let filter = this.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
         let response = await this.readPaginatedEntities(0, 1, filter);
-        return response.results[0];
+        if (response.results.length > 0)
+            return response.results[0];
+        else
+            return undefined;
     }
 
     _constructUpdateClause(columnName, columnvalue, prefixString, columnNamesArray, argumentArray) {
@@ -125,7 +130,7 @@ class entity {
         let idx = columnNamesArray.indexOf(columnName.toLowerCase());
         if (idx < 0) throw new Error("No column defination for " + columnName + ", Please define column for same.");
         columnNamesArray.splice(idx, 1);
-        returnClause += columnName.toLowerCase() + " = $" + (argumentArray.length + 1) + ",";
+        returnClause += '"' + columnName + '" = $' + (argumentArray.length + 1) + ",";
         argumentArray.push(columnvalue);
         return returnClause;
     }

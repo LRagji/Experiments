@@ -11,7 +11,7 @@ let healthLinks = require('./healthlinks').singleton();
 let brands = require('./brands').singleton();
 let categories = require('./categories').singleton(pgPool);
 let subCategories = require('./subcategories').singleton();
-let healthVideos = require('./healthvideos').singleton();
+let healthVideos = require('./healthvideos').singleton(pgPool);
 let wishlist = require('./wishlist').singleton();
 
 // TODO:Call the appropiate API

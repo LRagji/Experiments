@@ -27,8 +27,8 @@ class categories {
     }
 
     async createCategory(name) {
-        let results = await this.retriveCategoryByName(name);
-        if (results.length > 0) throw new Error(name + " name already exists.");
+        let result = await this.retriveCategoryByName(name);
+        if (result === undefined) throw new Error(name + " name already exists.");
         return await this._entity.createEntity({ "name": name });
     }
 
@@ -38,8 +38,7 @@ class categories {
     }
 
     async readCategoryId(id) {
-        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
-        return await this._entity.readAllEntities(filter);
+        return await this._entity.readEntitiesById(id);
     }
 
     async readAllCategories() {

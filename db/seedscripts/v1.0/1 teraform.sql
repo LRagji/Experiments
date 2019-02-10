@@ -7,7 +7,7 @@ WITH (OIDS=FALSE);
 ALTER TABLE "session" DROP CONSTRAINT IF EXISTS "session_pkey";
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
-create table IF NOT EXISTS "products" (
+CREATE TABLE IF NOT EXISTS "products" (
 "id" serial Primary key,
 "name" varchar(250) not null,
 "offerprice" float not null,
@@ -24,7 +24,7 @@ create table IF NOT EXISTS "products" (
 "subcategories" integer[]
 );
 
-create table IF NOT EXISTS "products_archive" (
+CREATE TABLE IF NOT EXISTS "products_archive" (
 "id" serial Primary key,
 "name" varchar(250) not null,
 "offerprice" float not null,
@@ -41,7 +41,16 @@ create table IF NOT EXISTS "products_archive" (
 "subcategories" integer[]
 );
 
-create table IF NOT EXISTS "categories" (
+CREATE TABLE IF NOT EXISTS "categories" (
 "id" serial Primary key,
 "name" varchar(250) not null
+);
+
+CREATE TABLE IF NOT EXISTS "videos" (
+"id" serial Primary key,
+"name" varchar(250),
+"tag" varchar(1000),
+"text" text,
+"ingredients" integer[],
+"healthConditions" integer[]
 );

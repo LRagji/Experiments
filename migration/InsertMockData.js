@@ -2,6 +2,7 @@ let pg = require('pg')
 let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: process.env.DB_HOST || 'localhost', database: process.env.DB_DB || 'Experimental', password: process.env.DB_PASS || 'P@55word', port: 5432, });
 const products = require('../db/products').singleton(pgPool);
 const categories = require('../db/categories').singleton(pgPool);
+const videos = require('../db/healthvideos').singleton(pgPool);
 
 async function InsertMockProducts(numberOfProducts) {
     for (let i = 0; i < numberOfProducts; i++) {
@@ -35,7 +36,13 @@ async function InsertMockProducts(numberOfProducts) {
 
 async function InsertCategories(numberOfCategories) {
     for (let i = 0; i < numberOfCategories; i++) {
-        await categories.createCategory("Category " + i).then(i++);
+        await categories.createCategory("Category " + i);
+    }
+}
+
+async function InsertVideos(numberOfCategories) {
+    for (let i = 0; i < numberOfCategories; i++) {
+        await videos.createCategory("Health Video" + i, "Video Text", '<iframe width="560" height="315" src="https://www.youtube.com/embed/nm1lYAvx2mw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', [], []);
     }
 }
 
@@ -57,6 +64,14 @@ async function main() {
             if (!isNaN(value)) {
                 console.log("Inserting " + value + " categories.")
                 InsertCategories(parseInt(value));
+            }
+        }
+
+        if (kvp.startsWith("videos:")) {
+            let value = kvp.replace("categories:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " videos.")
+                InsertVideos(parseInt(value));
             }
         }
     };
