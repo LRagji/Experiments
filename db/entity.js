@@ -89,7 +89,7 @@ class entity {
 
         let filterClause = this._queryBuilder.constructWhereClause(filterJson, argumentArray) + this._queryBuilder.constructOrderByClause(filterJson);
 
-        let selectQuery = 'select * from ' + this._tableName + ' ' + filterClause + ' limit $1 offset $2';
+        let selectQuery = 'select * from "' + this._tableName + '" ' + filterClause + ' limit $1 offset $2';
         let response = await this._pgPool.query(selectQuery, argumentArray);
 
         let fetchedEntities = [];

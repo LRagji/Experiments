@@ -54,3 +54,13 @@ CREATE TABLE IF NOT EXISTS "videos" (
 "ingredients" integer[],
 "healthConditions" integer[]
 );
+
+CREATE TABLE IF NOT EXISTS "ingredients" (
+"id" serial Primary key,
+"name" varchar(250) not null
+);
+
+CREATE TABLE IF NOT EXISTS "healthConditions" (
+"id" serial Primary key,
+"name" varchar(250) not null
+);

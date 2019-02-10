@@ -42,7 +42,19 @@ async function InsertCategories(numberOfCategories) {
 
 async function InsertVideos(numberOfCategories) {
     for (let i = 0; i < numberOfCategories; i++) {
-        await videos.createCategory("Health Video" + i, "Video Text", '<iframe width="560" height="315" src="https://www.youtube.com/embed/nm1lYAvx2mw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', [], []);
+        await videos.createHealthVideo("Health Video" + i, "Video Text", '<iframe width="560" height="315" src="https://www.youtube.com/embed/nm1lYAvx2mw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', [], []);
+    }
+}
+
+async function InsertIngredients(number) {
+    for (let i = 0; i < number; i++) {
+        await videos._ingredientsEntity.createEntity({ name: "Ingredient" + i})
+    }
+}
+
+async function InsertHealthConditions(number) {
+    for (let i = 0; i < number; i++) {
+        await videos._healthConditionsEnity.createEntity({ name: "Health condition" + i});
     }
 }
 
@@ -68,10 +80,26 @@ async function main() {
         }
 
         if (kvp.startsWith("videos:")) {
-            let value = kvp.replace("categories:", "");
+            let value = kvp.replace("videos:", "");
             if (!isNaN(value)) {
                 console.log("Inserting " + value + " videos.")
                 InsertVideos(parseInt(value));
+            }
+        }
+
+        if (kvp.startsWith("ingredients:")) {
+            let value = kvp.replace("ingredients:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " ingredients.")
+                InsertIngredients(parseInt(value));
+            }
+        }
+
+        if (kvp.startsWith("healthconditions:")) {
+            let value = kvp.replace("healthconditions:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " healthConditions.")
+                InsertHealthConditions(parseInt(value));
             }
         }
     };

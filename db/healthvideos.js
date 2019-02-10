@@ -1,9 +1,5 @@
 let eType = require('./entity');
 
-let videos = [];
-let ingredients = [];
-let healthConditions = [];
-
 class healthVideos {
 
     constructor(pgPool) {
@@ -27,18 +23,13 @@ class healthVideos {
         };
 
         this._entity = new eType("videos", propertyMap, pgPool);
-
-        if (ingredients.length === 0) {
-            for (let i = 0; i < 20; i++) {
-                ingredients.push({ name: "Ingredient" + i, id: i });
-            }
-        }
-
-        if (healthConditions.length === 0) {
-            for (let i = 0; i < 20; i++) {
-                healthConditions.push({ name: "Health condition" + i, id: i });
-            }
-        }
+        
+        propertyMap = {
+            "id": "id",
+            "name": "name"
+        };
+        this._ingredientsEntity = new eType("ingredients", propertyMap, pgPool);
+        this._healthConditionsEnity = new eType("healthConditions", propertyMap, pgPool);
     }
 
     static singleton(pgPool) {
@@ -48,7 +39,7 @@ class healthVideos {
         return this.instance;
     }
 
-    createHealthVideo(videoName, videoText, videoTag, ingredients, healthConditions) {
+    async createHealthVideo(videoName, videoText, videoTag, ingredients, healthConditions) {
         let healthVideo = {
             name: videoName,
             text: videoText,
@@ -56,15 +47,15 @@ class healthVideos {
             healthConditions: healthConditions,
             tag: videoTag
         };
-        return this._entity.createEntity(healthVideo);
+        return await this._entity.createEntity(healthVideo);
     }
 
     async readHealthVideoById(id) {
         return await this._entity.readEntitiesById(id);
     }
 
-    readHealthVideos() {
-        return this._entity.readAllEntities({});
+    async readHealthVideos() {
+        return await this._entity.readAllEntities({});
     }
 
     async updateHealthVideo(id, videoName, videoText, videoTag, ingredients, healthConditions) {
@@ -78,58 +69,20 @@ class healthVideos {
         return await this._entity.updateEntity(id, healthVideo);
     }
 
-    readIngredients() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(ingredients.map((e) => Object.assign({}, e)));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readIngredients() {
+        return await this._ingredientsEntity.readAllEntities({});
     }
 
-    readIngredientById(id) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let idx = ingredients.findIndex((l) => l.id === id);
-                if (ingredients < 0)
-                    acc(undefined);
-                else
-                    acc(Object.assign({}, ingredients[idx]));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readIngredientById(id) {
+        return await this._ingredientsEntity.readEntitiesById(id);
     }
 
-    readHealthConditions() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(healthConditions.map((e) => Object.assign({}, e)));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readHealthConditions() {
+        return await this._healthConditionsEnity.readAllEntities({});
     }
 
-    readHealthConditionsById(id) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let idx = healthConditions.findIndex((l) => l.id === id);
-                if (healthConditions < 0)
-                    acc(undefined);
-                else
-                    acc(Object.assign({}, healthConditions[idx]));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readHealthConditionsById(id) {
+        return await this._healthConditionsEnity.readEntitiesById(id);
     }
 }
 
