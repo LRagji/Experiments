@@ -1,5 +1,5 @@
 let fs = require('fs');
-let fpType = require('filter-query-parser-pg').filterQueryParserPg;
+let fpType = require('backend-entity').filterQueryParserPg;
 let operatorMap = {
     "like": "like",
     "equal": "=",

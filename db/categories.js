@@ -1,5 +1,5 @@
-let categoriesArray = [];
-let eType = require('./entity');
+
+let eType = require('backend-entity').entity;
 
 class categories {
 

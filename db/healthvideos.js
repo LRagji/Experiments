@@ -1,4 +1,4 @@
-let eType = require('./entity');
+let eType = require('backend-entity').entity;
 
 class healthVideos {
 
@@ -20,7 +20,7 @@ class healthVideos {
             "text": "text",
             "tag": "tag",
             "ingredients": "ingredients",
-            "healthConditions": "healthConditions"
+            "healthConditions": '"healthConditions"'
         };
 
         this._entity = new eType("videos", propertyMap, pgPool);
