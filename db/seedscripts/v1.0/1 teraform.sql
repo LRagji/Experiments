@@ -70,3 +70,9 @@ CREATE TABLE IF NOT EXISTS "wishlist" (
 "productId" integer not null,
 "userId" integer not null
 );
+
+CREATE TABLE IF NOT EXISTS "subCategories" (
+"id" serial Primary key,
+"categoryId" integer not null,
+"name" varchar(250) not null
+);

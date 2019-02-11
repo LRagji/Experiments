@@ -10,7 +10,7 @@ let healthTopics = require('./healthtopics').singleton();
 let healthLinks = require('./healthlinks').singleton();
 let brands = require('./brands').singleton();
 let categories = require('./categories').singleton(pgPool);
-let subCategories = require('./subcategories').singleton();
+let subCategories = require('./subcategories').singleton(pgPool);
 let healthVideos = require('./healthvideos').singleton(pgPool);
 let wishlist = require('./wishlist').singleton(pgPool);
 

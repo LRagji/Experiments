@@ -3,6 +3,7 @@ let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: proces
 const products = require('../db/products').singleton(pgPool);
 const categories = require('../db/categories').singleton(pgPool);
 const videos = require('../db/healthvideos').singleton(pgPool);
+const subCategories = require('../db/subcategories').singleton(pgPool);
 
 async function InsertMockProducts(numberOfProducts) {
     for (let i = 0; i < numberOfProducts; i++) {
@@ -48,13 +49,20 @@ async function InsertVideos(numberOfCategories) {
 
 async function InsertIngredients(number) {
     for (let i = 0; i < number; i++) {
-        await videos._ingredientsEntity.createEntity({ name: "Ingredient" + i})
+        await videos._ingredientsEntity.createEntity({ name: "Ingredient" + i })
     }
 }
 
 async function InsertHealthConditions(number) {
     for (let i = 0; i < number; i++) {
-        await videos._healthConditionsEnity.createEntity({ name: "Health condition" + i});
+        await videos._healthConditionsEnity.createEntity({ name: "Health condition" + i });
+    }
+}
+
+async function InsertSubCategories(number) {
+    let cat = await categories.readAllCategories();
+    for (let i = 0; i < number; i++) {
+        await subCategories.createSubCategory(cat[0].id, "SubCate\"gory " + i);
     }
 }
 
@@ -100,6 +108,14 @@ async function main() {
             if (!isNaN(value)) {
                 console.log("Inserting " + value + " healthConditions.")
                 InsertHealthConditions(parseInt(value));
+            }
+        }
+
+        if (kvp.startsWith("subcategories:")) {
+            let value = kvp.replace("subcategories:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " subCategories.")
+                InsertSubCategories(parseInt(value));
             }
         }
     };
