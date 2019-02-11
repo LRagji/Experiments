@@ -246,7 +246,7 @@ class pageProducts extends adminPage {
                 return;
             }
 
-            if (this.util.validateIsWholeNumberBetween(req.file.size, (100 * 1000), 1) == false) { //1-100KB
+            if (this.util.validateIsWholeNumberBetween(req.file.size, (250 * 1000), 1) == false) { //1-100KB
                 req.flash(this.const.newProductError, "Unsupported Product Image size: " + req.file.size);
                 this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
                 return;
