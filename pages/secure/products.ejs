@@ -69,48 +69,69 @@
                                  </div>
                                 </div>
                             </div>
-                            <div class="row m-2">
-                                <div class="col-md">
-                                    <input type="text" class="form-control" placeholder="Product Price" minlength="1"
-                                        value="${pageData.productinfo!==undefined?pageData.productinfo.price:''}"
-                                        maxlength="20" required name="price">
-                                </div>
-                                <div class="col-md">
-                                    <input type="text" class="form-control" placeholder="Offer Price" minlength="1"
-                                        value="${pageData.productinfo!==undefined?pageData.productinfo.offerprice:''}"
-                                        maxlength="20" required name="offerPrice">
+                            <div class="row">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                        <label>Product Price</label>
+                                            <input type="text" class="form-control" placeholder="Product Price" minlength="1"
+                                                value="${pageData.productinfo!==undefined?pageData.productinfo.price:''}"
+                                                maxlength="20" required name="price">
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                        <label>Product Offer Price</label>
+                                            <input type="text" class="form-control" placeholder="Offer Price" minlength="1"
+                                                value="${pageData.productinfo!==undefined?pageData.productinfo.offerprice:''}"
+                                                maxlength="20" required name="offerPrice">
+                                        </div>
                                 </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                 <div class="col-md">
+                                <div class="form-group">
+                                    <label>Shipping Details</label>
                                     <input type="text" class="form-control" placeholder="Ships time in days" minlength="1"
                                         value="${pageData.productinfo!==undefined?pageData.productinfo.meta.shippingdetail:''}"
                                         maxlength="3" required name="shippingDetails">
                                 </div>
+                                </div>
                                 <div class="col-md">
+                                <div class="form-group">
+                                <label>Product Code</label>
                                     <input type="text" class="form-control" placeholder="Product Code" minlength="1"
                                          value="${pageData.productinfo!==undefined?pageData.productinfo.meta.code:''}"
                                         maxlength="20" required name="code">
                                 </div>
+                                </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                 <div class="col-md">
+                                <div class="form-group">
+                                <label>Package Detail Code</label>
                                     <input type="text" class="form-control" placeholder="Package detail" minlength="1"
                                          value="${pageData.productinfo!==undefined?pageData.productinfo.meta.package_detail:''}"
                                         maxlength="20" required name="packageDetail">
+                                        </div>
                                 </div>
                                 <div class="col-md">
+                                <div class="form-group">
+                                <label>Product Serving</label>
                                     <input type="text" class="form-control" placeholder="Serving size" minlength="1"
                                        value="${pageData.productinfo!==undefined?pageData.productinfo.meta.serving_size:''}"
                                         maxlength="20" required name="servingSize">
+                                        </div>
                                 </div>
                                 <div class="col-md">
+                                <div class="form-group">
+                                <label>Serving per container</label>
                                     <input type="text" class="form-control" placeholder="Serving per Container"
                                         value="${pageData.productinfo!==undefined?pageData.productinfo.meta.serving_per_container:''}"
                                         minlength="1" maxlength="100" required name="servingPerContainer">
+                                        </div>
                                 </div>
                             </div>
-                             <div class="row m-2">
+                             <div class="row">
                                 <div class="col-md">
                                      <div class="form-group">
                                         <label>Brand:</label>
@@ -122,7 +143,7 @@
                                  </div>
                                 </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                 <div class="col-md">
                                     <div class="form-group">
                                         <label for="desc">Description</label>
@@ -132,7 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                 <div class="col-md">
                                     <div class="form-group">
                                         <label for="ingredients">Ingredients</label>
@@ -143,7 +164,7 @@
                                      <hr>
                                 </div>
                             </div>
-                             <div class="row m-2">
+                             <div class="row">
                                 <div class="col-md">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" name="bestSelling" class="custom-control-input" id="bestSelling"
@@ -159,13 +180,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                     <div class="col">
                                         <hr>
                                     </div>
                             </div>
 
-                            <div class="row m-2">
+                            <div class="row">
                                     <div class="col">
                                       <label for="basic-url">Related Products</label>
                                         <div class="input-group mb-3">
@@ -186,17 +207,17 @@
                                     </div>
                             </div>
 
-                            <div class="row m-2">
+                            <div class="row">
                                     <div class="col">
                                         <hr>
                                     </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                 <div class="col">
                                     <h4>F.A.Q's</h4>
                                 </div>
                             </div>
-                             <div class="row m-2">
+                             <div class="row">
                                 <div class="col">
                                 <div class="card-columns">` %>
                         <% pageData.faqs.forEach(function(faq){ %>
@@ -211,7 +232,7 @@
                                 <hr>
                                 </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                 <div class="col">
                                  <div class="form-group">
                                         <label>Search keywords:</label>
@@ -224,7 +245,7 @@
                         <%- include('./serverComponents/productPage.ejs',{id:"healthTopics", tittle:"Associate Health Topics", healthTopics:pageData.ht, selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.healthTopics:[])}) %>
                         <%- include('./serverComponents/productPage.ejs',{id:"categories",tittle:"Associate Categories",healthTopics:pageData.cat, selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.categories:[])}) %>
                         <%- include('./serverComponents/productPage.ejs',{id:"subcategories",tittle:"Associate Sub-Categories",healthTopics:pageData.scat, selectedHealthTopics:(pageData.productinfo!==undefined?pageData.productinfo.subcategories:[])}) %>
-                            <%-`<div class="row m-2">
+                            <%-`<div class="row my-2">
                                 <div class="col">
                                         <div class="form-group">
                                                 <div class="form-group form-check">
@@ -237,7 +258,7 @@
                                         <input type="hidden" id="imageName" name="imageName" value="${(pageData.productinfo!==undefined && pageData.productinfo.image!==undefined)?pageData.productinfo.image:Date.now()}" />
                                     </div>
                             </div>
-                            <div class="row m-2">
+                            <div class="row">
                                 <div class="col">
                                     <div class="d-flex" >
                                         <button type="submit" id="submitForm" class="btn btn-primary ml-auto mt-auto">Save</button>
