@@ -12,7 +12,7 @@ let brands = require('./brands').singleton();
 let categories = require('./categories').singleton(pgPool);
 let subCategories = require('./subcategories').singleton();
 let healthVideos = require('./healthvideos').singleton(pgPool);
-let wishlist = require('./wishlist').singleton();
+let wishlist = require('./wishlist').singleton(pgPool);
 
 // TODO:Call the appropiate API
 class DAL {

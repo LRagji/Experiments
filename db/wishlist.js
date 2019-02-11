@@ -1,62 +1,53 @@
-let list = [];
-
+let eType = require('backend-entity').entity;
 class wishlist {
 
-    constructor() {
+    constructor(pgPool) {
 
         this.createWishlist = this.createWishlist.bind(this);
         this.readAllWishlist = this.readAllWishlist.bind(this);
         this.deleteWishlist = this.deleteWishlist.bind(this);
+
+        let propertyMap = {
+            "id": "id",
+            "productid": '"productId"',
+            "userid": '"userId"'
+        };
+
+        this._entity = new eType("wishlist", propertyMap, pgPool);
     }
 
-    static singleton() {
+    static singleton(pgPool) {
         if (this.instance === undefined) {
-            this.instance = new wishlist();
+            this.instance = new wishlist(pgPool);
         }
         return this.instance;
     }
 
-    createWishlist(productId) {
-        return new Promise((acc, rej) => {
-            try {
-                productId = parseInt(productId);
-                let idx = list.indexOf(productId);
-                if (idx < 0) {
-                    list.push(productId);
-                }
-                acc(list.length);
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async createWishlist(productId, userId) {
+        productId = parseInt(productId);
+        userId = parseInt(userId);
+
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
+        filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "userid", userId);
+        let existingEntry = await this._entity.readAllEntities(filter);
+        if (existingEntry.length <= 0) {
+            return await this._entity.createEntity({ "productid": productId, "userid": userId });
+        }
+        return existingEntry[0];
     }
 
-    readAllWishlist() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(list);
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readAllWishlist(userId) {
+        userId = parseInt(userId);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "userid", userId);
+        return await this._entity.readAllEntities(filter);
     }
 
-    deleteWishlist(productId) {
-        return new Promise((acc, rej) => {
-            try {
-                productId = parseInt(productId);
-                let idx = list.indexOf(productId);
-                if (idx >= 0) {
-                    list.splice(idx, 1);
-                }
-                acc();
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async deleteWishlist(productId, userId) {
+        userId = parseInt(userId);
+        productId = parseInt(productId);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
+        filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "userid", userId);
+        return await this._entity.deleteEntities(filter);
     }
 
 }

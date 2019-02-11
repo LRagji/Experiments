@@ -102,9 +102,9 @@ class apiServer extends page {
             return;
         }
 
-        let totalWishlistItems = await this.dal.wishlist.createWishlist(parseInt(req.body.productId));
+        await this.dal.wishlist.createWishlist(parseInt(req.body.productId), parseInt(req.user.id));
 
-        renderResponse(201, { "TotalProducts": totalWishlistItems });
+        renderResponse(201, {});
     }
 }
 

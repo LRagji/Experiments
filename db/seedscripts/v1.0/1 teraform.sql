@@ -64,3 +64,9 @@ CREATE TABLE IF NOT EXISTS "healthConditions" (
 "id" serial Primary key,
 "name" varchar(250) not null
 );
+
+CREATE TABLE IF NOT EXISTS "wishlist" (
+"id" serial Primary key,
+"productId" integer not null,
+"userId" integer not null
+);

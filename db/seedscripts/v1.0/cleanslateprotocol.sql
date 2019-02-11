@@ -5,3 +5,4 @@ DROP TABLE IF EXISTS "categories";
 DROP TABLE IF EXISTS "videos";
 DROP TABLE IF EXISTS "ingredients";
 DROP TABLE IF EXISTS "healthConditions";
+DROP TABLE IF EXISTS "wishlist";
