@@ -35,8 +35,8 @@
                         <ul class="list-unstyled">
                             <% pageData.i.forEach(function(ingredient){ %>
                             <%- `<li><div class="custom-control custom-checkbox">
-                                <input id="healthC${ingredient.id}" type="checkbox" onchange="filterBy(${ingredient.id},this,'ingredients')" class="custom-control-input">
-                                <label for="healthC${ingredient.id}" class="custom-control-label">${ingredient.name}</label>
+                                <input id="in${ingredient.id}" type="checkbox" onchange="filterBy(${ingredient.id},this,'ingredients')" class="custom-control-input">
+                                <label for="in${ingredient.id}" class="custom-control-label">${ingredient.name}</label>
                                 </div></li>`%>
                             <% }); %>
                         </ul>
