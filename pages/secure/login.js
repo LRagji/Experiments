@@ -78,7 +78,7 @@ class pageLogin extends page {
             renderRedirect("/secure/login?tab=register");
             return;
         }
-        if (await this.dal.getUserByEmail(req.body.registerEmail) !== undefined) {
+        if (await this.dal.users.getUserByEmail(req.body.registerEmail) !== undefined) {
             req.flash("registerError", "User with email address already exists.");
             renderRedirect("/secure/login?tab=register");
             return;

@@ -40,7 +40,7 @@ class pagePassword extends securePage {
             return;
         }
 
-        await this.dal.updateUserPassword(req.user.id, req.body.newPassword);
+        await this.dal.users.updateUserPassword(req.user.id, req.body.newPassword);
 
         renderRedirect("./logout");
     }

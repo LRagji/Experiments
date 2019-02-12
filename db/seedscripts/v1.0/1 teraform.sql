@@ -118,4 +118,16 @@ CREATE TABLE IF NOT EXISTS "faqs" (
 "answer" text
 );
 
+CREATE TABLE IF NOT EXISTS "users" (
+"id" serial Primary key,
+"salutation" varchar(10),
+"firstName" varchar(250),
+"lastName" varchar(250),
+"mobile" varchar(20),
+"email" varchar(250),
+"password" varchar(250),
+"type" varchar(50),
+"status"  varchar(50)
+);
+
 INSERT INTO "appSettings" (key,value) values ('tsk',10);

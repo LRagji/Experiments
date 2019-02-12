@@ -47,9 +47,9 @@ class authentication {
                 return done(null, false, { message: 'Password fails length validation [50,1] ' + username });
             }
 
-            let user = await this.dal.getUserByEmail(username)
+            let user = await this.dal.users.getUserByEmail(username)
             if (user !== undefined) {
-                if (user.meta.status === "active") {
+                if (user.status === "active") {
                     if (user.password === this.util.getHash(password)) {
                         console.info(username + ' logged in.');
                         return done(null, user);
@@ -60,8 +60,8 @@ class authentication {
                     }
                 }
                 else {
-                    console.warn('User(' + user.id + ') is not active in system(' + user.meta.status + ')');
-                    return done(null, false, { message: 'User(' + user.id + ') is not active in system(' + user.meta.status + ')' });
+                    console.warn('User(' + user.id + ') is not active in system(' + user.status + ')');
+                    return done(null, false, { message: 'User(' + user.id + ') is not active in system(' + user.status + ')' });
                 }
             }
             else {

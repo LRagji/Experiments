@@ -214,7 +214,7 @@ module.exports = {
     },
 
     isAdmin(user) {
-        return user.meta.type === "admin";
+        return user.type === "admin";
     },
 
     cloneFilterForNetworkTransport(filter) {

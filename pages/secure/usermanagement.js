@@ -39,7 +39,7 @@ class pageUserManangement extends adminPage {
             return;
         }
 
-        await this.dal.updateUserActivationState(userId, status);
+        await this.dal.users.updateUserActivationState(userId, status);
         renderRedirect("/secure/users");
         return;
     }
@@ -53,7 +53,7 @@ class pageUserManangement extends adminPage {
             return;
         }
 
-        await this.dal.updateUserAccountType(userId, req.body.promotion);
+        await this.dal.users.updateUserAccountType(userId, req.body.promotion);
         renderRedirect("/secure/users");
         return;
     }
@@ -67,7 +67,7 @@ class pageUserManangement extends adminPage {
             return;
         }
 
-        await this.dal.resetUserAccountPassword(userId);
+        await this.dal.users.resetUserAccountPassword(userId);
         renderRedirect("/secure/users");
         return;
     }

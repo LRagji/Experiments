@@ -20,7 +20,7 @@ class secureAPI extends adminPage {
         let size = parseInt(req.query.size);
         let userId = parseInt(req.user.id);
 
-        let users = await this.dal.getAllUsersPagedExcept(page, size, userId);
+        let users = await this.dal.users.getAllUsersPagedExcept(page, size, userId);
         if (users.length >= size - 1)// This is cause we are explicitly removing the current user.
             renderResponse(206, users);
         else
