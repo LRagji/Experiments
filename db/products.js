@@ -1,14 +1,5 @@
 let fs = require('fs');
 let fpType = require('backend-entity').filterQueryParserPg;
-let operatorMap = {
-    "like": "like",
-    "equal": "=",
-    "greaterThan": ">",
-    "lessThan": "<",
-    "ascending": "asc",
-    "descending": "desc",
-    "containsArr": "&&"
-};
 let propertyMap = {
     "keyword": "keywords",
     "bestSeller": "meta->>'bestSelling'",
