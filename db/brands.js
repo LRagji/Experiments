@@ -9,11 +9,6 @@ class brands {
         this.readBrands = this.readBrands.bind(this);
         this.updateBrand = this.updateBrand.bind(this);
 
-        // if (brandsArray.length === 0) {
-        //     for (let i = 0; i < 10; i++) {
-        //         this.createBrand("Laukik" + i, "https://www.facebook.com/");
-        //     }
-        // }
         let propertyMap = {
             "id": "id",
             "name": "name",
@@ -35,49 +30,20 @@ class brands {
         return await this._entity.createEntity(brand);
     }
 
-    readBrands() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(brandsArray.map((e) => Object.assign({}, e)));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readBrands() {
+        return await this._entity.readAllEntities({});
     }
 
-    readBrandById(id) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let idx = brandsArray.findIndex((l) => l.id === id);
-                if (idx < 0)
-                    acc(undefined);
-                else
-                    acc(Object.assign({}, brandsArray[idx]));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async readBrandById(id) {
+        return await this._entity.readEntitiesById(id);
     }
 
 
-    updateBrand(id, brandName, brandWebsite) {
-        return new Promise((acc, rej) => {
-            try {
-                id = parseInt(id);
-                let foundBrands = brandsArray.filter((e) => e.id === id);
-                if (foundBrands.length > 0) {
-                    foundBrands[0].name = brandName;
-                    foundBrands[0].website = brandWebsite;
-                }
-                acc(Object.assign({}, foundBrands[0]));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async updateBrand(id, brandName, brandWebsite) {
+        id = parseInt(id);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
+        let updateEntity = { name: brandName, website: brandWebsite };
+        return await this._entity.updateEntity(updateEntity, filter);
     }
 }
 
