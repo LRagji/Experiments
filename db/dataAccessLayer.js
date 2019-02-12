@@ -21,7 +21,7 @@ class DAL {
         this.const = constantService;
         products = require('./products').singleton(pgPool, this); //TODO kill this line it should be required in the top with only pgpool param.
 
-        this.appSettings = settings.singleton(constantService);
+        this.appSettings = settings.singleton(constantService, pgPool);
         this.orders = orders;
         this.products = products;
         this.banners = banners;

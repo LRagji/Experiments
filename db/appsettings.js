@@ -1,6 +1,7 @@
+let eType = require('backend-entity').entity;
 class appSettings {
 
-    constructor(constantService) {
+    constructor(constantService, pgPool) {
         this.const = constantService;
 
         this.settings = {};
@@ -11,86 +12,53 @@ class appSettings {
         this.updateSetting = this.updateSetting.bind(this);
         this.deleteSetting = this.deleteSetting.bind(this);
         this.readAllSettings = this.readAllSettings.bind(this);
+
+        let propertyMap = {
+            "id": "id",
+            "key": "key",
+            "value": "value"
+        };
+
+        this._entity = new eType("appSettings", propertyMap, pgPool);
     }
 
-    static singleton(constantService) {
+    static singleton(constantService, pgPool) {
         if (this.instance === undefined) {
-            this.instance = new appSettings(constantService);
+            this.instance = new appSettings(constantService, pgPool);
         }
         return this.instance;
     }
 
-    createSetting(key, value) {
-        return new Promise((acc, rej) => {
-            try {
-                if (this.settings.hasOwnProperty(key)) {
-                    throw new Error(key + " already exists.");
-                }
-                else {
-                    this.settings.key = value;
-                    acc(undefined);
-                }
-            } catch (err) {
-                rej(err);
-            }
-        });
+    async createSetting(key, value) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "key", key);
+        let existingEntry = await this._entity.readAllEntities(filter);
+        if (existingEntry.length <= 0) {
+            return await this._entity.createEntity({ "key": key, "value": value });
+        }
+        else {
+            return existingEntry[0];
+        }
     }
 
-    readSetting(key) {
-        return new Promise((acc, rej) => {
-            try {
-                if (this.settings.hasOwnProperty(key)) {
-                    acc(this.settings[key]);
-                }
-                else {
-                    acc(undefined);
-                }
-            } catch (err) {
-                rej(err);
-            }
-        });
+    async readSetting(key) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "key", key);
+        let existingEntry = await this._entity.readAllEntities(filter);
+        return existingEntry[0]["value"];
     }
 
-    readAllSettings() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(this.settings);
-            } catch (err) {
-                rej(err);
-            }
-        });
+    async readAllSettings() {
+        return await this._entity.readAllEntities({});
     }
 
-    updateSetting(key, value) {
-        return new Promise((acc, rej) => {
-            try {
-                if (!this.settings.hasOwnProperty(key)) {
-                    throw new Error(key + " doesnt exists.");
-                }
-                else {
-                    this.settings[key] = value;
-                    acc(undefined);
-                }
-            } catch (err) {
-                rej(err);
-            }
-        });
+    async updateSetting(key, value) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "key", key);
+        let updateEntity = { "value": value };
+        return await this._entity.updateEntity(updateEntity, filter);
     }
 
-    deleteSetting(key, value) {
-        return new Promise((acc, rej) => {
-            try {
-                if (!this.settings.hasOwnProperty(key)) {
-                    throw new Error(key + " doesnt exists.");
-                }
-                else {
-                    delete this.settings.key;
-                    acc(undefined);
-                }
-            } catch (err) {
-                rej(err);
-            }
-        });
+    async deleteSetting(key) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "key", key);
+        return await this._entity.deleteEntities(filter);
     }
 }
 

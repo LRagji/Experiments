@@ -7,3 +7,4 @@ DROP TABLE IF EXISTS "ingredients";
 DROP TABLE IF EXISTS "healthConditions";
 DROP TABLE IF EXISTS "wishlist";
 DROP TABLE IF EXISTS "subCategories";
+DROP TABLE IF EXISTS "appSettings";

@@ -76,3 +76,11 @@ CREATE TABLE IF NOT EXISTS "subCategories" (
 "categoryId" integer not null,
 "name" varchar(250) not null
 );
+
+CREATE TABLE IF NOT EXISTS "appSettings" (
+"id" serial Primary key,
+"key" varchar(250) not null,
+"value" varchar(250) not null
+);
+
+INSERT INTO "appSettings" (key,value) values ('tsk',10);
