@@ -4,6 +4,7 @@ const products = require('../db/products').singleton(pgPool);
 const categories = require('../db/categories').singleton(pgPool);
 const videos = require('../db/healthvideos').singleton(pgPool);
 const subCategories = require('../db/subcategories').singleton(pgPool);
+const brands = require('../db/brands').singleton(pgPool);
 
 async function InsertMockProducts(numberOfProducts) {
     for (let i = 0; i < numberOfProducts; i++) {
@@ -66,6 +67,12 @@ async function InsertSubCategories(number) {
     }
 }
 
+async function InsertBrands(number) {
+    for (let i = 0; i < number; i++) {
+        await brands.createBrand("Manufacturer" + i, "https://www.facebook.com/");
+    }
+}
+
 async function main() {
     console.log("Execution Started");
     for (let ctr = 0; ctr < process.argv.length; ctr++) {
@@ -116,6 +123,14 @@ async function main() {
             if (!isNaN(value)) {
                 console.log("Inserting " + value + " subCategories.")
                 InsertSubCategories(parseInt(value));
+            }
+        }
+
+        if (kvp.startsWith("brands:")) {
+            let value = kvp.replace("brands:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " brands.")
+                InsertBrands(parseInt(value));
             }
         }
     };

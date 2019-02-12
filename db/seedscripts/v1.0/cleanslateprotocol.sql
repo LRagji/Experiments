@@ -8,3 +8,4 @@ DROP TABLE IF EXISTS "healthConditions";
 DROP TABLE IF EXISTS "wishlist";
 DROP TABLE IF EXISTS "subCategories";
 DROP TABLE IF EXISTS "appSettings";
+DROP TABLE IF EXISTS "brands";

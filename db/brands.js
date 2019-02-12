@@ -1,38 +1,38 @@
 let brandsArray = [];
+let eType = require('backend-entity').entity;
 
 class brands {
 
-    constructor() {
+    constructor(pgPool) {
 
         this.createBrand = this.createBrand.bind(this);
         this.readBrands = this.readBrands.bind(this);
         this.updateBrand = this.updateBrand.bind(this);
 
-        if (brandsArray.length === 0) {
-            for (let i = 0; i < 10; i++) {
-                this.createBrand("Laukik" + i, "https://www.facebook.com/");
-            }
-        }
+        // if (brandsArray.length === 0) {
+        //     for (let i = 0; i < 10; i++) {
+        //         this.createBrand("Laukik" + i, "https://www.facebook.com/");
+        //     }
+        // }
+        let propertyMap = {
+            "id": "id",
+            "name": "name",
+            "website": "website"
+        };
+
+        this._entity = new eType("brands", propertyMap, pgPool);
     }
 
-    static singleton() {
+    static singleton(pgPool) {
         if (this.instance === undefined) {
-            this.instance = new brands();
+            this.instance = new brands(pgPool);
         }
         return this.instance;
     }
 
-    createBrand(brandName, brandWebsite) {
-        return new Promise((acc, rej) => {
-            try {
-                let brand = { name: brandName, id: brandsArray.length, website: brandWebsite };
-                brandsArray.push(brand);
-                acc(brand);
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async createBrand(brandName, brandWebsite) {
+        let brand = { name: brandName, website: brandWebsite };
+        return await this._entity.createEntity(brand);
     }
 
     readBrands() {

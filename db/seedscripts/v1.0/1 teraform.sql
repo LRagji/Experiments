@@ -83,4 +83,10 @@ CREATE TABLE IF NOT EXISTS "appSettings" (
 "value" varchar(250) not null
 );
 
+CREATE TABLE IF NOT EXISTS "brands" (
+"id" serial Primary key,
+"name" varchar(250) not null,
+"website" varchar(500) not null
+);
+
 INSERT INTO "appSettings" (key,value) values ('tsk',10);
