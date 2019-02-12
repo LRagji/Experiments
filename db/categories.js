@@ -46,7 +46,9 @@ class categories {
     }
 
     async updateCategory(id, name) {
-        return await this._entity.updateEntity(id, { "name": name });
+        id = parseInt(id);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
+        return await this._entity.updateEntity({ "name": name }, filter);
     }
 }
 

@@ -52,7 +52,9 @@ class subcategories {
             "catid": categoryId,
             "name": subCatName
         };
-        return await this._entity.updateEntity(id,subCategrory);
+        id = parseInt(id);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
+        return await this._entity.updateEntity(subCategrory, filter);
     }
 }
 

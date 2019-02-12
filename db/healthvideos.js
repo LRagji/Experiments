@@ -71,7 +71,9 @@ class healthVideos {
             healthConditions: healthConditions,
             tag: videoTag
         };
-        return await this._entity.updateEntity(id, healthVideo);
+        id = parseInt(id);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
+        return await this._entity.updateEntity(healthVideo, filter);
     }
 
     async readIngredients() {
