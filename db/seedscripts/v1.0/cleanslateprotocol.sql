@@ -11,3 +11,4 @@ DROP TABLE IF EXISTS "appSettings";
 DROP TABLE IF EXISTS "brands";
 DROP TABLE IF EXISTS "healthLinks";
 DROP TABLE IF EXISTS "healthTopics";
+DROP TABLE IF EXISTS "orders";

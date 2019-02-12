@@ -3,7 +3,7 @@ let pgPool = new pg.Pool({ user: process.env.DB_USER || 'postgres', host: proces
 let users = [], FAQ = [];
 let util = require('../modules/utilities');
 let settings = require('./appsettings');
-let orders = require('./orders').singleton();
+let orders = require('./orders').singleton(pgPool);
 let banners = require('./banners').singleton();
 let products = undefined;
 let healthTopics = require('./healthtopics').singleton(pgPool);

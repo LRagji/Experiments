@@ -154,7 +154,7 @@ class pageCart extends page {
                                     "amount": req.body.amount
                                 }
 
-                                orderId = this.dal.orders.createOrder(req.session.locked);
+                                orderId = await this.dal.orders.createOrder(req.session.locked);
                                 this.clearShoppingCartSession(req);
                                 redirectPage = '/secure/success?oid=' + orderId; //TODO:Confirm if these are right page links
                                 break;
@@ -176,7 +176,7 @@ class pageCart extends page {
                                     "amount": req.body.amount
                                 }
 
-                                orderId = this.dal.orders.createOrder(req.session.locked);
+                                orderId = await this.dal.orders.createOrder(req.session.locked);
                                 this.clearShoppingCartSession(req);
                                 redirectPage = '/secure/success?oid=' + orderId; //TODO:Confirm if these are right page links
                                 break;
@@ -189,7 +189,7 @@ class pageCart extends page {
                                     "amount": req.body.amount
                                 }
 
-                                orderId = this.dal.orders.createOrder(req.session.locked);
+                                orderId = await this.dal.orders.createOrder(req.session.locked);
                                 this.clearShoppingCartSession(req);
                                 redirectPage = '/secure/gateway?oid=' + orderId; //TODO:Confirm if these are right page links
                                 break;

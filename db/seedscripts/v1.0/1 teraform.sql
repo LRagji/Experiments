@@ -101,4 +101,15 @@ CREATE TABLE IF NOT EXISTS "healthTopics" (
 "name" varchar(250) not null
 );
 
+CREATE TABLE IF NOT EXISTS "orders" (
+"id" serial Primary key,
+"userId" integer not null,
+"date" bigint not null,
+"status" varchar(250),
+"tax" integer not null,
+"products" jsonb[],
+"shippingDetails" jsonb,
+"payment" jsonb
+);
+
 INSERT INTO "appSettings" (key,value) values ('tsk',10);

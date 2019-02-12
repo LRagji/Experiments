@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Injest Data",
             "program": "${workspaceFolder}/migration/InsertMockData.js",
-            "args": ["products:50","categories:10","videos:10", "healthConditions:10", "ingredients:10","subCategories:10","brands:10","healthlinks:10","healthtopics:10"]
+            "args": ["products:50","categories:10","videos:10", "healthConditions:10", "ingredients:10","subCategories:10","brands:10","healthlinks:10","healthtopics:10","orders:10"]
         },
         {
             "type": "node",

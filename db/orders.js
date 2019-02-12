@@ -1,13 +1,25 @@
 let orders = [];
-
+let eType = require('backend-entity').entity;
 class Orders {
 
-
-    constructor() {
+    constructor(pgPool) {
 
         this.createOrder = this.createOrder.bind(this);
         this.getOrderById = this.getOrderById.bind(this);
         this.getTopOrdersForUser = this.getTopOrdersForUser.bind(this);
+
+        let propertyMap = {
+            "id": "id",
+            "userId": '"userId"',
+            "date": "date",
+            "status": "status",
+            "tax": "tax",
+            "products": "products",
+            "shippingDetails": '"shippingDetails"',
+            "payment": "payment"
+        };
+
+        this._entity = new eType("orders", propertyMap, pgPool);
 
 
         if (orders.length === 0) {
@@ -35,7 +47,7 @@ class Orders {
                             "bPincode": "400093",
                             "bState": "Jammu & Kashmir",
                             "bMobile": "9819569622",
-                            "bGstin":"123456789012345"
+                            "bGstin": "123456789012345"
                         },
                         "shipping": {
                             "sSalutation": "Mr.",
@@ -48,7 +60,7 @@ class Orders {
                             "sPincode": "400093",
                             "sState": "Jammu & Kashmir",
                             "sMobile": "9819569622",
-                            "sGstin":"123456789012345"
+                            "sGstin": "123456789012345"
                         }
                     },
                     "payment": {
@@ -65,53 +77,31 @@ class Orders {
         }
     }
 
-    static singleton() {
+    static singleton(pgPool) {
         if (this.instance === undefined) {
-            this.instance = new Orders();
+            this.instance = new Orders(pgPool);
         }
         return this.instance;
     }
 
-    createOrder(order) {
+    async createOrder(order) {
         //TODO:Compare order amount with calculated product amount from all products.
         if (order.hasOwnProperty("state")) delete order.state;
         order.date = Date.now();
         order.status = "Awaiting Payment";
-        order.id = orders.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1;
-        orders.push(order);
-        return order.id;
+        let createdOrder = await this._entity.createEntity(order);
+        return createdOrder.id;
     }
 
-    getOrderById(orderId) {
-        return new Promise((acc, rej) => {
-            try {
-                //TODO:Remove object Assign which is used to keep the array safe and clone the element
-                let order = orders.find((e) => e.id === orderId);
-                if (order !== undefined)
-                    acc(Object.assign({}, order));
-                else
-                    acc();
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        });
+    async getOrderById(orderId) {
+        return await this._entity.readEntitiesById(orderId);
     }
 
-    getTopOrdersForUser(userId, topSize) {
-        return new Promise((acc, rej) => {
-            try {
-                let userOrders = [];
-                orders.forEach((order) => {
-                    if (order.userId === userId && userOrders.length < topSize)
-                        userOrders.push(Object.assign({}, order));
-                });
-                acc(userOrders);
-            }
-            catch (err) {
-                rej(err);
-            }
-        });
+    async getTopOrdersForUser(userId, topSize) {
+
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "userId", userId);
+        let ordersForCurrentUser = await this._entity.readPaginatedEntities(0, topSize, filter);
+        return ordersForCurrentUser.results;
     }
 
 }
