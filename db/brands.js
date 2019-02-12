@@ -1,4 +1,3 @@
-let brandsArray = [];
 let eType = require('backend-entity').entity;
 
 class brands {

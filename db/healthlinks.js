@@ -1,8 +1,10 @@
 let healthLinksArray = [];
+let eType = require('backend-entity').entity;
+
 
 class healthLinks {
 
-    constructor() {
+    constructor(pgPool) {
 
         this.createHealthLink = this.createHealthLink.bind(this);
         this.updateHealthLink = this.updateHealthLink.bind(this);
@@ -11,103 +13,76 @@ class healthLinks {
         this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
         this.isNameTaken = this.isNameTaken.bind(this);
 
-        if (healthLinksArray.length === 0) {
-            for (let i = 0; i < 1;)
-                this.createHealthLink("Link " + i, "Random html text for link " + i).then(i++);
-        }
+        let propertyMap = {
+            "id": "id",
+            "name": "name",
+            "url": "url",
+            "contents": "contents"
+        };
 
+        this._entity = new eType("healthLinks", propertyMap, pgPool);
     }
 
-    static singleton() {
+    static singleton(pgPool) {
         if (this.instance === undefined) {
-            this.instance = new healthLinks();
+            this.instance = new healthLinks(pgPool);
         }
         return this.instance;
     }
 
     async getAllHealthLinks() {
-        return new Promise((acc, rej) => {
-            try {
-                acc(healthLinksArray);
-            } catch (err) {
-                rej(err);
-            }
-        });
+        return await this._entity.readAllEntities({});
     }
 
     async createHealthLink(name, contents) {
-        return new Promise((acc, rej) => {
-            try {
-
-                if (healthLinksArray.find((l) => l.name === name) !== undefined) throw new Error(name + " name already exists.");
-                let healthLinkObj = {
-                    "name": name,
-                    "url": "/healthLinks?id=" + encodeURIComponent(name),
-                    "contents": contents
-                };
-                healthLinksArray.push(healthLinkObj);
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
+        let existingEntities = await this._entity.readAllEntities(filter);
+        if (existingEntities.length > 0) {
+            throw new Error(name + " name already exists.");
+        }
+        else {
+            let healthLinkObj = {
+                "name": name,
+                "url": "/healthLinks?id=" + encodeURIComponent(name),
+                "contents": contents
+            };
+            return await this._entity.createEntity(healthLinkObj);
+        }
     }
 
     async deleteHealthLink(name) {
-        return new Promise((acc, rej) => {
-            try {
-                let dbHealthLinkIdx = healthLinksArray.findIndex((l) => l.name === name);
-                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
-
-                healthLinksArray.splice(dbHealthLinkIdx, 1);
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
+        let result = await this._entity.deleteEntities(filter);
+        if (result <= 0) throw new Error("Health link " + name + " doesnot exists.");
     }
 
     async updateHealthLink(name, contents) {
-        return new Promise((acc, rej) => {
-            try {
-                let dbHealthLinkIdx = healthLinksArray.findIndex((l) => l.name === name);
-                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
-
-                healthLinksArray[dbHealthLinkIdx].contents = contents;
-
-                acc();
-
-            } catch (err) {
-                rej(err);
-            }
-        });
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
+        let healthLinkObj = { "contents": contents };
+        let result = await this._entity.updateEntity(healthLinkObj, filter);
+        if (result === undefined) {
+            throw new Error("Health link " + name + " doesnot exists.");
+        }
+        else {
+            return result;
+        }
     }
 
-    isNameTaken(name) {
-        return new Promise((acc, rej) => {
-            try {
-                let dbHealthLinkIdx = healthLinksArray.findIndex((l) => l.name === name);
-                acc(dbHealthLinkIdx >= 0);
-            } catch (err) {
-                rej(err);
-            }
-        })
+    async isNameTaken(name) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
+        let existingEntities = await this._entity.readAllEntities(filter);
+        return (existingEntities.length > 0);
     }
 
     async getHealthLinkContentFor(name) {
-        return new Promise((acc, rej) => {
-            try {
-                let dbHealthLinkIdx = healthLinksArray.findIndex((l) => l.name === name);
-                if (dbHealthLinkIdx < 0) throw new Error("Health link " + name + " doesnot exists.");
-                acc(Object.assign({}, healthLinksArray[dbHealthLinkIdx]));
-            } catch (err) {
-                rej(err);
-            }
-        })
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
+        let existingEntities = await this._entity.readAllEntities(filter);
+        if (existingEntities.length > 0) {
+            return existingEntities[0];
+        }
+        else {
+            throw new Error("Health link " + name + " doesnot exists.");
+        }
     }
 
 }

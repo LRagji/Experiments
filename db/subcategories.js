@@ -39,10 +39,6 @@ class subcategories {
         await this._entity.createEntity(subCategrory);
     }
 
-    // async readSubCategoryId(id) {
-    //     return await this._entity.readEntitiesById(id);
-    // }
-
     async readAllSubCategories() {
         return await this._entity.readAllEntities({});
     }

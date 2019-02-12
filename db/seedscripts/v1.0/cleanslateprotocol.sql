@@ -9,3 +9,4 @@ DROP TABLE IF EXISTS "wishlist";
 DROP TABLE IF EXISTS "subCategories";
 DROP TABLE IF EXISTS "appSettings";
 DROP TABLE IF EXISTS "brands";
+DROP TABLE IF EXISTS "healthLinks";

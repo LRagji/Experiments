@@ -5,6 +5,7 @@ const categories = require('../db/categories').singleton(pgPool);
 const videos = require('../db/healthvideos').singleton(pgPool);
 const subCategories = require('../db/subcategories').singleton(pgPool);
 const brands = require('../db/brands').singleton(pgPool);
+const healthLinks = require('../db/healthlinks').singleton(pgPool);
 
 async function InsertMockProducts(numberOfProducts) {
     for (let i = 0; i < numberOfProducts; i++) {
@@ -73,6 +74,12 @@ async function InsertBrands(number) {
     }
 }
 
+async function InsertHealthLinks(number) {
+    for (let i = 0; i < number; i++) {
+        await healthLinks.createHealthLink("Link " + i, "Random html text for link " + i);
+    }
+}
+
 async function main() {
     console.log("Execution Started");
     for (let ctr = 0; ctr < process.argv.length; ctr++) {
@@ -131,6 +138,14 @@ async function main() {
             if (!isNaN(value)) {
                 console.log("Inserting " + value + " brands.")
                 InsertBrands(parseInt(value));
+            }
+        }
+
+        if (kvp.startsWith("healthlinks:")) {
+            let value = kvp.replace("healthlinks:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " healthlinks.")
+                await InsertHealthLinks(parseInt(value));
             }
         }
     };

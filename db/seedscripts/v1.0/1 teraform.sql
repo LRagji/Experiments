@@ -89,4 +89,12 @@ CREATE TABLE IF NOT EXISTS "brands" (
 "website" varchar(500) not null
 );
 
+CREATE TABLE IF NOT EXISTS "healthLinks" (
+"id" serial Primary key,
+"name" varchar(250) not null,
+"url" varchar(500) not null,
+"contents" text
+);
+
+
 INSERT INTO "appSettings" (key,value) values ('tsk',10);
