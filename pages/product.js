@@ -24,7 +24,7 @@ class pageProduct extends page {
 
             let faqObject = [];
             for (let i = 0; i < product.faq.length; i++) {
-                faqObject.push(await this.dal.getFAQ(product.faq[i]));
+                faqObject.push(await this.dal.faqs.getFAQ(product.faq[i]));
             }
             product.faq = faqObject;
 

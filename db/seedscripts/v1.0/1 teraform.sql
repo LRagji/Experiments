@@ -112,4 +112,10 @@ CREATE TABLE IF NOT EXISTS "orders" (
 "payment" jsonb
 );
 
+CREATE TABLE IF NOT EXISTS "faqs" (
+"id" serial Primary key,
+"question" text not null,
+"answer" text
+);
+
 INSERT INTO "appSettings" (key,value) values ('tsk',10);

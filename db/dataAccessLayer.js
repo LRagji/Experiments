@@ -13,6 +13,7 @@ let categories = require('./categories').singleton(pgPool);
 let subCategories = require('./subcategories').singleton(pgPool);
 let healthVideos = require('./healthvideos').singleton(pgPool);
 let wishlist = require('./wishlist').singleton(pgPool);
+let faqs = require('./faqs').singleton(pgPool);
 
 // TODO:Call the appropiate API
 class DAL {
@@ -32,6 +33,7 @@ class DAL {
         this.subCategories = subCategories;
         this.healthVideos = healthVideos;
         this.wishlist = wishlist;
+        this.faqs = faqs;
 
 
 
@@ -44,11 +46,6 @@ class DAL {
         this.updateUserActivationState = this.updateUserActivationState.bind(this);
         this.updateUserAccountType = this.updateUserAccountType.bind(this);
         this.resetUserAccountPassword = this.resetUserAccountPassword.bind(this);
-        this.createFAQ = this.createFAQ.bind(this);
-        this.updateFAQ = this.updateFAQ.bind(this);
-        this.deleteFAQ = this.deleteFAQ.bind(this);
-        this.getAllFAQ = this.getAllFAQ.bind(this);
-        this.getFAQ = this.getFAQ.bind(this);
 
         //TODO:Delete this mock data
 
@@ -70,92 +67,11 @@ class DAL {
                     }
                 );
         }
-
-        if (FAQ.length === 0) {
-            for (let i = 0; i < 1;)
-                this.createFAQ("Who am i ?" + i, "I am your friendly neighbourhood spider man." + i).then(i++);
-        }
     }
 
     pool() {
         return pgPool;
     }
-    // START Product FAQ
-
-    async createFAQ(question, answer) {
-        return new Promise((acc, rej) => {
-            try {
-                let FAQObject = {
-                    id: FAQ.reduce((acc, ele) => ele.id > acc ? ele.id : acc, 0) + 1,
-                    Q: question,
-                    A: answer
-                };
-                FAQ.push(FAQObject);
-                acc(Object.assign({}, FAQObject));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        })
-    }
-
-    async updateFAQ(id, question, answer) {
-        return new Promise((acc, rej) => {
-            try {
-                let faqIdx = FAQ.findIndex((q) => q.id === id);
-                if (faqIdx < 0) throw new Error("FAQ " + name + " doesnot exists.");
-                FAQ[faqIdx].Q = question;
-                FAQ[faqIdx].A = answer;
-                acc(Object.assign({}, FAQ[faqIdx]));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        })
-    }
-
-    async deleteFAQ(id) {
-        return new Promise((acc, rej) => {
-            try {
-                let faqIdx = FAQ.findIndex((q) => q.id === id);
-                if (faqIdx < 0) throw new Error("FAQ " + name + " doesnot exists.");
-                FAQ.splice(faqIdx, 1);
-                acc();
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        })
-    }
-
-    async getFAQ(id) {
-        return new Promise((acc, rej) => {
-            try {
-                let faqIdx = FAQ.findIndex((q) => q.id === id);
-                if (faqIdx < 0) throw new Error("FAQ " + getFAQ + " doesnot exists.");
-                acc(Object.assign({}, FAQ[faqIdx]));
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        })
-    }
-
-    async getAllFAQ() {
-        return new Promise((acc, rej) => {
-            try {
-                let results = [];
-                FAQ.forEach((faq) => {
-                    results.push(Object.assign({}, faq));
-                })
-                acc(results);
-            }
-            catch (ex) {
-                rej(ex);
-            }
-        })
-    }
-    // END Product FAQ
 
     updateUserPassword(userId, password) {
         return new Promise((acc, rej) => {

@@ -8,6 +8,7 @@ const brands = require('../db/brands').singleton(pgPool);
 const healthLinks = require('../db/healthlinks').singleton(pgPool);
 const healthTopics = require('../db/healthtopics').singleton(pgPool);
 const orders = require('../db/orders').singleton(pgPool);
+const faqs = require('../db/faqs').singleton(pgPool);
 
 async function InsertMockProducts(numberOfProducts) {
     for (let i = 0; i < numberOfProducts; i++) {
@@ -85,6 +86,12 @@ async function InsertHealthLinks(number) {
 async function InsertHealthTopics(number) {
     for (let i = 0; i < number; i++) {
         await healthTopics.createHealthTopic("Topic " + i);
+    }
+}
+
+async function InsertFaqs(number) {
+    for (let i = 0; i < number; i++) {
+        await faqs.createFAQ("Who am i ?" + i, "I am your friendly neighbourhood spider man." + i);
     }
 }
 
@@ -224,6 +231,14 @@ async function main() {
             if (!isNaN(value)) {
                 console.log("Inserting " + value + " orders.")
                 await InsertOrders(parseInt(value));
+            }
+        }
+        
+        if (kvp.startsWith("faqs:")) {
+            let value = kvp.replace("faqs:", "");
+            if (!isNaN(value)) {
+                console.log("Inserting " + value + " faqs.")
+                await InsertFaqs(parseInt(value));
             }
         }
     };

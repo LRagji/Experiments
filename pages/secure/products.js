@@ -29,7 +29,7 @@ class pageProducts extends adminPage {
         }
 
         let pageData = {};
-        pageData[this.const.FAQS] = await this.dal.getAllFAQ();
+        pageData[this.const.FAQS] = await this.dal.faqs.getAllFAQ();
         pageData[this.const.categories] = this.util.sortArrayByProperty(await this.dal.categories.readAllCategories(), "name");
         pageData[this.const.subcategories] = this.util.sortArrayByProperty(await this.dal.subCategories.readAllSubCategories(), "name");
         pageData[this.const.brands] = await this.dal.brands.readBrands();

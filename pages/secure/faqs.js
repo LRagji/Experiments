@@ -21,7 +21,7 @@ class pageFAQS extends adminPage {
 
     async renderFAQS(req, renderView) {
         let pageData = {};
-        pageData[this.const.FAQS] = await this.dal.getAllFAQ();
+        pageData[this.const.FAQS] = await this.dal.faqs.getAllFAQ();
         pageData[this.const.FAQSError] = req.flash(this.const.FAQSError);
         renderView('../pages/secure/faqs', pageData);
     }
@@ -33,7 +33,7 @@ class pageFAQS extends adminPage {
             return;
         }
 
-        await this.dal.deleteFAQ(parseInt(req.body.id));
+        await this.dal.faqs.deleteFAQ(parseInt(req.body.id));
         renderRedirect("/secure/faqs");
         return;
     }
@@ -57,7 +57,7 @@ class pageFAQS extends adminPage {
             return;
         }
 
-        await this.dal.updateFAQ(parseInt(req.body.id), req.body.Q, req.body.A);
+        await this.dal.faqs.updateFAQ(parseInt(req.body.id), req.body.Q, req.body.A);
         renderRedirect("/secure/faqs");
         return;
 
@@ -71,7 +71,7 @@ class pageFAQS extends adminPage {
             return;
         }
 
-        await this.dal.createFAQ(req.body.Q, "Answer");
+        await this.dal.faqs.createFAQ(req.body.Q, "Answer");
         renderRedirect("/secure/faqs");
         return;
     }
