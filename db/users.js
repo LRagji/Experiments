@@ -56,7 +56,8 @@ class users {
     }
 
     async getAllUsersPagedExcept(pageNo, size, userId) {
-        let users = await this._entity.readPaginatedEntities(pageNo, size, {});//TODO not show current user.
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "notequal", "id", userId);
+        let users = await this._entity.readPaginatedEntities(pageNo, size, filter);
         return users.results;
     }
 

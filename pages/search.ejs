@@ -156,16 +156,7 @@
     </script>
     <script type="module">
         import { filterBuilder } from "../../static/resources/scripts/filterbuilder.mjs"
-        let operatorMap = {
-            "like": "singleOperand",
-            "equal": "singleOperand",
-            "greaterThan": "singleOperand",
-            "lessThan": "singleOperand",
-            "ascending": "asc",
-            "descending": "desc",
-            "containsArr": "multiOperand"
-        };
-        let fb = new filterBuilder(operatorMap);
+        let fb = new filterBuilder();
 
         window.sort = function sort(index) {
             filter = fb.removeSortByConditionFor(filter, "price", true, 0);
