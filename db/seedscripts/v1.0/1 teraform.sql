@@ -96,5 +96,9 @@ CREATE TABLE IF NOT EXISTS "healthLinks" (
 "contents" text
 );
 
+CREATE TABLE IF NOT EXISTS "healthTopics" (
+"id" serial Primary key,
+"name" varchar(250) not null
+);
 
 INSERT INTO "appSettings" (key,value) values ('tsk',10);

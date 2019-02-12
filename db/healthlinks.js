@@ -1,6 +1,4 @@
-let healthLinksArray = [];
 let eType = require('backend-entity').entity;
-
 
 class healthLinks {
 
