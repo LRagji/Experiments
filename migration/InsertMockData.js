@@ -28,8 +28,8 @@ async function InsertMockProducts(numberOfProducts) {
             [],
             [0],
             0,
-            [0],
-            [0]
+            [1],
+            [1]
         );
     }
     process.stdout.write("\r\n");
