@@ -19,11 +19,11 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LRagji/Experiments/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/LRagji/Experiments#readme",
+  "homepage": "",
   "dependencies": {
-    "backend-entity": "git+https://github.com/LRagji/backend-entity.git",
+    "backend-entity": "0.0.1",
     "body-parser": "^1.18.3",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
