@@ -11,7 +11,6 @@
     "detectDuplicateCode": "jsinspect ./ > ./extras/DuplicateCodeReport.txt",
     "injestData": "node migration/InsertMockData.js",
     "injestDataAll": "node migration/InsertMockData.js products:50 users:10 faqs:10 categories:10 videos:10 healthConditions:10 ingredients:10 subCategories:10 brands:10 healthlinks:10 healthtopics:10 orders:10"
-  
   },
   "repository": {
     "type": "",
