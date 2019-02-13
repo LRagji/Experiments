@@ -197,8 +197,8 @@ class pageProducts extends adminPage {
             return;
         }
 
-        if (this.util.validateIsWholeNumberBetween(req.body.shippingDetails, 999, 1) === false) {
-            req.flash(this.const.newProductError, "Invalid shipping detail, should be a whole number between 1 to 999 days.");
+        if (this.util.validateLength(req.body.shippingDetails, 20, 1) === false) {
+            req.flash(this.const.newProductError, "Invalid shipping detail length, should be a between 1,20.");
             this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
             return;
         }
@@ -246,7 +246,7 @@ class pageProducts extends adminPage {
                 return;
             }
 
-            if (this.util.validateIsWholeNumberBetween(req.file.size, (250 * 1000), 1) == false) { //1-100KB
+            if (this.util.validateIsWholeNumberBetween(req.file.size, (250 * 1000), 1) == false) { //1-250KB
                 req.flash(this.const.newProductError, "Unsupported Product Image size: " + req.file.size);
                 this.respondWithRightPage(req, IsNewProduct, productState, renderRedirect);
                 return;
