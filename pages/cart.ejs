@@ -104,7 +104,7 @@
                     <div class="card-body">
                         <%
                         function setBillingInputValue(session, propertyName) {
-                            return session !== undefined ? session.shippingDetails.billing[propertyName] : '';
+                            return session !== undefined ? session.shippingDetails.billing[propertyName] : (propertyName==="bFirstName"?user.first: (propertyName==="bLastName"?user.last:""));
                         }
                         function setShippingInputValue(session, propertyName) {
                             return session !== undefined ? session.shippingDetails.shipping[propertyName] : '';
