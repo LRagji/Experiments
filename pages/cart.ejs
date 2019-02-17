@@ -82,7 +82,8 @@
                                 <h3 class="mx-1 my-1"><small class="text-mute">Total</small> &#8377;
                                     <%= pageData.scp.reduce((acc,ele) => acc+(ele.offerprice*ele.quantity),0) %>
                                 </h3>
-                                <button type="submit" class="btn btn-primary" <%=pageData.cartItems <=0?'disabled':'' %>>Place
+                                <button type="submit" class="btn btn-primary"
+                                    <%=pageData.cartItems <=0?'disabled':'' %>>Place
                                     Order</button>
                             </form>
                         </div>
@@ -94,8 +95,9 @@
             <div class="card">
                 <div class="card-header bg-success" id="headingTwo">
                     <h5 class="mb-0">
-                        <button id="btnCollapseTwo" class="btn btn-link collapsed text-white" type="button" data-toggle="collapse"
-                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <button id="btnCollapseTwo" class="btn btn-link collapsed text-white" type="button"
+                            data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                            aria-controls="collapseTwo">
                             <h4>2.Shipping Details</h4>
                         </button>
                     </h5>
@@ -104,10 +106,34 @@
                     <div class="card-body">
                         <%
                         function setBillingInputValue(session, propertyName) {
-                            return session !== undefined ? session.shippingDetails.billing[propertyName] : (propertyName==="bFirstName"?user.first: (propertyName==="bLastName"?user.last:""));
+                            return session !== undefined ? session.shippingDetails.billing[propertyName] :'';
                         }
                         function setShippingInputValue(session, propertyName) {
                             return session !== undefined ? session.shippingDetails.shipping[propertyName] : '';
+                        }
+                        function getFirstName(session)
+                        {
+                            let sessionValue=setBillingInputValue(session,"bFirstName");
+                            if(sessionValue==="" & user!=undefined)
+                            {
+                                return user.first;
+                            }
+                            else
+                            {
+                                return sessionValue;
+                            }
+                        } 
+                         function getLastName(session)
+                        {
+                            let sessionValue=setBillingInputValue(session,"bLastName");
+                            if(sessionValue==="" & user!=undefined)
+                            {
+                                return user.last;
+                            }
+                            else
+                            {
+                                return sessionValue;
+                            }
                         } 
                         %>
                         <%-
@@ -127,7 +153,7 @@
                                                 <option>Prof.</option>
                                             </select>
                                             <input type="text" name="bFirstName" class="form-control" id="registerFirstName" minlength="1"  maxlength="50"
-                                                placeholder="First Name" value="${setBillingInputValue(pageData.si,'bFirstName')}" required>
+                                                placeholder="First Name" value="${getFirstName(pageData.si)}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +163,7 @@
                             <div class="row m-1">
                                 <div class="col">
                                     <input type="text" name="bLastName" class="form-control" placeholder="Last name"
-                                    value="${setBillingInputValue(pageData.si,'bLastName')}"
+                                    value="${getLastName(pageData.si)}"
                                        minlength="1"  maxlength="50" required>
                                 </div>
                             </div>
@@ -397,7 +423,8 @@
                 <div class="card-header bg-success" id="headingThree">
                     <h5 class="mb-0">
                         <button id="btnCollapseThree" class="btn btn-link collapsed text-white" type="button"
-                            data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                            aria-controls="collapseThree">
                             <h4>3.Payment Details</h4>
                         </button>
                     </h5>
@@ -409,13 +436,14 @@
                             <div class="card">
                                 <div class="card-header bg-transparent" id="headingOne">
                                     <h5 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#payCheque"
-                                            aria-expanded="true" aria-controls="collapseOne">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#payCheque" aria-expanded="true" aria-controls="collapseOne">
                                             Pay via Cheque/DD
                                         </button>
                                     </h5>
                                 </div>
-                                <div id="payCheque" class="collapse" aria-labelledby="headingOne" data-parent="#payment">
+                                <div id="payCheque" class="collapse" aria-labelledby="headingOne"
+                                    data-parent="#payment">
                                     <div id="chequeCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;
@@ -424,7 +452,8 @@
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="chequeChequeNo" type="text" class="form-control"
-                                                        pattern="[0-9]{4,10}" title="Please enter a valid cheque number."
+                                                        pattern="[0-9]{4,10}"
+                                                        title="Please enter a valid cheque number."
                                                         placeholder="Cheque No" required>
                                                 </div>
                                                 <div class="col-md">
@@ -444,15 +473,16 @@
                                             </div>
                                             <div class="d-flex my-2">
                                                 <p>Deposited in Bank:</p>
-                                                <select name="chequeDepositedBank" class="custom-select" id="forBankList">
+                                                <select name="chequeDepositedBank" class="custom-select"
+                                                    id="forBankList">
                                                     <option selected>HDFC</option>
                                                     <option>Canara</option>
                                                 </select>
                                             </div>
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" name="chequeDeclaration" type="checkbox"
-                                                        value="" id="chequeConfirm" required>
+                                                    <input class="form-check-input" name="chequeDeclaration"
+                                                        type="checkbox" value="" id="chequeConfirm" required>
                                                     <label class="form-check-label" for="chequeConfirm">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -464,9 +494,11 @@
                                                 <input type="hidden" name="paymentMode" value="cheque">
                                                 <input type="hidden" name="state" value="3" />
                                                 <input type="hidden" name="amount" value="5000" />
-                                                <button onclick='$("#chequeCancel").val(true);$("#chequeCancelValidation :input").prop("required",false);$("#chequeOrder").click()'
+                                                <button
+                                                    onclick='$("#chequeCancel").val(true);$("#chequeCancelValidation :input").prop("required",false);$("#chequeOrder").click()'
                                                     type="button" class="btn btn-dark">Cancel</button>
-                                                <button id="chequeOrder" type="submit" class="mr-1 btn btn-primary">Confirm
+                                                <button id="chequeOrder" type="submit"
+                                                    class="mr-1 btn btn-primary">Confirm
                                                     Order</button>
                                             </div>
                                         </form>
@@ -492,7 +524,8 @@
                                             <div class="row my-2">
                                                 <div class="col-md">
                                                     <input name="bankTransferRefNo" type="text" class="form-control"
-                                                        pattern="[0-9A-Za-z]{4,20}" title="Input a valid Bank transfer reference."
+                                                        pattern="[0-9A-Za-z]{4,20}"
+                                                        title="Input a valid Bank transfer reference."
                                                         placeholder="Txn Reference No">
                                                 </div>
                                                 <div class="col-md">
@@ -502,8 +535,8 @@
                                             </div>
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
-                                                    <input name="bankTransferDeclaration" class="form-check-input" type="checkbox"
-                                                        value="" id="bankTransferDeclaration" required>
+                                                    <input name="bankTransferDeclaration" class="form-check-input"
+                                                        type="checkbox" value="" id="bankTransferDeclaration" required>
                                                     <label class="form-check-label" for="bankTransferDeclaration">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -511,13 +544,16 @@
                                                 </div>
                                             </div>
                                             <div class="d-flex my-2 flex-row-reverse ">
-                                                <input type="hidden" id="bankTransferCancel" name="cancel" value="false">
+                                                <input type="hidden" id="bankTransferCancel" name="cancel"
+                                                    value="false">
                                                 <input type="hidden" name="paymentMode" value="bankTransfer">
                                                 <input type="hidden" name="state" value="3" />
                                                 <input type="hidden" name="amount" value="5000" />
-                                                <button onclick='$("#bankTransferCancel").val(true);$("#bankTransferCancelValidation :input").prop("required",false);$("#bankTransferOrder").click()'
+                                                <button
+                                                    onclick='$("#bankTransferCancel").val(true);$("#bankTransferCancelValidation :input").prop("required",false);$("#bankTransferOrder").click()'
                                                     type="button" class="btn btn-dark">Cancel</button>
-                                                <button id="bankTransferOrder" type="submit" class="mr-1 btn btn-primary">Confirm
+                                                <button id="bankTransferOrder" type="submit"
+                                                    class="mr-1 btn btn-primary">Confirm
                                                     Order</button>
                                             </div>
                                         </form>
@@ -529,12 +565,14 @@
                                 <div class="card-header bg-transparent" id="headingThree">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-                                            data-target="#payGateway" aria-expanded="false" aria-controls="collapseThree">
+                                            data-target="#payGateway" aria-expanded="false"
+                                            aria-controls="collapseThree">
                                             Pay via Net Banking/Card
                                         </button>
                                     </h5>
                                 </div>
-                                <div id="payGateway" class="collapse" aria-labelledby="headingThree" data-parent="#payment">
+                                <div id="payGateway" class="collapse" aria-labelledby="headingThree"
+                                    data-parent="#payment">
                                     <div id="gatewayCancelValidation" class="card-body">
                                         <form method="POST" action="/cart">
                                             <h2>Total:&#8377;
@@ -549,8 +587,8 @@
                                             </div>
                                             <div class="d-flex my-2">
                                                 <div class="form-check">
-                                                    <input name="gatewayDeclaration" class="form-check-input" type="checkbox"
-                                                        value="" id="gatewayDeclaration" required>
+                                                    <input name="gatewayDeclaration" class="form-check-input"
+                                                        type="checkbox" value="" id="gatewayDeclaration" required>
                                                     <label class="form-check-label" for="gatewayDeclaration">
                                                         I hereby confirm that said above goods are being purchased for
                                                         my internal or personal purpose and not for re-sale.
@@ -562,9 +600,11 @@
                                                 <input type="hidden" name="paymentMode" value="gateway">
                                                 <input type="hidden" name="state" value="3" />
                                                 <input type="hidden" name="amount" value="5000" />
-                                                <button onclick='$("#gatewayCancel").val(true);$("#gatewayCancelValidation :input").prop("required",false);$("#gatewayOrder").click()'
+                                                <button
+                                                    onclick='$("#gatewayCancel").val(true);$("#gatewayCancelValidation :input").prop("required",false);$("#gatewayOrder").click()'
                                                     type="button" class="btn btn-dark">Cancel</button>
-                                                <button id="gatewayOrder" type="submit" class="mr-1 btn btn-primary">Confirm
+                                                <button id="gatewayOrder" type="submit"
+                                                    class="mr-1 btn btn-primary">Confirm
                                                     Order</button>
                                             </div>
                                         </form>
