@@ -27,11 +27,11 @@ class wishlist {
         productId = parseInt(productId);
         userId = parseInt(userId);
 
-        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productId", productId);
         filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "userid", userId);
         let existingEntry = await this._entity.readAllEntities(filter);
         if (existingEntry.length <= 0) {
-            return await this._entity.createEntity({ "productid": productId, "userid": userId });
+            return await this._entity.createEntity({ "productId": productId, "userid": userId });
         }
         return existingEntry[0];
     }
@@ -45,7 +45,7 @@ class wishlist {
     async deleteWishlist(productId, userId) {
         userId = parseInt(userId);
         productId = parseInt(productId);
-        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productId", productId);
         filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "userid", userId);
         return await this._entity.deleteEntities(filter);
     }
