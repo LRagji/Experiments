@@ -9,7 +9,7 @@ class wishlist {
 
         let propertyMap = {
             "id": "id",
-            "productid": '"productId"',
+            "productId": '"productId"',
             "userid": '"userId"'
         };
 
