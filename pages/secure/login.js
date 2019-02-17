@@ -84,7 +84,7 @@ class pageLogin extends page {
             return;
         }
 
-        await this.dal.createUser(req.body.registerSalutation,
+        await this.dal.users.createUser(req.body.registerSalutation,
             req.body.registerFirstName,
             req.body.registerLastName,
             req.body.registerPhone,
