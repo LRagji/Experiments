@@ -15,7 +15,9 @@ module.exports = {
           DB_USER:"tonystark",
           DB_DB:"tonystark",
           DB_PASS:"P@55word",
-          DB_HOST:"localhost"
+          DB_HOST:"localhost",
+          RAZORID:"rzp_test_pZJroOItvoUvqXasd",
+          RAZOR:"F5dGV8A6hJ0E2h21vZv2xrQTtrx"
       },
       env_production: {
         NODE_ENV: 'production'

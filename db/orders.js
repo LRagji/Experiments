@@ -1,4 +1,3 @@
-let orders = [];
 let eType = require('backend-entity').entity;
 class Orders {
 
@@ -7,6 +6,12 @@ class Orders {
         this.createOrder = this.createOrder.bind(this);
         this.getOrderById = this.getOrderById.bind(this);
         this.getTopOrdersForUser = this.getTopOrdersForUser.bind(this);
+        this.computeTotalPrice = this.computeTotalPrice.bind(this);
+        this.updateOrderStatusAndPayment = this.updateOrderStatusAndPayment.bind(this);
+        this.orderStatuses = {
+            "awaitingPayment": "Awaiting Payment",
+            "paymentReceived": "Payment Received"
+        };
 
         let propertyMap = {
             "id": "id",
@@ -20,61 +25,6 @@ class Orders {
         };
 
         this._entity = new eType("orders", propertyMap, pgPool);
-
-
-        if (orders.length === 0) {
-            for (let i = 0; i < 1; i++)
-                orders.push({
-                    "userId": 0,
-                    "date": 1545477745147,
-                    "status": "Awaiting Payment",
-                    "tax": 20,
-                    "products": [
-                        { "productId": 14, "quantity": 1, "offerprice": 100 / i },
-                        { "productId": 13, "quantity": 1, "offerprice": 10 * i },
-                        { "productId": i, "quantity": 1, "offerprice": 10 / i },
-                        { "productId": 12, "quantity": 1, "offerprice": 100 * i }
-                    ],
-                    "shippingDetails": {
-                        "billing": {
-                            "bSalutation": "Mr.",
-                            "bFirstName": "Laukik",
-                            "bLastName": "Ragji",
-                            "bAdd1": "Add1",
-                            "bAdd2": "Add2",
-                            "bAdd3": "Add3",
-                            "bCity": "Mumbai",
-                            "bPincode": "400093",
-                            "bState": "Jammu & Kashmir",
-                            "bMobile": "9819569622",
-                            "bGstin": "123456789012345"
-                        },
-                        "shipping": {
-                            "sSalutation": "Mr.",
-                            "sFirstName": "Laukik",
-                            "sLastName": "Ragji",
-                            "sAdd1": "Add1",
-                            "sAdd2": "Add2",
-                            "sAdd3": "Add3",
-                            "sCity": "Mumbai",
-                            "sPincode": "400093",
-                            "sState": "Jammu & Kashmir",
-                            "sMobile": "9819569622",
-                            "sGstin": "123456789012345"
-                        }
-                    },
-                    "payment": {
-                        "type": "cheque",
-                        "no": "335562",
-                        "date": "2018-12-22",
-                        "bank name": "Hello Bank",
-                        "bank branch": "Some Branch",
-                        "deposited bank": "Canara",
-                        "amount": "5000"
-                    },
-                    "id": i
-                });
-        }
     }
 
     static singleton(pgPool) {
@@ -88,7 +38,7 @@ class Orders {
         //TODO:Compare order amount with calculated product amount from all products.
         if (order.hasOwnProperty("state")) delete order.state;
         order.date = Date.now();
-        order.status = "Awaiting Payment";
+        order.status = this.orderStatuses.awaitingPayment;
         let createdOrder = await this._entity.createEntity(order);
         return createdOrder.id;
     }
@@ -97,11 +47,23 @@ class Orders {
         return await this._entity.readEntitiesById(orderId);
     }
 
+    async updateOrderStatusAndPayment(order) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", order.id);
+        this._entity.updateEntity({
+            "status": order.status,
+            "payment": order.payment
+        }, filter);
+    }
+
     async getTopOrdersForUser(userId, topSize) {
 
         let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "userId", userId);
         let ordersForCurrentUser = await this._entity.readPaginatedEntities(0, topSize, filter);
         return ordersForCurrentUser.results;
+    }
+
+    computeTotalPrice(order) {
+        return order.products.reduce((acc, ele) => acc + (ele.offerprice * ele.quantity), 0)
     }
 
 }

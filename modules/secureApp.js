@@ -1,5 +1,7 @@
 let modPageSuccess = require('../pages/secure/success');
 let pageSuccess = undefined;
+let modPageGateway = require('../pages/secure/gateway');
+let pageGateway = undefined;
 let modPageLogin = require('../pages/secure/login');
 let pageLogin = undefined;
 let modPageProfile = require('../pages/secure/profile');
@@ -44,6 +46,7 @@ class secureapp {
         //General User Pages
         pageOrders = new modPageOrders(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageGateway = new modPageGateway(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageLogin = new modPageLogin(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pageProfile = new modPageProfile(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
         pagePassword = new modPagePassword(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
