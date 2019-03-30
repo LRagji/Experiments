@@ -26,6 +26,11 @@ class pageHome extends page {
         pageData[this.const.bestSellers] = await this.dal.products.readAllProducts(0, this.const.maxProductsToShowOnScreen, { equal: { bestSeller: true } });
         pageData[this.const.newArrivals] = await this.dal.products.readAllProducts(0, this.const.maxProductsToShowOnScreen, { equal: { newArrivals: true } });
         pageData[this.const.recentlyBought] = recentlyPurchasedProducts;
+        pageData.menuData = {
+            "Animal": [{ "name": "Dog", "link": "https://www.npmjs.com/package/ejs" }, { "name": "Cat", "link": "https://www.npmjs.com/package/ejs" }, { "name": "Mouse", "link": "https://www.npmjs.com/package/ejs" }],
+            "Number": [{ "name": "1", "link": "https://www.npmjs.com/package/ejs" }, { "name": "2", "link": "https://www.npmjs.com/package/ejs" }, { "name": "3", "link": "https://www.npmjs.com/package/ejs" }],
+            "Character": [{ "name": "A", "link": "https://www.npmjs.com/package/ejs" }, { "name": "B", "link": "https://www.npmjs.com/package/ejs" }, { "name": "C", "link": "https://www.npmjs.com/package/ejs" }]
+        };
         renderView('../pages/index', pageData);
     }
 }
