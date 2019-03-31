@@ -10,10 +10,12 @@ class categories {
         this.updateCategory = this.updateCategory.bind(this);
         this.readCategoryId = this.readCategoryId.bind(this);
         this.retriveCategoryByName = this.retriveCategoryByName.bind(this);
+        this.readAllMenuCategories = this.readAllMenuCategories.bind(this);
 
         let propertyMap = {
             "id": "id",
-            "name": "name"
+            "name": "name",
+            "showonmenu": "showonmenu"
         };
 
         this._entity = new eType("categories", propertyMap, pgPool);
@@ -26,10 +28,11 @@ class categories {
         return this.instance;
     }
 
-    async createCategory(name) {
+    async createCategory(name, showCategoryOnMenu = 0) {
         let result = await this.retriveCategoryByName(name);
         if (result === undefined) throw new Error(name + " name already exists.");
-        return await this._entity.createEntity({ "name": name });
+        if (showCategoryOnMenu !== 1) showCategoryOnMenu = 0;
+        return await this._entity.createEntity({ "name": name, "showonmenu": showCategoryOnMenu });
     }
 
     async retriveCategoryByName(name) {
@@ -45,10 +48,17 @@ class categories {
         return await this._entity.readAllEntities({});
     }
 
-    async updateCategory(id, name) {
+    async readAllMenuCategories() {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "showonmenu", 1);
+        return await this._entity.readAllEntities(filter);
+    }
+
+    async updateCategory(id, name, showCategoryOnMenu) {
         id = parseInt(id);
+        showCategoryOnMenu = parseInt(showCategoryOnMenu);
+        if (showCategoryOnMenu !== 1) showCategoryOnMenu = 0;
         let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", id);
-        return await this._entity.updateEntity({ "name": name }, filter);
+        return await this._entity.updateEntity({ "name": name, "showonmenu": showCategoryOnMenu }, filter);
     }
 }
 

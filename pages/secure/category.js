@@ -39,7 +39,9 @@ class pageCategory extends adminPage {
             return;
         }
 
-        await this.dal.categories.updateCategory(req.body.id, req.body.name);
+        req.body.showonmenu = req.body.showonmenu === "on" ? 1 : 0;
+
+        await this.dal.categories.updateCategory(req.body.id, req.body.name, req.body.showonmenu);
         renderRedirect("/secure/category");
         return;
     }
@@ -52,7 +54,7 @@ class pageCategory extends adminPage {
             return;
         }
 
-        await this.dal.categories.createCategory(req.body.name);
+        await this.dal.categories.createCategory(req.body.name, 0);
         renderRedirect("/secure/category");
         return;
     }

@@ -43,7 +43,7 @@ async function InsertMockProducts(numberOfProducts) {
 
 async function InsertCategories(numberOfCategories) {
     for (let i = 0; i < numberOfCategories; i++) {
-        await categories.createCategory("Category " + i);
+        await categories.createCategory("Category " + i, 0);
     }
 }
 
