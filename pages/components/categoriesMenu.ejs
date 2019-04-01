@@ -12,9 +12,11 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">${category}</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    ${menuData[category].map((subCategory)=>`<a class="dropdown-item" href="${subCategory.link}">${subCategory.name}</a>`).join("")}
+                    ${menuData[category].map((subCategory)=>`<form class="dropdown-item" action="/search" method="POST"><input type="hidden" name="subcat" value="${subCategory.id}"> <button type="Submit" class="btn btn-link pl-0">${subCategory.name}</button></form>`).join("")}
                     </div>
                     </li>`%>
+                <% } else { %>
+                    <%-`<form class="nav-item" action="/search" method="POST"><input type="hidden" name="cat" value="1"> <button type="Submit" class="btn btn-link pl-0">${category}</button></form>`%>
                 <% } %>
             <% }) %>
         </ul>

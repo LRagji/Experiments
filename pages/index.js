@@ -28,8 +28,7 @@ class pageHome extends page {
         let subCategories = await this.dal.subCategories.readAllSubCategories();
         let menuCategories = await this.dal.categories.readAllMenuCategories();
         menuCategories.forEach((category) => {
-            menuData[category.name] = subCategories.filter((subCat) => subCat.catid === category.id)
-            .map((subCat) => { return { "name": subCat.name, "link": "#" }; })
+            menuData[category.name] = subCategories.filter((subCat) => subCat.catid === category.id);
         })
         pageData.menuData = menuData;
 
