@@ -7,6 +7,7 @@ let propertyMap = {
     "price": "price",
     "name": "name",
     "categories": "categories",
+    "subcategories": "subcategories",
     "brand": "brand",
     "healthtopics": '"healthTopics"'
 };
@@ -200,7 +201,7 @@ class Products {
 
         skipOrdering = skipOrdering === true;
 
-        return queryBuilder.constructWhereClause(filter, argumentArray) + (skipOrdering ? "" :(" "+ queryBuilder.constructOrderByClause(filter)));
+        return queryBuilder.constructWhereClause(filter, argumentArray) + (skipOrdering ? "" : (" " + queryBuilder.constructOrderByClause(filter)));
     }
 
     _rowToProduct(row) {
