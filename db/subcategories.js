@@ -8,7 +8,7 @@ class subcategories {
         this.readAllSubCategories = this.readAllSubCategories.bind(this);
         this.createSubCategory = this.createSubCategory.bind(this);
         this.updateSubCategory = this.updateSubCategory.bind(this);
-        //this.readSubCategoryId = this.readSubCategoryId.bind(this);
+        this.readSubCategoryId = this.readSubCategoryId.bind(this);
 
         let propertyMap = {
             "id": "id",
@@ -41,6 +41,10 @@ class subcategories {
 
     async readAllSubCategories() {
         return await this._entity.readAllEntities({});
+    }
+
+    async readSubCategoryId(id) {
+        return await this._entity.readEntitiesById(id);
     }
 
     async updateSubCategory(id, categoryId, subCatName) {
