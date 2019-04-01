@@ -42,6 +42,31 @@ class pageSearch extends page {
             searchText += (searchText === "" ? "" : ", ") + "manufactured by:" + brand.name;
         }
 
+        if (!isNaN(parseInt(req.body.subcat)) && !isNaN(parseInt(req.body.cat))) {
+            req.body.subcat = parseInt(req.body.subcat);
+            req.body.cat = parseInt(req.body.cat);
+            let category = await this.dal.categories.readCategoryId(req.body.cat);
+            let subcategory = await this.dal.subCategories.readSubCategoryId(req.body.subcat);
+            if (subcategory === undefined) {
+                throw new Error("Invalid search parameter Sub-category Id.")
+            }
+            if (category === undefined) {
+                throw new Error("Invalid search parameter Category Id.")
+            }
+
+            filter.containsArr = { "subcategories": [subcategory.id], "categories": [category.id] };
+            searchText += (searchText === "" ? "" : ", ") + "sub categorized as " + subcategory.name;
+            
+        } else if (!isNaN(parseInt(req.body.cat))) {
+            req.body.cat = parseInt(req.body.cat);
+            let category = await this.dal.categories.readCategoryId(req.body.cat);
+            if (category === undefined) {
+                throw new Error("Invalid search parameter Category Id.")
+            }
+            filter.containsArr = { "categories": [category.id] };
+            searchText += (searchText === "" ? "" : ", ") + "categorized as " + category.name;
+        }
+
         let optimizedFilter = this.util.cloneFilterForNetworkTransport(filter);
         if (optimizedFilter === undefined) {
             throw new Error("Invalid search request.")

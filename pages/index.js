@@ -24,13 +24,12 @@ class pageHome extends page {
             recentlyPurchasedProducts = await this.dal.products.readProducts(cookieData);
         }
 
-        let menuData = {};
         let subCategories = await this.dal.subCategories.readAllSubCategories();
         let menuCategories = await this.dal.categories.readAllMenuCategories();
-        menuCategories.forEach((category) => {
-            menuData[category.name] = subCategories.filter((subCat) => subCat.catid === category.id);
+        menuCategories.map((category) => {
+            category.subCategories = subCategories.filter((subCat) => subCat.catid === category.id);
         })
-        pageData.menuData = menuData;
+        pageData.menuData = menuCategories;
 
         pageData[this.const.bestSellers] = await this.dal.products.readAllProducts(0, this.const.maxProductsToShowOnScreen, { equal: { bestSeller: true } });
         pageData[this.const.newArrivals] = await this.dal.products.readAllProducts(0, this.const.maxProductsToShowOnScreen, { equal: { newArrivals: true } });
