@@ -16,7 +16,7 @@
                     </div>
                     </li>`%>
                 <% } else { %>
-                    <%-`<form class="nav-item" action="/search" method="POST"><input type="hidden" name="cat" value="${category.id}"> <button type="Submit" class="btn btn-link pl-0">${category.name}</button></form>`%>
+                    <%-`<form class="nav-item" action="/search" method="POST"><input type="hidden" name="cat" value="${category.id}"> <button type="Submit" class="btn btn-link text-secondary pl-0">${category.name}</button></form>`%>
                 <% } %>
             <% }) %>
         </ul>
