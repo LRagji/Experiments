@@ -11,6 +11,7 @@ class users {
         this.updateUserActivationState = this.updateUserActivationState.bind(this);
         this.updateUserAccountType = this.updateUserAccountType.bind(this);
         this.resetUserAccountPassword = this.resetUserAccountPassword.bind(this);
+        this.getUsersByIds = this.getUsersByIds.bind(this);
 
         let propertyMap = {
             "id": "id",
@@ -47,6 +48,11 @@ class users {
             type: type
         }
         return await this._entity.createEntity(newUser);
+    }
+
+    async getUsersByIds(ids) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "in", "id", ids);
+        return await this._entity.readAllEntities(filter);
     }
 
     async getUserByEmail(email) {
