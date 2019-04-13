@@ -13,6 +13,7 @@ let healthVideos = require('./healthvideos').singleton(pgPool);
 let wishlist = require('./wishlist').singleton(pgPool);
 let faqs = require('./faqs').singleton(pgPool);
 let users = require('./users').singleton(pgPool);
+let feedback = require('./feedback').singleton(pgPool);
 
 // TODO:Call the appropiate API
 class DAL {
@@ -34,9 +35,10 @@ class DAL {
         this.wishlist = wishlist;
         this.faqs = faqs;
         this.users = users;
+        this.feedback = feedback;
 
         this.pool = this.pool.bind(this);
-      
+
 
         //TODO:Delete this mock data
 
