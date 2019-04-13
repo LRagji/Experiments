@@ -50,7 +50,7 @@ async function InsertCategories(numberOfCategories) {
 
 async function InsertFeedback(numberOfComments) {
     for (let i = 0; i < numberOfComments; i++) {
-        await feedback.createFeedback(0, i, 5, "Comment number: " + i);
+        await feedback.createFeedback(i, i, 5, "Comment number: " + i);
     }
 }
 
