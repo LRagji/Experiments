@@ -24,7 +24,7 @@
   },
   "homepage": "",
   "dependencies": {
-    "backend-entity": "0.0.1",
+    "backend-entity": "0.0.2",
     "body-parser": "^1.18.3",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
