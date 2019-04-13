@@ -141,6 +141,13 @@
                     </div>
                 </div>
 
+                <!-- Feedback -->
+                <div class="row my-1" >
+                    <div class="col" >
+                        <%- include('components/feedback',pageData.product) %>
+                    </div>
+                </div>
+
                 <!-- Related Products -->
                 <div class="row my-1 py-2" <%- pageData.product.meta.relatedProducts.length<1?'hidden':'' %>>
                     <div class="col">

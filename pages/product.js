@@ -32,6 +32,10 @@ class pageProduct extends page {
 
             product.brand = await this.dal.brands.readBrandById(product.brand);
 
+            let feedback = await this.dal.feedback.getApprovedCommnetsFor(product.id)
+            //"{"id":4,"userid":0,"rating":5,"productid":3,"timestamp":"1555142219584","comment":"Comment number: 3","status":0}"
+            product.feedback = feedback;
+
             let pageData = {};
             pageData[this.const.product] = product;
             renderView('../pages/product', pageData);

@@ -7,7 +7,7 @@ class feedback {
         this.createFeedback = this.createFeedback.bind(this);
         // this.updateHealthLink = this.updateHealthLink.bind(this);
         // this.deleteHealthLink = this.deleteHealthLink.bind(this);
-        // this.getAllHealthLinks = this.getAllHealthLinks.bind(this);
+         this.getApprovedCommnetsFor = this.getApprovedCommnetsFor.bind(this);
         // this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
         // this.isNameTaken = this.isNameTaken.bind(this);
 
@@ -31,10 +31,6 @@ class feedback {
         return this.instance;
     }
 
-    // async getAllHealthLinks() {
-    //     return await this._entity.readAllEntities({});
-    // }
-
     async createFeedback(userid, productid, rating, comment) {
 
         let feedbackObj = {
@@ -46,6 +42,13 @@ class feedback {
             "status": 0//Inactive
         };
         return await this._entity.createEntity(feedbackObj);
+    }
+
+    async getApprovedCommnetsFor(productId) {
+        productId = parseInt(productId, 10);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
+        filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "status", 1);
+        return await this._entity.readAllEntities(filter);
     }
 
     // async deleteHealthLink(name) {
