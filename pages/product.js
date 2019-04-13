@@ -33,7 +33,17 @@ class pageProduct extends page {
             product.brand = await this.dal.brands.readBrandById(product.brand);
 
             let feedback = await this.dal.feedback.getApprovedCommnetsFor(product.id)
-            //"{"id":4,"userid":0,"rating":5,"productid":3,"timestamp":"1555142219584","comment":"Comment number: 3","status":0}"
+            let distinctUserIds = new Set();
+            feedback.every((f) => distinctUserIds.add(f.userid));
+            distinctUserIds = [...distinctUserIds];
+            let users = await this.dal.users.getUsersByIds(distinctUserIds);
+            feedback = feedback.map((f) => {
+                let cUser = users.find((u) => u.id === f.userid);
+                if (cUser !== undefined) {
+                    f.userid = cUser.salutation + " " + cUser.first + " " + cUser.last;
+                }
+                return f;
+            })
             product.feedback = feedback;
 
             let pageData = {};
