@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include ../head %>
+
+    <title>Health Mall-Feedback</title>
+</head>
+
+<body class="bg-light">
+    <!-- Main Nav -->
+    <% include ../header %>
+    <div class="container mt-5">
+        <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap">
+        <% pageData.fd.forEach(function(product){ %>
+            <%-`
+            <div class="card m-2 myshadow myproductcard">
+                    <a href="/product?pid=${product.id}">
+                        <center>
+                            <img class="productThumbnail" src="../static/resources/images/products/${product.image}"
+                                style="max-width:150px;max-height:170px" alt="Product Image">
+                        </center>
+                    </a>
+                    <div class="card-body bg-light">
+                        <strong>${product.name}</strong>
+
+                        <div class="d-flex justify-content-center align-items-center my-2">
+                           <button type="button" class="btn btn-success">
+                            Pending Reviews <span class="badge badge-light">${product.reviewPendingCount}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `%>
+            <% }); %>    
+        </div>
+    </div>
+    <!-- Footer -->
+    <% include ../footer %>
+</body>
+
+</html>

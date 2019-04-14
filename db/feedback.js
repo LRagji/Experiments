@@ -51,6 +51,11 @@ class feedback {
         return await this._entity.readAllEntities(filter);
     }
 
+    async getAllPendingComments() {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "status", 0);
+        return await this._entity.readAllEntities(filter);
+    }
+
     // async deleteHealthLink(name) {
     //     let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
     //     let result = await this._entity.deleteEntities(filter);

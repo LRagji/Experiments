@@ -40,6 +40,7 @@ module.exports = {
     healthVideoDetail:"hvd",
     wishlist:"wl",
     ingredients:'i',
+    feedbackData:"fd",
     brands:"b",
     brandError:"be",
     categories:"cat",

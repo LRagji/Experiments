@@ -34,36 +34,39 @@ let modPageSubCategory = require('../pages/secure/subcategory');
 let pageSubCategory = undefined;
 let modPageHealthVideos = require('../pages/secure/healthvideos');
 let pageHealthVideos = undefined;
-let wishlistPage = undefined;
 let modWishlistPage = require('../pages/secure/wishlist');
+let wishlistPage = undefined;
+let modFeedbackPage = require('../pages/secure/feedback');
+let feedbackPage = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
 
         //TODO: Move all of these page inits to index.js
-        secureApi = new modSecureApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        secureApi = new modSecureApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
 
         //General User Pages
-        pageOrders = new modPageOrders(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageGateway = new modPageGateway(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageLogin = new modPageLogin(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageProfile = new modPageProfile(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pagePassword = new modPagePassword(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        wishlistPage = new modWishlistPage(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageOrders = new modPageOrders(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageSuccess = new modPageSuccess(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageGateway = new modPageGateway(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageLogin = new modPageLogin(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageProfile = new modPageProfile(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pagePassword = new modPagePassword(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        wishlistPage = new modWishlistPage(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
 
         //Admin Pages
-        pageProducts = new modPageProducts(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageProducts = new modPageProducts(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
         pageBanner = new modPageBanner(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
-        pageUser = new modPageUser(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageHealthLinks = new modPageApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageFAQs = new modPageFAQs(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageSettings = new modPageSettings(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageHealthTopics = new modPageHealthTopics(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageBrands = new modPageBrands(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageCategory = new modPageCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageSubCategory = new modPageSubCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
-        pageHealthVideos = new modPageHealthVideos(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService,textService);
+        pageUser = new modPageUser(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageHealthLinks = new modPageApi(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageFAQs = new modPageFAQs(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageSettings = new modPageSettings(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageHealthTopics = new modPageHealthTopics(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageBrands = new modPageBrands(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageCategory = new modPageCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageSubCategory = new modPageSubCategory(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        pageHealthVideos = new modPageHealthVideos(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        feedbackPage = new modFeedbackPage(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
     }
 }
 

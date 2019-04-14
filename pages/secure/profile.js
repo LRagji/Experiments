@@ -100,7 +100,11 @@ class pageProfile extends securePage {
                 url: "/secure/healthvideos",
                 name: "Health Videos"
             });
-          
+            menuItems.push({
+                icon: "far fa-comment-dots",
+                url: "/secure/feedback",
+                name: "Pending Reviews"
+            });
         }
         return menuItems;
     }
