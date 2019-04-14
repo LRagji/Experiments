@@ -21,17 +21,33 @@ class pageFeedback extends adminPage {
 
     async renderFeedback(req, renderView) {
         let pendingComments = await this.dal.feedback.getAllPendingComments();
+
+        //Update Products
         let productReviewCountMap = new Map();
         pendingComments.every((f) => productReviewCountMap.set(f.productid, (productReviewCountMap.has(f.productid) ? productReviewCountMap.get(f.productid) + 1 : 1)));
         let products = await this.dal.products.readProducts([...productReviewCountMap.keys()]);
-        products = products.map((p) => {
-            p.reviewPendingCount = productReviewCountMap.get(p.id);
-            if (p.reviewPendingCount === undefined) p.reviewPendingCount = 0;
-            return p;
+        pendingComments = pendingComments.map((comment) => {
+            let productId = comment.productid;
+            comment.productid = products.find((p) => p.id === productId);
+            if (comment.productid === undefined) comment.productid = productId;
+            return comment;
+        })
+
+        //Update Users
+        let distinctUserIds = new Set();
+        pendingComments.every((f) => distinctUserIds.add(f.userid));
+        distinctUserIds = [...distinctUserIds];
+        let users = await this.dal.users.getUsersByIds(distinctUserIds);
+        pendingComments = pendingComments.map((comment) => {
+            let cUser = users.find((u) => u.id === comment.userid);
+            if (cUser !== undefined) {
+                comment.userid = cUser.salutation + " " + cUser.first + " " + cUser.last;
+            }
+            return comment;
         })
 
         let pageData = {};
-        pageData[this.const.feedbackData] = products;
+        pageData[this.const.feedbackData] = pendingComments;
         // pageData[this.const.FAQSError] = req.flash(this.const.FAQSError);
         renderView('../pages/secure/feedback', pageData);
     }

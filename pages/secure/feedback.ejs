@@ -11,29 +11,27 @@
     <!-- Main Nav -->
     <% include ../header %>
     <div class="container mt-5">
-        <div id="resultContainer" class="d-flex justify-content-center justify-content-md-around flex-wrap">
-        <% pageData.fd.forEach(function(product){ %>
-            <%-`
-            <div class="card m-2 myshadow myproductcard">
-                    <a href="/product?pid=${product.id}">
-                        <center>
-                            <img class="productThumbnail" src="../static/resources/images/products/${product.image}"
-                                style="max-width:150px;max-height:170px" alt="Product Image">
-                        </center>
-                    </a>
-                    <div class="card-body bg-light">
-                        <strong>${product.name}</strong>
-
-                        <div class="d-flex justify-content-center align-items-center my-2">
-                           <button type="button" class="btn btn-success">
-                            Pending Reviews <span class="badge badge-light">${product.reviewPendingCount}</span>
-                            </button>
-                        </div>
+    <div class="d-flex"><h4>Feedback Pending Approval:</h4></div>
+       <% pageData.fd.forEach(function(comment){ %>
+        <%- `<div class="card my-2" > 
+                <div class="card-header" >
+                    <a href="/product?pid=${comment.productid.id}">${comment.productid.name}</a>
+                </div>
+                <div class="card-body" >
+                    <blockquote class="blockquote">
+                                <div class="flexbox small">
+                                    <b>${comment.userid}</b> <cite>on ${new Date(parseInt(comment.timestamp,10)).toDateString()}</cite>
+                                    <img src="/static/resources/images/stars-${comment.rating}.gif" />
+                                </div>
+                                <p class="mb-0 text-break small">${comment.comment}</p>
+                    </blockquote>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-success">Approve</button>
                     </div>
                 </div>
-            `%>
-            <% }); %>    
-        </div>
+            </div>
+            ` %>
+    <% }); %>
     </div>
     <!-- Footer -->
     <% include ../footer %>
