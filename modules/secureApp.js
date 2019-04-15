@@ -38,6 +38,8 @@ let modWishlistPage = require('../pages/secure/wishlist');
 let wishlistPage = undefined;
 let modFeedbackPage = require('../pages/secure/feedback');
 let feedbackPage = undefined;
+let modCommentPage = require('../pages/secure/comment');
+let commentPage = undefined;
 
 class secureapp {
     constructor(_secureApp, basePath, dataAccessService, utilityService, constantsService, textService, authenticationService) {
@@ -53,6 +55,7 @@ class secureapp {
         pageProfile = new modPageProfile(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
         pagePassword = new modPagePassword(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
         wishlistPage = new modWishlistPage(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
+        commentPage = new modCommentPage(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);
 
         //Admin Pages
         pageProducts = new modPageProducts(_secureApp, basePath, authenticationService, dataAccessService, utilityService, constantsService, textService);

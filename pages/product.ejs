@@ -143,9 +143,18 @@
 
                 <!-- Feedback -->
                 <div class="row my-1" >
-                    <div class="col" >
-                        <%- include('components/feedback',pageData.product) %>
-                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col" >
+                                <%- include('components/feedback',pageData.product) %>
+                            </div>
+                         </div>
+                           <div class="row">
+                            <div class="col" >
+                                <a href="/secure/comment" class="btn btn-link">Add new comment</a>
+                            </div>
+                         </div>
+                     </div>
                 </div>
 
                 <!-- Related Products -->
