@@ -5,7 +5,7 @@ class pageFeedback extends adminPage {
 
         this.loadRoutes = this.loadRoutes.bind(this);
         this.renderFeedback = this.renderFeedback.bind(this);
-        // this.handleEdit = this.handleEdit.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
         // this.handleDelete = this.handleDelete.bind(this);
         // this.handleCreate = this.handleCreate.bind(this);
 
@@ -14,7 +14,7 @@ class pageFeedback extends adminPage {
 
     loadRoutes(server, basePath) {
         server.get(basePath + '/feedback', this.safeRender(this.renderFeedback));
-        // server.post(basePath + '/faqs/edit', this.safeRender(this.handleEdit));
+        server.post(basePath + '/feedback/edit', this.safeRender(this.handleEdit));
         // server.post(basePath + '/faqs/delete', this.safeRender(this.handleDelete));
         // server.post(basePath + '/faqs/new', this.safeRender(this.handleCreate));
     }
@@ -64,30 +64,16 @@ class pageFeedback extends adminPage {
     //     return;
     // }
 
-    // async handleEdit(req, renderView, renderRedirect) {
-    //     if (this.util.validateIsWholeNumberBetween(req.body.id, 5000, 1) === false) {
-    //         req.flash(this.const.FAQSError, "Invalid Input parameter Id.");
-    //         renderRedirect("/secure/faqs");
-    //         return;
-    //     }
+    async handleEdit(req, renderView, renderRedirect) {
+        if (this.util.validateIsWholeNumberBetween(req.body.id, 5000, 1) === false) {
+            throw new Error("Invalid input parameter Id.");
 
-    //     if (this.util.validateLength(req.body.Q, 200, 1) === false) {
-    //         req.flash(this.const.FAQSError, "Invalid Input parameter Question length.");
-    //         renderRedirect("/secure/faqs");
-    //         return;
-    //     }
+        }
 
-    //     if (this.util.validateLength(req.body.A, 1500, 1) === false) {
-    //         req.flash(this.const.FAQSError, "Answers length should be between 1, to 1000 characters.");
-    //         renderRedirect("/secure/faqs");
-    //         return;
-    //     }
-
-    //     await this.dal.faqs.updateFAQ(parseInt(req.body.id), req.body.Q, req.body.A);
-    //     renderRedirect("/secure/faqs");
-    //     return;
-
-    // }
+        await this.dal.feedback.approveComment(parseInt(req.body.id));
+        renderRedirect("/secure/feedback");
+        return;
+    }
 
     // async handleCreate(req, renderView, renderRedirect) {
 

@@ -11,7 +11,7 @@
     <!-- Main Nav -->
     <% include ../header %>
     <div class="container mt-5">
-    <div class="d-flex"><h4>Feedback Pending Approval:</h4></div>
+    <div class="d-flex"><h4>Feedback Pending Approval:<%-pageData.fd.length%></h4></div>
        <% pageData.fd.forEach(function(comment){ %>
         <%- `<div class="card my-2" > 
                 <div class="card-header" >
@@ -26,7 +26,10 @@
                                 <p class="mb-0 text-break small">${comment.comment}</p>
                     </blockquote>
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-success">Approve</button>
+                    <form action="feedback/edit" method="POST">
+                        <input type="hidden" name="id" value="${comment.id}"></input>
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -5,9 +5,9 @@ class feedback {
     constructor(pgPool) {
 
         this.createFeedback = this.createFeedback.bind(this);
-        // this.updateHealthLink = this.updateHealthLink.bind(this);
+        this.approveComment = this.approveComment.bind(this);
         // this.deleteHealthLink = this.deleteHealthLink.bind(this);
-         this.getApprovedCommnetsFor = this.getApprovedCommnetsFor.bind(this);
+        this.getApprovedCommnetsFor = this.getApprovedCommnetsFor.bind(this);
         // this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
         // this.isNameTaken = this.isNameTaken.bind(this);
 
@@ -47,13 +47,26 @@ class feedback {
     async getApprovedCommnetsFor(productId) {
         productId = parseInt(productId, 10);
         let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
-        filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "status", 1);
+        filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "status", 1);
         return await this._entity.readAllEntities(filter);
     }
 
     async getAllPendingComments() {
         let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "status", 0);
         return await this._entity.readAllEntities(filter);
+    }
+
+    async approveComment(commentId) {
+        commentId = parseInt(commentId, 10);
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", commentId);
+        let commentObj = { "status": 1 };
+        let result = await this._entity.updateEntity(commentObj, filter);
+        if (result === undefined) {
+            throw new Error("Feedback " + commentId + " doesnot exists.");
+        }
+        else {
+            return result;
+        }
     }
 
     // async deleteHealthLink(name) {
