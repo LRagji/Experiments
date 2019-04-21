@@ -11,29 +11,23 @@ class pageComment extends securePage {
     }
 
     loadRoutes(server, basePath) {
-        server.get(basePath + '/comment', this.safeRender(this.render));
-        server.post(basePath + '/comment', this.safeRender(this.handleCreate));
+        server.post(basePath + '/comment', this.safeRender(this.render));
+        server.post(basePath + '/comment/new', this.safeRender(this.handleCreate));
     }
 
     async render(req, renderView) {
+        let product = await this.dal.products.readProductById(req.body.pid);
+        product.brand = await this.dal.brands.readBrandById(product.brand);
         let pageData = {};
-        // let productIds = await this.dal.wishlist.readAllWishlist(req.user.id);
-        // productIds = productIds.map(e => e.productId);
-        // let wishedProducts = await this.dal.products.readProducts(productIds);
-        // if (wishedProducts.length < productIds.length) {
-        //     let productsToRemove = productIds.filter((pid) => wishedProducts.find((p) => p.id === pid) === undefined);
-        //     await Promise.all(productsToRemove.map((productId) => {
-        //         this.dal.wishlist.deleteWishlist(productId, req.user.id);
-        //     }));
-        // }
-        // pageData[this.const.wishlist] = wishedProducts;
+        pageData[this.const.product] = product;
         renderView('../pages/secure/comment', pageData);
     }
 
     async handleCreate(req, renderView, renderRedirect) {
-        req.body.id = parseInt(req.body.id);
-        await this.dal.wishlist.deleteWishlist(req.body.id, req.user.id);
-        renderRedirect("/secure/wishlist");
+        req.body.pid = parseInt(req.body.pid);
+        req.body.rating = parseInt(req.body.rating);
+        await this.dal.feedback.createFeedback(req.user.id, req.body.pid, req.body.rating, req.body.comment);
+        renderRedirect("/product?pid=" + req.body.pid);
         return;
     }
 }

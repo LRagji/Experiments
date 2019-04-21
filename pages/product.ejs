@@ -151,7 +151,10 @@
                          </div>
                            <div class="row">
                             <div class="col" >
-                                <a href="/secure/comment" class="btn btn-link">Add new comment</a>
+                                  <form action="/secure/comment" method="POST">
+                    <input type="hidden" name="pid" value="<%-pageData.product.id %>" />
+                    <button type="Submit" class="btn btn-success">Add comment</button>
+                </form>
                             </div>
                          </div>
                      </div>
