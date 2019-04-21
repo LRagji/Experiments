@@ -7,7 +7,7 @@ class feedback {
         this.createFeedback = this.createFeedback.bind(this);
         this.approveComment = this.approveComment.bind(this);
         // this.deleteHealthLink = this.deleteHealthLink.bind(this);
-        this.getApprovedCommnetsFor = this.getApprovedCommnetsFor.bind(this);
+        this.getApprovedCommnetsForProductIdSortedByLatestFirst = this.getApprovedCommnetsForProductIdSortedByLatestFirst.bind(this);
         // this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
         // this.isNameTaken = this.isNameTaken.bind(this);
 
@@ -44,10 +44,11 @@ class feedback {
         return await this._entity.createEntity(feedbackObj);
     }
 
-    async getApprovedCommnetsFor(productId) {
+    async getApprovedCommnetsForProductIdSortedByLatestFirst(productId) {
         productId = parseInt(productId, 10);
         let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
         filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "status", 1);
+        filter = this._entity.filterBuilder.sortByConditionFor(filter, "id", false, 0);
         return await this._entity.readAllEntities(filter);
     }
 
