@@ -32,7 +32,7 @@ class pageProduct extends page {
 
             product.brand = await this.dal.brands.readBrandById(product.brand);
 
-            let feedback = await this.dal.feedback.getApprovedCommnetsForProductIdSortedByLatestFirst(product.id)
+            let feedback = await this.dal.feedback.getApprovedCommentsForProductIdSortedByLatestFirst(product.id)
             let distinctUserIds = new Set();
             feedback.every((f) => distinctUserIds.add(f.userid));
             distinctUserIds = [...distinctUserIds];

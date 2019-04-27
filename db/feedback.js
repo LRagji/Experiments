@@ -1,5 +1,18 @@
 let eType = require('backend-entity').entity;
 
+Array.prototype.mutate = function (predicate) {
+    let idx = 0;
+    let accumulator = [];
+    while (idx < this.length) {
+        if (predicate(this[idx])) {
+            accumulator.push(idx);
+        }
+        idx++;
+    }
+
+    return accumulator.map((fetchIdx, offsetIdx) => this.splice(fetchIdx - offsetIdx, 1)[0]);
+}
+
 class feedback {
 
     constructor(pgPool) {
@@ -7,7 +20,8 @@ class feedback {
         this.createFeedback = this.createFeedback.bind(this);
         this.approveComment = this.approveComment.bind(this);
         // this.deleteHealthLink = this.deleteHealthLink.bind(this);
-        this.getApprovedCommnetsForProductIdSortedByLatestFirst = this.getApprovedCommnetsForProductIdSortedByLatestFirst.bind(this);
+        this.getApprovedCommentsForProductIdSortedByLatestFirst = this.getApprovedCommentsForProductIdSortedByLatestFirst.bind(this);
+        this.arrangeReplies = this.arrangeReplies.bind(this);
         // this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
         // this.isNameTaken = this.isNameTaken.bind(this);
 
@@ -18,7 +32,8 @@ class feedback {
             "productid": "productid",
             "timestamp": "timestamp",
             "comment": "comment",
-            "status": "status"
+            "status": "status",
+            "reply": "reply"
         };
 
         this._entity = new eType("feedback", propertyMap, pgPool);
@@ -39,17 +54,47 @@ class feedback {
             "productid": productid,
             "timestamp": Date.now(),
             "comment": comment,
-            "status": 0//Inactive
+            "status": 0,//Inactive
+            "reply": -1 //Since this is feedback -1 else reference id of the reply comment.
         };
         return await this._entity.createEntity(feedbackObj);
     }
 
-    async getApprovedCommnetsForProductIdSortedByLatestFirst(productId) {
+    async getApprovedCommentsForProductIdSortedByLatestFirst(productId) {
         productId = parseInt(productId, 10);
         let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
         filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "status", 1);
         filter = this._entity.filterBuilder.sortByConditionFor(filter, "id", false, 0);
-        return await this._entity.readAllEntities(filter);
+        let allComments = await this._entity.readAllEntities(filter);
+        // for (let index = 0; index < array.length; index++) {
+        //     const element = array[index];
+
+        // }
+        let arrangedComments = [];
+        let infiniteLoopWatchDog = 0;
+        while (allComments.length > 0) {
+            let currentComment = allComments.shift();
+            if (currentComment.reply === -1) {
+                console.log("Before:" + allComments.length);
+                currentComment = this.arrangeReplies(currentComment, allComments);
+                console.log("After:" + allComments.length);
+                arrangedComments.push(currentComment);
+                infiniteLoopWatchDog = 0;
+            }
+            else {
+                allComments.push(currentComment);
+                if (infiniteLoopWatchDog > allComments.length) {
+                    debugger; //Infinite loop detected;
+                    break;
+                }
+                infiniteLoopWatchDog++;
+            }
+        }
+        // allComments = allComments.map((comment) => {
+
+        //     return r;
+        // })
+        return arrangedComments;
     }
 
     async getAllPendingComments() {
@@ -69,6 +114,20 @@ class feedback {
             return result;
         }
     }
+
+    arrangeReplies(currentComment, comments) {
+        currentComment.replies = [];
+        let repliesForCurrentComment = comments.mutate((c) => c.reply == currentComment.id);
+
+        while (repliesForCurrentComment.length > 0) {
+            let reply = repliesForCurrentComment.shift();
+            currentComment.replies.push(this.arrangeReplies(reply, comments));
+        }
+
+        return currentComment;
+    }
+
+
 
     // async deleteHealthLink(name) {
     //     let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "name", name);
