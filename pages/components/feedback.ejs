@@ -1,17 +1,17 @@
-<div>
-<% if (feedback!==undefined && Array.isArray(feedback)&& feedback.length>0) { %>
- <h4 class="my-2">Review's</h4>
-<% } %>
-   
+<div> 
     <% feedback.forEach(function(comment){ %>
-    <%- `<blockquote class="blockquote">
+    <blockquote class="m-3 blockquote">
                 <div class="flexbox small">
-                    <b>${comment.userid}</b> <cite>on ${new Date(parseInt(comment.timestamp,10)).toDateString()}</cite>
-                    <img src="/static/resources/images/stars-${comment.rating}.gif" />
+                    <b><%= comment.userid %></b> <cite>on <%= new Date(parseInt(comment.timestamp,10)).toDateString() %></cite>
+                    <img src="/static/resources/images/stars-<%=comment.rating%>.gif" />
                 </div>
-                <p class="mb-0 text-break small">${comment.comment}</p>
-            </blockquote>
-            <hr>` %>
+                <p class="mb-0 text-break small"><%= comment.comment %></p> 
+                <% if (comment.replies!==undefined && Array.isArray(comment.replies)&& comment.replies.length>0) { %>
+                   <% comment.feedback=comment.replies %>
+                    <%- include('feedback',comment) %>
+                <% } %>
+             </blockquote>
+            <hr>
     <% }); %>
 
 </div>
