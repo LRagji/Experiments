@@ -3,9 +3,17 @@
     <blockquote class="m-3 blockquote">
                 <div class="flexbox small">
                     <b><%= comment.userid %></b> <cite>on <%= new Date(parseInt(comment.timestamp,10)).toDateString() %></cite>
-                    <img src="/static/resources/images/stars-<%=comment.rating%>.gif" />
+                    <% if (comment.rating>0) { %>
+                        <img src="/static/resources/images/stars-<%=comment.rating%>.gif" />
+                    <% } %>
                 </div>
-                <p class="mb-0 text-break small"><%= comment.comment %></p> 
+                <p class="mb-0 text-break small"><%= comment.comment %></p>
+
+                <form action="/secure/comment" method="POST">
+                    <input type="hidden" name="pid" value="<%- comment.productid %>" />
+                    <input type="hidden" name="commentid" value="<%- comment.id %>" />
+                    <button type="Submit" class="btn btn-link">Reply</button>
+                </form>
                 <% if (comment.replies!==undefined && Array.isArray(comment.replies)&& comment.replies.length>0) { %>
                    <% comment.feedback=comment.replies %>
                     <%- include('feedback',comment) %>

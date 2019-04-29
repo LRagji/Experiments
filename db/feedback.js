@@ -21,9 +21,11 @@ class feedback {
         this.approveComment = this.approveComment.bind(this);
         // this.deleteHealthLink = this.deleteHealthLink.bind(this);
         this.getApprovedCommentsForProductIdSortedByLatestFirst = this.getApprovedCommentsForProductIdSortedByLatestFirst.bind(this);
-        this.arrangeReplies = this.arrangeReplies.bind(this);
+        this._arrangeReplies = this._arrangeReplies.bind(this);
+        this.arrangeHierarchicalComments = this.arrangeHierarchicalComments.bind(this);
         // this.getHealthLinkContentFor = this.getHealthLinkContentFor.bind(this);
         // this.isNameTaken = this.isNameTaken.bind(this);
+        this.readCommentById = this.readCommentById.bind(this);
 
         let propertyMap = {
             "id": "id",
@@ -46,7 +48,12 @@ class feedback {
         return this.instance;
     }
 
-    async createFeedback(userid, productid, rating, comment) {
+    async readCommentById(commentid) {
+        let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "id", commentid);
+        return await this._entity.readAllEntities(filter);
+    }
+
+    async createFeedback(userid, productid, rating, comment, reply = -1) {
 
         let feedbackObj = {
             "userid": userid,
@@ -55,7 +62,7 @@ class feedback {
             "timestamp": Date.now(),
             "comment": comment,
             "status": 0,//Inactive
-            "reply": -1 //Since this is feedback -1 else reference id of the reply comment.
+            "reply": reply //Since this is feedback -1 else reference id of the reply comment.
         };
         return await this._entity.createEntity(feedbackObj);
     }
@@ -65,36 +72,7 @@ class feedback {
         let filter = this._entity.filterBuilder.addOperatorConditionFor({}, "equal", "productid", productId);
         filter = this._entity.filterBuilder.addOperatorConditionFor(filter, "equal", "status", 1);
         filter = this._entity.filterBuilder.sortByConditionFor(filter, "id", false, 0);
-        let allComments = await this._entity.readAllEntities(filter);
-        // for (let index = 0; index < array.length; index++) {
-        //     const element = array[index];
-
-        // }
-        let arrangedComments = [];
-        let infiniteLoopWatchDog = 0;
-        while (allComments.length > 0) {
-            let currentComment = allComments.shift();
-            if (currentComment.reply === -1) {
-                console.log("Before:" + allComments.length);
-                currentComment = this.arrangeReplies(currentComment, allComments);
-                console.log("After:" + allComments.length);
-                arrangedComments.push(currentComment);
-                infiniteLoopWatchDog = 0;
-            }
-            else {
-                allComments.push(currentComment);
-                if (infiniteLoopWatchDog > allComments.length) {
-                    debugger; //Infinite loop detected;
-                    break;
-                }
-                infiniteLoopWatchDog++;
-            }
-        }
-        // allComments = allComments.map((comment) => {
-
-        //     return r;
-        // })
-        return arrangedComments;
+        return await this._entity.readAllEntities(filter);
     }
 
     async getAllPendingComments() {
@@ -115,13 +93,36 @@ class feedback {
         }
     }
 
-    arrangeReplies(currentComment, comments) {
+    arrangeHierarchicalComments(allComments) {
+        let arrangedComments = [];
+        let infiniteLoopWatchDog = 0;
+        while (allComments.length > 0) {
+            let currentComment = allComments.shift();
+            if (currentComment.reply === -1) {
+                currentComment = this._arrangeReplies(currentComment, allComments);
+                arrangedComments.push(currentComment);
+                infiniteLoopWatchDog = 0;
+            }
+            else {
+                allComments.push(currentComment);
+                if (infiniteLoopWatchDog > allComments.length) {
+                    throw new Error("Infinite loop detected with comments.")
+                    //Infinite loop detected;
+                    break;
+                }
+                infiniteLoopWatchDog++;
+            }
+        }
+        return arrangedComments;
+    }
+
+    _arrangeReplies(currentComment, comments) {
         currentComment.replies = [];
         let repliesForCurrentComment = comments.mutate((c) => c.reply == currentComment.id);
 
         while (repliesForCurrentComment.length > 0) {
             let reply = repliesForCurrentComment.shift();
-            currentComment.replies.push(this.arrangeReplies(reply, comments));
+            currentComment.replies.push(this._arrangeReplies(reply, comments));
         }
 
         return currentComment;

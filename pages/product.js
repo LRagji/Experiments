@@ -44,7 +44,8 @@ class pageProduct extends page {
                 }
                 return f;
             })
-            product.feedback = feedback;
+
+            product.feedback = this.dal.feedback.arrangeHierarchicalComments(feedback);
 
             let pageData = {};
             pageData[this.const.product] = product;

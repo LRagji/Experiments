@@ -57,8 +57,10 @@
                 <!-- Add a new Comment -->
                 <div class="mt-3">
                     <div class="col">
-                    <h4>Your Comment</h4>
+                    <h4><%- pageData.replyComment!==undefined?`Your Reply`:`Your New Comment` %></h4>
                        <form class="mt-2" action="comment/new" method="POST">
+
+                        <% if (pageData.replyComment===undefined) { %>
                         <div class="form-group">
                         <b>Ratings: </b>
                             <div class="custom-control custom-radio custom-control-inline">
@@ -82,6 +84,16 @@
                                 <label class="custom-control-label" for="rating5"><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i></label>
                             </div>
                          </div>
+                        <% } else { %>
+                            <blockquote class="m-3 blockquote">
+                                <div class="flexbox small">
+                                    <b><%= pageData.replyComment.userid %></b> <cite>on <%= new Date(parseInt(pageData.replyComment.timestamp,10)).toDateString() %></cite>
+                                    <img src="/static/resources/images/stars-<%=pageData.replyComment.rating%>.gif" />
+                                </div>
+                                <p class="mb-0 text-break small"><%= pageData.replyComment.comment %></p>
+                            </blockquote>
+                              <input type="hidden" name="cid" value="<%-pageData.replyComment.id %>" />
+                        <% } %>
                         <div class="form-group">
                             <label for="comment"><b>Enter your comment</b></label>
                             <textarea  maxlength="200" class="form-control" id="comment" name="comment" rows="3"></textarea>
